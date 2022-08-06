@@ -1,5 +1,4 @@
-import type { DataFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
-import { json } from "@remix-run/cloudflare";
+import type { MetaFunction } from "@remix-run/cloudflare";
 import {
   Links,
   LiveReload,
@@ -7,10 +6,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
 } from "@remix-run/react";
-
-import { getProducts } from "~/providers/products/products";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",

@@ -29,6 +29,8 @@ export default function Index() {
           <img
             src={product.imageSmall.edges[0].node.url}
             alt={product.imageSmall.edges[0].node.altText ?? ""}
+            width={80}
+            height={53}
           />
         </div>
       ))}
