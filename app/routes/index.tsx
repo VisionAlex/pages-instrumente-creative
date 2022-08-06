@@ -22,7 +22,7 @@ export const loader = async ({
 export default function Index() {
   const { products } = useLoaderData<IndexLoaderData>();
   return (
-    <div>
+    <div className="mt-8">
       {products.products.edges.map(({ node: product }) => (
         <div key={product.id}>
           <h5>{product.title}</h5>
