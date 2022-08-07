@@ -22,7 +22,12 @@ export const ScrollToTop: React.FC = () => {
   });
   return (
     <Fade show={show}>
-      <div className="fixed bottom-[60px] right-[20px] flex h-[42px] w-[26px] cursor-pointer flex-col items-center justify-center bg-primary text-white transition duration-300 ease-in-out ">
+      <div
+        className="fixed bottom-[60px] right-[20px] flex h-[42px] w-[26px] cursor-pointer flex-col items-center justify-center bg-primary text-white transition duration-300 ease-in-out "
+        onClick={() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+      >
         <IoChevronUpOutline size={16} className="mt-[-5px]" />
         <FaSquareFull size="3px" />
         <FaSquareFull size="3px" className="mt-1" />
