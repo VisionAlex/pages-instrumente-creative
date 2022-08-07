@@ -23,7 +23,7 @@ gql`
           imageSmall: images(first: 1) {
             edges {
               node {
-                url(transform: { maxWidth: 80 })
+                url(transform: { maxWidth: 160 })
                 altText
                 width
                 height
@@ -33,7 +33,7 @@ gql`
           imageMedium: images(first: 1) {
             edges {
               node {
-                url(transform: { maxWidth: 360 })
+                url(transform: { maxWidth: 720 })
                 altText
                 width
                 height

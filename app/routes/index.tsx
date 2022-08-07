@@ -1,10 +1,18 @@
 import type { DataFunctionArgs } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
+import { Logo } from "~/components/Logo";
+import { Menu } from "~/components/Menu";
+import { Navbar } from "~/components/Navbar";
+import { ProductsTab } from "~/components/ProductsTab";
+import { ScrollToTop } from "~/components/ScrollToTop";
+import { Toolbar } from "~/components/Toolbar";
 import { getProducts } from "~/providers/products/products";
 
+export type Products = Awaited<ReturnType<typeof getProducts>>;
+
 export type IndexLoaderData = {
-  products: Awaited<ReturnType<typeof getProducts>>;
+  products: Products;
 };
 
 export const loader = async ({
@@ -22,18 +30,17 @@ export const loader = async ({
 export default function Index() {
   const { products } = useLoaderData<IndexLoaderData>();
   return (
-    <div className="mt-8">
-      {products.products.edges.map(({ node: product }) => (
-        <div key={product.id}>
-          <h5>{product.title}</h5>
-          <img
-            src={product.imageSmall.edges[0].node.url}
-            alt={product.imageSmall.edges[0].node.altText ?? ""}
-            width={80}
-            height={53}
-          />
-        </div>
-      ))}
+    <div>
+      <Navbar>
+        <Logo />
+        <Menu />
+        <Toolbar />
+      </Navbar>
+      <ScrollToTop />
+      <main className="pt-[123px]">
+        <ProductsTab products={products as Products} />
+        <ProductsTab products={products as Products} />
+      </main>
     </div>
   );
 }
