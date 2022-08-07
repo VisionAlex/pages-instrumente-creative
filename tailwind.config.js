@@ -8,6 +8,9 @@ module.exports = {
         primary: "#2c2c2c",
         text: "#707070",
       },
+      fontSize: {
+        tiny: "0.625rem",
+      },
     },
   },
   plugins: [],

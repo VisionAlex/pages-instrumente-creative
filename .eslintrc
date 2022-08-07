@@ -1,3 +1,14 @@
 {
-  "extends": ["@remix-run/eslint-config"]
+  "extends": ["@remix-run/eslint-config"],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "ignoreRestSiblings": true,
+        "argsIgnorePattern": "^_"
+      }
+    ]
+  }
 }

@@ -29,7 +29,7 @@ export const Navbar: React.FC<Props> = ({ children }) => {
   }, [lastScrollY]);
   return (
     <nav
-      className="linear fixed top-0 flex w-screen items-center justify-between bg-background transition-transform duration-300 sm:px-[20px] lg:px-[34px] xl:px-[80]"
+      className="linear fixed top-0 flex w-full items-center justify-between bg-background transition-transform duration-300 sm:px-[20px] lg:px-[34px] xl:px-[80px]"
       style={{
         height: NAVBAR_HEIGHT,
         transform: !show ? "translateY(-100%)" : undefined,
