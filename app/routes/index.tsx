@@ -24,9 +24,5 @@ export const loader = async ({
 
 export default function Index() {
   const { products } = useLoaderData<IndexLoaderData>();
-  return (
-    <div>
-      <ProductsTab products={products as Products} />
-    </div>
-  );
+  return <div>{/* <ProductsTab products={products as Products} /> */}</div>;
 }

@@ -7,6 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import { FooterMenu } from "./components/FooterMenu";
 import { Logo } from "./components/Logo";
 import { Menu } from "./components/Menu";
 import { Navbar, NAVBAR_HEIGHT } from "./components/Navbar";
@@ -47,6 +48,7 @@ export default function App() {
         <main className={`pt-[${NAVBAR_HEIGHT}px]`}>
           <Outlet />
         </main>
+        <FooterMenu />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
