@@ -31,10 +31,10 @@ export const Menu: React.FC = () => {
       <div
         className={`${
           isOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"
-        } fixed h-[calc(100vh_-_${NAVBAR_HEIGHT}px_-_${FOOTER_HEIGHT}px)] top-[${NAVBAR_HEIGHT}px] left-0 w-full overflow-y-auto overflow-x-hidden px-[20px] transition duration-300`}
+        } fixed top-[123px] left-0 h-[calc(100vh_-_123px_-_50px)] w-full overflow-y-auto overflow-x-hidden px-[20px] transition duration-300`}
       >
         <div
-          className={`flex min-h-[calc(100vh_-_${NAVBAR_HEIGHT}px_-_${FOOTER_HEIGHT}px)] flex-col bg-background p-[30px]`}
+          className={`flex min-h-[calc(100vh_-_123px_-_50px)] flex-col bg-background p-[30px]`}
         >
           <NavLink className="mb-[13px] border-b pb-[13px]" to="/products">
             Produse

@@ -609,6 +609,10 @@ html {
   bottom: 0px;
 }
 
+.top-\[123px\] {
+  top: 123px;
+}
+
 .left-0 {
   left: 0px;
 }
@@ -677,8 +681,8 @@ html {
   height: 100%;
 }
 
-.h-\[calc\(100vh_-_\$\{NAVBAR_HEIGHT\}px_-_\$\{FOOTER_HEIGHT\}px\)\] {
-  height: calc(100vh - ${NAVBAR HEIGHT}px - ${FOOTER HEIGHT}px);
+.h-\[calc\(100vh_-_123px_-_50px\)\] {
+  height: calc(100vh - 123px - 50px);
 }
 
 .h-\[42px\] {
@@ -689,16 +693,8 @@ html {
   height: 16px;
 }
 
-.h-\[calc\(100vh_-_123px_-_50px\)\] {
-  height: calc(100vh - 123px - 50px);
-}
-
 .min-h-\[calc\(100vh_-_123px_-_50px\)\] {
   min-height: calc(100vh - 123px - 50px);
-}
-
-.min-h-\[calc\(100vh_-_\$\{NAVBAR_HEIGHT\}px_-_\$\{FOOTER_HEIGHT\}px\)\] {
-  min-height: calc(100vh - ${NAVBAR HEIGHT}px - ${FOOTER HEIGHT}px);
 }
 
 .w-screen {
