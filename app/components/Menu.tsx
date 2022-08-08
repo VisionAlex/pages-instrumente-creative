@@ -1,9 +1,7 @@
 import { NavLink } from "@remix-run/react";
 import { useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
-import { FOOTER_HEIGHT } from "./FooterMenu";
 import { Link } from "./Link";
-import { NAVBAR_HEIGHT } from "./Navbar";
 import { MenuIcon } from "./shared/icons";
 
 export const Menu: React.FC = () => {
@@ -11,13 +9,18 @@ export const Menu: React.FC = () => {
   return (
     <nav className="order-1 text-primary lg:order-2">
       {isOpen ? (
-        <button className="hover:opacity-70" onClick={() => setIsOpen(false)}>
+        <button
+          className="hover:opacity-70"
+          onClick={() => setIsOpen(false)}
+          aria-label="close"
+        >
           <IoCloseOutline fontSize={30} />
         </button>
       ) : (
         <button
           className="hover:opacity-70 lg:hidden"
           onClick={() => setIsOpen(true)}
+          aria-label="open"
         >
           <MenuIcon />
         </button>
