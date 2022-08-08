@@ -7,10 +7,10 @@ export const Toolbar: React.FC = () => {
     <div className="flex items-center gap-4  text-primary">
       <BsSearch className="cursor-pointer" />
       <BsPerson fontSize={20} />
-      <Counter count={1}>
+      <Counter count={0}>
         <BsBasket />
       </Counter>
-      <Counter count={2}>
+      <Counter count={0}>
         <BsHeart />
       </Counter>
     </div>

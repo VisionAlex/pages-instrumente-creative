@@ -7,6 +7,11 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import { Logo } from "./components/Logo";
+import { Menu } from "./components/Menu";
+import { Navbar, NAVBAR_HEIGHT } from "./components/Navbar";
+import { ScrollToTop } from "./components/ScrollToTop";
+import { Toolbar } from "./components/Toolbar";
 import styles from "./styles/app.css";
 
 export const meta: MetaFunction = () => ({
@@ -33,7 +38,15 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <Navbar>
+          <Logo />
+          <Menu />
+          <Toolbar />
+        </Navbar>
+        <ScrollToTop />
+        <main className={`pt-[${NAVBAR_HEIGHT}px]`}>
+          <Outlet />
+        </main>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />

@@ -410,6 +410,10 @@ video {
   height: auto;
 }
 
+html {
+  font-family: "Jost", sans-serif;
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -649,16 +653,12 @@ video {
   height: 16px;
 }
 
-.w-screen {
-  width: 100vw;
+.w-full {
+  width: 100%;
 }
 
 .w-\[26px\] {
   width: 26px;
-}
-
-.w-full {
-  width: 100%;
 }
 
 .min-w-\[16px\] {
@@ -729,20 +729,12 @@ video {
   padding-bottom: 3px;
 }
 
-.pt-\[123px\] {
-  padding-top: 123px;
-}
-
 .text-center {
   text-align: center;
 }
 
 .text-tiny {
   font-size: 0.625rem;
-}
-
-.leading-4 {
-  line-height: 1rem;
 }
 
 .text-primary {
@@ -791,6 +783,12 @@ video {
 
 .ease-in {
   transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+}
+
+@font-face {
+  font-family: "Jost";
+
+  src: url("/fonts/Jost-VariableFont_wght.ttf") format("truetype");
 }
 
 .after\:absolute::after {
@@ -876,11 +874,6 @@ video {
 }
 
 @media (min-width: 1280px) {
-  .xl\:px-\[80\] {
-    padding-left: 80;
-    padding-right: 80;
-  }
-
   .xl\:px-\[80px\] {
     padding-left: 80px;
     padding-right: 80px;
