@@ -3,11 +3,13 @@ import { BsBasket, BsHeart, BsPerson } from "react-icons/bs";
 import { HiOutlineHome } from "react-icons/hi";
 import { Counter } from "./shared/Counter";
 
+export const FOOTER_HEIGHT = 50;
+
 export const FooterMenu: React.FC = () => {
   return (
     <nav
       className="fixed bottom-0 flex w-screen items-center justify-evenly bg-white text-primary shadow-2xl lg:hidden"
-      style={{ height: 50 }}
+      style={{ height: FOOTER_HEIGHT }}
     >
       <HiOutlineHome
         fontSize={24}
