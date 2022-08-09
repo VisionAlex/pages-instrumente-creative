@@ -7,7 +7,7 @@ import { MenuIcon } from "./shared/icons";
 export const Menu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <nav className="order-1 text-primary lg:order-2">
+    <nav className="z-50 order-1 text-primary lg:order-2">
       {isOpen ? (
         <button
           className="hover:opacity-70 lg:hidden"
@@ -34,7 +34,7 @@ export const Menu: React.FC = () => {
       <div
         className={`${
           isOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"
-        } fixed top-[123px] left-0 h-[calc(100vh_-_123px_-_50px)] w-full overflow-y-auto overflow-x-hidden px-[20px] transition duration-300 lg:hidden`}
+        }  fixed top-[123px] left-0 z-50 h-[calc(100vh_-_123px_-_50px)] w-full overflow-y-auto overflow-x-hidden px-[20px] transition duration-300 lg:hidden`}
       >
         <div
           className={`flex min-h-[calc(100vh_-_123px_-_50px)] flex-col bg-background p-[30px]`}

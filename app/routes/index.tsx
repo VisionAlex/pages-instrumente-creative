@@ -1,6 +1,7 @@
 import type { DataFunctionArgs } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
+import { Hero } from "~/components/Hero";
 import { ProductsTab } from "~/components/ProductsTab";
 import { getProducts } from "~/providers/products/products";
 
@@ -24,5 +25,9 @@ export const loader = async ({
 
 export default function Index() {
   const { products } = useLoaderData<IndexLoaderData>();
-  return <div>{/* <ProductsTab products={products as Products} /> */}</div>;
+  return (
+    <div>
+      <Hero />
+    </div>
+  );
 }

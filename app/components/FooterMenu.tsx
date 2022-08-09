@@ -8,7 +8,7 @@ export const FOOTER_HEIGHT = 50;
 export const FooterMenu: React.FC = () => {
   return (
     <nav
-      className="fixed bottom-0 flex w-screen items-center justify-evenly bg-white text-primary shadow-2xl lg:hidden"
+      className="fixed bottom-0 z-50 flex w-screen items-center justify-evenly bg-white text-primary shadow-2xl lg:hidden"
       style={{ height: FOOTER_HEIGHT }}
     >
       <HiOutlineHome

@@ -7,9 +7,14 @@ module.exports = {
         background: "#efefef",
         primary: "#2c2c2c",
         text: "#707070",
+        lightGrey: "#f1f1f1",
       },
       fontSize: {
         tiny: "0.625rem",
+        header: "2.65rem",
+      },
+      transitionDuration: {
+        400: "400ms",
       },
     },
   },

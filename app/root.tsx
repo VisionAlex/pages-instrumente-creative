@@ -45,7 +45,7 @@ export default function App() {
           <Toolbar />
         </Navbar>
         <ScrollToTop />
-        <main className={`pt-[${NAVBAR_HEIGHT}px]`}>
+        <main className={`pt-[123px]`}>
           <Outlet />
         </main>
         <FooterMenu />
