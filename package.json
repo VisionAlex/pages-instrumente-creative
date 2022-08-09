@@ -10,7 +10,7 @@
     "dev": "remix build && run-p \"dev:*\"",
     "start": "cross-env NODE_ENV=production npm run dev:wrangler",
     "generate": "graphql-codegen --config codegen.yml",
-    "svg:build": "npx @svgr/cli --out-dir app/components/shared/icons --ignore-existing --typescript --  public/assets/icons && eslint app/components/shared/icons --fix"
+    "svg:build": "npx @svgr/cli --out-dir app/components/shared/icons --ignore-existing --typescript --  app/components/shared/icons/svgs && eslint app/components/shared/icons --fix"
   },
   "dependencies": {
     "@graphql-codegen/cli": "^2.11.3",

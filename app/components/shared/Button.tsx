@@ -6,7 +6,7 @@ interface Props {
 
 export const Button: React.FC<Props> = ({ text }) => {
   return (
-    <button className="w-auto cursor-pointer select-none border border-primary bg-lightGrey py-[15px] px-[29px] text-center align-middle font-bold text-primary transition duration-400 hover:bg-primary hover:text-white ">
+    <button className="cursor-pointer select-none border border-primary bg-lightGrey py-2 px-4 text-center align-middle text-primary transition  duration-400 hover:bg-primary hover:text-white lg:py-4 lg:px-8 ">
       {text}
     </button>
   );

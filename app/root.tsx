@@ -7,10 +7,11 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import { Footer } from "./components/Footer";
 import { FooterMenu } from "./components/FooterMenu";
 import { Logo } from "./components/Logo";
 import { Menu } from "./components/Menu";
-import { Navbar, NAVBAR_HEIGHT } from "./components/Navbar";
+import { Navbar } from "./components/Navbar";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { Toolbar } from "./components/Toolbar";
 import styles from "./styles/app.css";
@@ -48,7 +49,9 @@ export default function App() {
         <main className={`pt-[123px] pb-[50px]`}>
           <Outlet />
         </main>
+        <Footer />
         <FooterMenu />
+
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
