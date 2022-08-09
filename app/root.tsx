@@ -45,7 +45,7 @@ export default function App() {
           <Toolbar />
         </Navbar>
         <ScrollToTop />
-        <main className={`pt-[123px]`}>
+        <main className={`pt-[123px] pb-[50px]`}>
           <Outlet />
         </main>
         <FooterMenu />

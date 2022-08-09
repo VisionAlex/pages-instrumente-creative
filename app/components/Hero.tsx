@@ -9,7 +9,7 @@ export const Hero: React.FC = () => {
         <h2 className="text-header text-primary ">
           Editura Instrumente Creative
         </h2>
-        <p className="mx-[20px] mb-4 block text-lg text-text">
+        <p className="mx-[20px] mb-4 block text-lg text-subtitle">
           Produse create de psihologi și logopezi. Toate ilustrațiile sunt
           originale
         </p>

@@ -12,38 +12,32 @@ gql`
       edges {
         node {
           id
+          productType
           title
           handle
+          availableForSale
           priceRange {
             minVariantPrice {
               amount
-              currencyCode
             }
           }
-          imageSmall: images(first: 1) {
+          imageSmall: images(first: 2) {
             edges {
               node {
-                url(transform: { maxWidth: 160 })
+                url(transform: { maxWidth: 436 })
                 altText
                 width
                 height
               }
             }
           }
-          imageMedium: images(first: 1) {
+          imageMedium: images(first: 2) {
             edges {
               node {
                 url(transform: { maxWidth: 720 })
                 altText
                 width
                 height
-              }
-            }
-          }
-          variants(first: 1) {
-            edges {
-              node {
-                id
               }
             }
           }
