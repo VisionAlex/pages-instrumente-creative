@@ -28,12 +28,11 @@ export const Footer: React.FC = () => {
           Abonează-te
         </button>
       </form>
-      <div className="flex justify-center pt-6 text-subtitle">
+      <div className="pt-6 text-center leading-7 text-subtitle">
         <span>
           © {new Date().getFullYear()} Instrumente Creative. Toate drepturile
-          rezervate
-        </span>
-        <span className="px-2">|</span>
+          rezervate |
+        </span>{" "}
         <a
           href="mailto:gmail@instrumentecreative.com"
           aria-describedby="email"
