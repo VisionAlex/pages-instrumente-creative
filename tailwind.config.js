@@ -3,12 +3,15 @@ module.exports = {
   content: ["./app/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      screens: {
+        xs: "550px",
+      },
       colors: {
         background: "#efefef",
         primary: "#2c2c2c",
         subtitle: "#707070",
         lightGrey: "#f1f1f1",
-        line: "#d2d2d2"
+        line: "#d2d2d2",
       },
       fontSize: {
         tiny: "0.625rem",
