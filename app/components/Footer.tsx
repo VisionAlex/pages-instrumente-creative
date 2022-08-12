@@ -16,9 +16,9 @@ export const Footer: React.FC = () => {
       <div className="my-4 flex justify-center">
         <Logo />
       </div>
-      <form className="flex h-8 items-center">
+      <form className="my-4 flex h-8 items-center justify-center">
         <input
-          className="grow-1 mr-5 grow border-b border-line bg-background leading-loose text-primary outline-none"
+          className="grow-1 mr-5 max-w-md grow border-b border-line bg-background leading-loose text-primary outline-none"
           placeholder="Adresă de e-mail"
         />
         <button
@@ -28,6 +28,20 @@ export const Footer: React.FC = () => {
           Abonează-te
         </button>
       </form>
+      <div className="flex justify-center pt-6 text-subtitle">
+        <span>
+          © {new Date().getFullYear()} Instrumente Creative. Toate drepturile
+          rezervate
+        </span>
+        <span className="px-2">|</span>
+        <a
+          href="mailto:gmail@instrumentecreative.com"
+          aria-describedby="email"
+          className="hover:text-primary"
+        >
+          contact@instrumentecreative.com
+        </a>
+      </div>
     </footer>
   );
 };

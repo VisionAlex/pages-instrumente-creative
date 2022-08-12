@@ -758,8 +758,8 @@ html {
   height: 2rem;
 }
 
-.h-\[550px\] {
-  height: 550px;
+.h-\[110vw\] {
+  height: 110vw;
 }
 
 .h-\[100\.7px\] {
@@ -782,28 +782,16 @@ html {
   height: 16px;
 }
 
-.h-min {
-  height: -webkit-min-content;
-  height: -moz-min-content;
-  height: min-content;
-}
-
-.h-\[110vw\] {
-  height: 110vw;
-}
-
 .max-h-\[550px\] {
   max-height: 550px;
 }
 
-.min-h-\[calc\(100vh_-_123px_-_50px\)\] {
-  min-height: calc(100vh - 123px - 50px);
+.max-h-96 {
+  max-height: 24rem;
 }
 
-.min-h-min {
-  min-height: -webkit-min-content;
-  min-height: -moz-min-content;
-  min-height: min-content;
+.min-h-\[calc\(100vh_-_123px_-_50px\)\] {
+  min-height: calc(100vh - 123px - 50px);
 }
 
 .w-full {
@@ -830,6 +818,18 @@ html {
   max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
+}
+
+.max-w-7xl {
+  max-width: 80rem;
+}
+
+.max-w-lg {
+  max-width: 32rem;
+}
+
+.max-w-md {
+  max-width: 28rem;
 }
 
 .grow {
@@ -1025,6 +1025,11 @@ html {
   padding-bottom: 3px;
 }
 
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
 .pt-\[123px\] {
   padding-top: 123px;
 }
@@ -1039,6 +1044,14 @@ html {
 
 .pt-2 {
   padding-top: 0.5rem;
+}
+
+.pt-4 {
+  padding-top: 1rem;
+}
+
+.pt-6 {
+  padding-top: 1.5rem;
 }
 
 .text-center {
@@ -1217,6 +1230,12 @@ html {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.hover\:scale-125:hover {
+  --tw-scale-x: 1.25;
+  --tw-scale-y: 1.25;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
 .hover\:bg-primary:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(44 44 44 / var(--tw-bg-opacity));
@@ -1306,6 +1325,10 @@ html {
   .lg\:px-8 {
     padding-left: 2rem;
     padding-right: 2rem;
+  }
+
+  .lg\:pb-0 {
+    padding-bottom: 0px;
   }
 }
 

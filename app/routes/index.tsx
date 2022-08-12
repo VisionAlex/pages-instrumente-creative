@@ -1,42 +1,33 @@
-import type { DataFunctionArgs } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import { Hero } from "~/components/Hero";
 import { ProductsHighlights } from "~/components/ProductHighlights";
-import type { GetAllProductsQuery } from "~/generated/graphql";
-import { getProducts } from "~/providers/products/products";
+import type { GetHighlightProductsQuery } from "~/generated/graphql";
+import { getHighlightProducts } from "~/providers/products/products";
 
-export type Products = GetAllProductsQuery["products"]["edges"];
+export type Products = GetHighlightProductsQuery["products"]["edges"];
 
 export type IndexLoaderData = {
   products: Products;
-  availableProducts: Products;
 };
 
-export const loader = async ({
-  request,
-  params,
-  context,
-}: DataFunctionArgs) => {
-  const products = await getProducts(20);
-  const availableProducts = products.products.edges.filter(
-    (p) => p.node.availableForSale
-  );
-  console.log({ availableProducts });
+export const loader = async () => {
+  const products = await getHighlightProducts(3, "available_for_sale:true");
+
   const loaderData: IndexLoaderData = {
     products: products.products.edges,
-    availableProducts,
   };
   return json(loaderData);
 };
 
-export default function Index() {
-  const { availableProducts } = useLoaderData<IndexLoaderData>();
-  console.log({ availableProducts });
+const Index: React.FC = () => {
+  const { products } = useLoaderData<IndexLoaderData>();
   return (
     <div>
       <Hero />
-      <ProductsHighlights products={availableProducts as Products} />
+      <ProductsHighlights products={products as Products} />
     </div>
   );
-}
+};
+
+export default Index;

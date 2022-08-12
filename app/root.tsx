@@ -46,7 +46,7 @@ export default function App() {
           <Toolbar />
         </Navbar>
         <ScrollToTop />
-        <div className={`pt-[123px] pb-[50px]`}>
+        <div className={`pt-[123px] pb-[50px] lg:pb-0`}>
           <main>
             <Outlet />
           </main>

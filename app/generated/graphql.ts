@@ -3593,7 +3593,7 @@ export enum LanguageCode {
   Lv = 'LV',
   /** Malagasy. */
   Mg = 'MG',
-  /** Maori. */
+  /** Māori. */
   Mi = 'MI',
   /** Macedonian. */
   Mk = 'MK',
@@ -5642,7 +5642,7 @@ export type QueryRoot = {
   blogByHandle?: Maybe<Blog>;
   /** List of the shop's blogs. */
   blogs: BlogConnection;
-  /** Find a cart by its ID. */
+  /** Retrieve a cart by its ID. For more information, refer to [Manage a cart with the Storefront API](https://shopify.dev/api/examples/cart). */
   cart?: Maybe<Cart>;
   /** Fetch a specific `Collection` by one of its unique attributes. */
   collection?: Maybe<Collection>;
@@ -6202,7 +6202,7 @@ export type Shop = HasMetafields & Node & {
   name: Scalars['String'];
   /** Settings related to payments. */
   paymentSettings: PaymentSettings;
-  /** The shop’s primary domain. */
+  /** The primary domain of the shop’s Online Store. */
   primaryDomain: Domain;
   /** The shop’s privacy policy. */
   privacyPolicy?: Maybe<ShopPolicy>;
@@ -6566,17 +6566,18 @@ export enum WeightUnit {
   Pounds = 'POUNDS'
 }
 
-export type GetAllProductsQueryVariables = Exact<{
+export type GetHighlightProductsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
+  query?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetAllProductsQuery = { __typename?: 'QueryRoot', products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, productType: string, title: string, handle: string, availableForSale: boolean, priceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, imageSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imageMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> } } }> } };
+export type GetHighlightProductsQuery = { __typename?: 'QueryRoot', products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, productType: string, title: string, handle: string, availableForSale: boolean, priceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, imageSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imageMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> } } }> } };
 
 
-export const GetAllProductsDocument = gql`
-    query getAllProducts($first: Int) {
-  products(first: $first) {
+export const GetHighlightProductsDocument = gql`
+    query getHighlightProducts($first: Int, $query: String) {
+  products(first: $first, query: $query) {
     edges {
       node {
         id
@@ -6617,8 +6618,8 @@ export const GetAllProductsDocument = gql`
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
-    getAllProducts(variables?: GetAllProductsQueryVariables, options?: C): Promise<GetAllProductsQuery> {
-      return requester<GetAllProductsQuery, GetAllProductsQueryVariables>(GetAllProductsDocument, variables, options);
+    getHighlightProducts(variables?: GetHighlightProductsQueryVariables, options?: C): Promise<GetHighlightProductsQuery> {
+      return requester<GetHighlightProductsQuery, GetHighlightProductsQueryVariables>(GetHighlightProductsDocument, variables, options);
     }
   };
 }

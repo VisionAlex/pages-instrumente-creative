@@ -31,7 +31,7 @@ export const ProductsHighlights: React.FC<Props> = ({ products }) => {
               <div className="flex items-start justify-between  pt-2">
                 <a
                   className="max-w-fit text-subtitle hover:text-primary"
-                  href={`/${product.handle}`}
+                  href={`/produse/${product.handle}`}
                 >
                   {product.title}
                 </a>

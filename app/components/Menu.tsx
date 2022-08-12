@@ -26,9 +26,9 @@ export const Menu: React.FC = () => {
         </button>
       )}
       <div className="hidden flex-wrap items-stretch gap-[30px] lg:flex">
-        <Link to="/products">Produse</Link>
+        <Link to="/produse">Produse</Link>
         <Link to="/blog">Blog</Link>
-        <Link to="/about">Despre noi</Link>
+        <Link to="/despre-noi">Despre noi</Link>
         <Link to="/contact">Contact</Link>
       </div>
       <div
