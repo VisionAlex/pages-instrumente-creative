@@ -14,6 +14,7 @@ module.exports = {
         subtitle: "#707070",
         lightGrey: "#f1f1f1",
         line: "#d2d2d2",
+        tag: "#8f8f8f",
       },
       fontSize: {
         tiny: "0.625rem",

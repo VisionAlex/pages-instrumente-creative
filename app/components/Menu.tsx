@@ -2,7 +2,7 @@ import { NavLink } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
 import useOnClickOutside from "~/shared/hooks/useOnClickOutside";
-import { Link } from "./Link";
+import { Link } from "./shared/Link";
 import { MenuIcon } from "./shared/icons";
 
 export const MENU_ITEMS = [

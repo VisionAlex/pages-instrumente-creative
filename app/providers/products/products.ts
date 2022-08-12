@@ -1,18 +1,24 @@
 import gql from "graphql-tag";
 import type { QueryOptions } from "graphqlWrapper";
 import { sdk } from "graphqlWrapper";
+import type { ProductSortKeys } from "~/generated/graphql";
 
 export function getProducts(
   first: number,
   query?: string,
+  sortKey?: ProductSortKeys,
   options?: QueryOptions
 ) {
-  return sdk.getProducts({ first, query }, options);
+  return sdk.getProducts({ first, query, sortKey }, options);
 }
 
 gql`
-  query getProducts($first: Int, $query: String) {
-    products(first: $first, query: $query) {
+  query getProducts(
+    $first: Int
+    $query: String
+    $sortKey: ProductSortKeys = BEST_SELLING
+  ) {
+    products(first: $first, query: $query, sortKey: $sortKey) {
       edges {
         node {
           id

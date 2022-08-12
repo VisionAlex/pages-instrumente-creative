@@ -6569,6 +6569,7 @@ export enum WeightUnit {
 export type GetProductsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
   query?: InputMaybe<Scalars['String']>;
+  sortKey?: InputMaybe<ProductSortKeys>;
 }>;
 
 
@@ -6576,8 +6577,8 @@ export type GetProductsQuery = { __typename?: 'QueryRoot', products: { __typenam
 
 
 export const GetProductsDocument = gql`
-    query getProducts($first: Int, $query: String) {
-  products(first: $first, query: $query) {
+    query getProducts($first: Int, $query: String, $sortKey: ProductSortKeys = BEST_SELLING) {
+  products(first: $first, query: $query, sortKey: $sortKey) {
     edges {
       node {
         id

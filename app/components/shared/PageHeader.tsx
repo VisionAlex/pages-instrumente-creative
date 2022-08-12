@@ -1,5 +1,5 @@
 import { useLocation } from "@remix-run/react";
-import { Link } from "../Link";
+import { Link } from "./Link";
 import { MENU_ITEMS } from "../Menu";
 
 export const PageHeader: React.FC = () => {
