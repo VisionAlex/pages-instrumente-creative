@@ -2,16 +2,16 @@ import gql from "graphql-tag";
 import type { QueryOptions } from "graphqlWrapper";
 import { sdk } from "graphqlWrapper";
 
-export function getHighlightProducts(
+export function getProducts(
   first: number,
   query?: string,
   options?: QueryOptions
 ) {
-  return sdk.getHighlightProducts({ first, query }, options);
+  return sdk.getProducts({ first, query }, options);
 }
 
 gql`
-  query getHighlightProducts($first: Int, $query: String) {
+  query getProducts($first: Int, $query: String) {
     products(first: $first, query: $query) {
       edges {
         node {

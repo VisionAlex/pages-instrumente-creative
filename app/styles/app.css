@@ -1066,12 +1066,12 @@ html {
   line-height: 1.625;
 }
 
-.leading-tight {
-  line-height: 1.25;
-}
-
 .leading-7 {
   line-height: 1.75rem;
+}
+
+.leading-tight {
+  line-height: 1.25;
 }
 
 .text-primary {

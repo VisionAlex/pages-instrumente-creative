@@ -6566,17 +6566,17 @@ export enum WeightUnit {
   Pounds = 'POUNDS'
 }
 
-export type GetHighlightProductsQueryVariables = Exact<{
+export type GetProductsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
   query?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetHighlightProductsQuery = { __typename?: 'QueryRoot', products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, productType: string, title: string, handle: string, availableForSale: boolean, priceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, imageSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imageMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> } } }> } };
+export type GetProductsQuery = { __typename?: 'QueryRoot', products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, productType: string, title: string, handle: string, availableForSale: boolean, priceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, imageSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imageMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> } } }> } };
 
 
-export const GetHighlightProductsDocument = gql`
-    query getHighlightProducts($first: Int, $query: String) {
+export const GetProductsDocument = gql`
+    query getProducts($first: Int, $query: String) {
   products(first: $first, query: $query) {
     edges {
       node {
@@ -6618,8 +6618,8 @@ export const GetHighlightProductsDocument = gql`
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
-    getHighlightProducts(variables?: GetHighlightProductsQueryVariables, options?: C): Promise<GetHighlightProductsQuery> {
-      return requester<GetHighlightProductsQuery, GetHighlightProductsQueryVariables>(GetHighlightProductsDocument, variables, options);
+    getProducts(variables?: GetProductsQueryVariables, options?: C): Promise<GetProductsQuery> {
+      return requester<GetProductsQuery, GetProductsQueryVariables>(GetProductsDocument, variables, options);
     }
   };
 }
