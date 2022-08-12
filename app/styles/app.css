@@ -734,6 +734,18 @@ html {
   margin-right: 11px;
 }
 
+.mb-8 {
+  margin-bottom: 2rem;
+}
+
+.mb-16 {
+  margin-bottom: 4rem;
+}
+
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
 .block {
   display: block;
 }
@@ -820,6 +832,10 @@ html {
   max-width: fit-content;
 }
 
+.max-w-sm {
+  max-width: 24rem;
+}
+
 .grow {
   flex-grow: 1;
 }
@@ -898,6 +914,14 @@ html {
 
 .gap-\[30px\] {
   gap: 30px;
+}
+
+.gap-1\.5 {
+  gap: 0.375rem;
+}
+
+.gap-1 {
+  gap: 0.25rem;
 }
 
 .overflow-y-auto {
@@ -1023,6 +1047,11 @@ html {
   padding-bottom: 3px;
 }
 
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
 .pt-\[123px\] {
   padding-top: 123px;
 }
@@ -1060,12 +1089,26 @@ html {
   line-height: 1.75rem;
 }
 
-.text-title {
+.text-3xl {
   font-size: 1.875rem;
+  line-height: 2.25rem;
 }
 
 .text-tiny {
   font-size: 0.625rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.text-title {
+  font-size: 1.625rem;
+}
+
+.font-normal {
+  font-weight: 400;
 }
 
 .capitalize {
@@ -1086,6 +1129,10 @@ html {
 
 .leading-tight {
   line-height: 1.25;
+}
+
+.tracking-tighter {
+  letter-spacing: -0.05em;
 }
 
 .text-primary {
@@ -1271,6 +1318,18 @@ html {
   .md\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  .md\:flex-row {
+    flex-direction: row;
+  }
+
+  .md\:justify-between {
+    justify-content: space-between;
+  }
+
+  .md\:gap-0 {
+    gap: 0px;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -1280,6 +1339,10 @@ html {
 
   .lg\:order-2 {
     order: 2;
+  }
+
+  .lg\:mb-44 {
+    margin-bottom: 11rem;
   }
 
   .lg\:block {

@@ -1,12 +1,10 @@
-import React from "react";
 import { PageHeader } from "~/components/shared/PageHeader";
 
-const Products: React.FC = () => {
+const Blog: React.FC = () => {
   return (
     <div>
       <PageHeader />
     </div>
   );
 };
-
-export default Products;
+export default Blog;

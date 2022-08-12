@@ -18,7 +18,7 @@ module.exports = {
       fontSize: {
         tiny: "0.625rem",
         header: "2.65rem",
-        title: "1.875rem",
+        title: "1.625rem",
       },
       transitionDuration: {
         400: "400ms",

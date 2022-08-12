@@ -9,7 +9,7 @@ interface Props {
 export const ProductsHighlights: React.FC<Props> = ({ products }) => {
   return (
     <div className="mx-auto max-w-3xl py-4 px-5">
-      <h3 className="mb-7 text-center text-title text-primary">
+      <h3 className="mb-7 text-center text-3xl leading-tight text-primary">
         Dezvoltă competențele copilului tău
       </h3>
       <div className="grid grid-cols-2 justify-items-center gap-3 md:grid-cols-3">

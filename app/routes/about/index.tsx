@@ -1,7 +1,6 @@
-import React from "react";
 import { PageHeader } from "~/components/shared/PageHeader";
 
-const Products: React.FC = () => {
+const About: React.FC = () => {
   return (
     <div>
       <PageHeader />
@@ -9,4 +8,4 @@ const Products: React.FC = () => {
   );
 };
 
-export default Products;
+export default About;

@@ -1,6 +1,7 @@
 import { NavLink } from "@remix-run/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
+import useOnClickOutside from "~/shared/hooks/useOnClickOutside";
 import { Link } from "./Link";
 import { MenuIcon } from "./shared/icons";
 
@@ -25,6 +26,10 @@ export const MENU_ITEMS = [
 
 export const Menu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+
+  useOnClickOutside(mobileMenuRef, () => setIsOpen(false));
+
   return (
     <nav className="z-50 order-1 text-primary lg:order-2">
       {isOpen ? (
@@ -57,6 +62,7 @@ export const Menu: React.FC = () => {
         }  fixed top-[123px] left-0 z-50 h-[calc(100vh_-_123px_-_50px)] w-full overflow-y-auto overflow-x-hidden px-[20px] transition duration-300 lg:hidden`}
       >
         <div
+          ref={mobileMenuRef}
           className={`flex min-h-[calc(100vh_-_123px_-_50px)] flex-col bg-secondaryBackground p-[30px] capitalize`}
         >
           {MENU_ITEMS.map(({ name, link }) => (

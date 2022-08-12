@@ -16,9 +16,9 @@ export const Footer: React.FC = () => {
       <div className="my-4 flex justify-center">
         <Logo />
       </div>
-      <form className="my-4 flex h-8 items-center justify-center">
+      <form className="my-4  mx-5 flex h-8 items-center justify-center">
         <input
-          className="grow-1 mr-5 max-w-md grow border-b border-line bg-background leading-loose text-primary outline-none"
+          className="grow-1 mr-5 max-w-sm grow border-b border-line bg-background leading-loose text-primary outline-none"
           placeholder="Adresă de e-mail"
         />
         <button
