@@ -5,7 +5,11 @@ import { Counter } from "./shared/Counter";
 
 export const FOOTER_HEIGHT = 50;
 
-export const FooterMenu: React.FC = () => {
+interface Props {
+  setShowCart: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const FooterMenu: React.FC<Props> = ({ setShowCart }) => {
   return (
     <nav
       className="fixed bottom-0 z-50 flex w-screen items-center justify-evenly bg-white text-primary shadow-2xl lg:hidden"
@@ -16,7 +20,7 @@ export const FooterMenu: React.FC = () => {
         className="cursor-pointer hover:opacity-70"
       />
       <BsPerson fontSize={24} className="cursor-pointer hover:opacity-70" />
-      <Counter count={0}>
+      <Counter count={0} onClick={() => setShowCart(true)}>
         <BsBasket fontSize={18} />
       </Counter>
       <Counter count={0}>

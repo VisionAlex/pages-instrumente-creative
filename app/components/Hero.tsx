@@ -1,5 +1,5 @@
 import React from "react";
-import { LinkAsButton } from "./shared/LinkAsButton";
+import { LinkButton } from "./shared/LinkButton";
 
 export const Hero: React.FC = () => {
   return (
@@ -13,7 +13,11 @@ export const Hero: React.FC = () => {
           Produse create de psihologi și logopezi. Toate ilustrațiile sunt
           originale
         </p>
-        <LinkAsButton to="/products" text="Vizualizează toate produsele" />
+        <LinkButton
+          to="/products"
+          text="Vizualizează toate produsele"
+          responsive
+        />
       </div>
       <img
         loading="lazy"

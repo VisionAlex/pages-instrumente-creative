@@ -4,10 +4,16 @@ import { TruckIcon } from "./shared/icons";
 export const Footer: React.FC = () => {
   return (
     <footer className="mt-20  w-full bg-background py-20 px-3 sm:px-5">
-      <div className=" mb-4 flex justify-center gap-4 text-primary">
-        <a href="#">Serviciu clienți</a>
-        <a href="#">Politica de confidențialitate</a>
-        <a href="#">Contact</a>
+      <div className=" mb-4 flex justify-center gap-4 text-primary ">
+        <a className="hover:opacity-70" href="#">
+          Serviciu clienți
+        </a>
+        <a className="hover:opacity-70" href="#">
+          Politica de confidențialitate
+        </a>
+        <a className="hover:opacity-70" href="/contact">
+          Contact
+        </a>
       </div>
       <div className="flex items-center justify-center gap-3 text-subtitle">
         <TruckIcon width={20} fill="#707070" />

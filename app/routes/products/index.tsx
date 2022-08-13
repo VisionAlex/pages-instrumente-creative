@@ -36,9 +36,9 @@ const AllProducts: React.FC = () => {
             return (
               <div
                 key={product.id}
-                className="grid grid-cols-2 border border-secondaryBackground"
+                className="grid grid-cols-1 overflow-hidden border border-secondaryBackground xs:grid-cols-2"
               >
-                <div className="relative flex cursor-pointer items-center transition duration-400 hover:scale-110">
+                <div className="relative flex cursor-pointer items-center">
                   <img
                     loading="lazy"
                     src={product.imageSmall.edges[0].node.url}
@@ -50,7 +50,7 @@ const AllProducts: React.FC = () => {
                     </div>
                   )}
                 </div>
-                <div className="my-8 border-l border-secondaryBackground px-8 text-subtitle">
+                <div className=" z-10 border-t border-secondaryBackground py-8 px-8 text-subtitle xs:my-8 xs:border-t-0 xs:border-l xs:py-0">
                   <div>{product.title}</div>
                   <p className="text-primary">
                     {product.productType === "Gift Cards"

@@ -7,12 +7,14 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import { useState } from "react";
 import { Footer } from "./components/Footer";
 import { FooterMenu } from "./components/FooterMenu";
 import { Logo } from "./components/Logo";
 import { Menu } from "./components/Menu";
 import { Navbar } from "./components/Navbar";
 import { ScrollToTop } from "./components/ScrollToTop";
+import { ShoppingCart } from "./components/ShoppingCart";
 import { Toolbar } from "./components/Toolbar";
 import styles from "./styles/app.css";
 
@@ -33,6 +35,7 @@ export const links = () => {
 };
 
 export default function App() {
+  const [showCart, setShowCart] = useState(true);
   return (
     <html lang="ro">
       <head>
@@ -40,10 +43,11 @@ export default function App() {
         <Links />
       </head>
       <body>
+        <ShoppingCart showCart={showCart} setShowCart={setShowCart} />
         <Navbar>
           <Logo />
           <Menu />
-          <Toolbar />
+          <Toolbar setShowCart={setShowCart} />
         </Navbar>
         <ScrollToTop />
         <div className={`pt-[123px] pb-[50px] lg:pb-0`}>
@@ -52,7 +56,7 @@ export default function App() {
           </main>
           <Footer />
         </div>
-        <FooterMenu />
+        <FooterMenu setShowCart={setShowCart} />
 
         <ScrollRestoration />
         <Scripts />

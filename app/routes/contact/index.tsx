@@ -12,7 +12,7 @@ export const SOCIAL_MEDIA = [
   },
   {
     name: "Pinterest",
-    link: "",
+    link: "https://ro.pinterest.com/instrumentec/_saved/",
   },
   {
     name: "Twitter",
