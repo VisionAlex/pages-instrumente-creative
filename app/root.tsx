@@ -35,7 +35,7 @@ export const links = () => {
 };
 
 export default function App() {
-  const [showCart, setShowCart] = useState(true);
+  const [showCart, setShowCart] = useState(false);
   return (
     <html lang="ro">
       <head>
