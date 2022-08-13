@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import React from "react";
 import { BsBasket, BsHeart, BsSearch } from "react-icons/bs";
 import { PageHeader } from "~/components/shared/PageHeader";
@@ -38,7 +38,10 @@ const AllProducts: React.FC = () => {
                 key={product.id}
                 className="grid grid-cols-1 overflow-hidden border border-secondaryBackground xs:grid-cols-2"
               >
-                <div className="relative flex cursor-pointer items-center">
+                <Link
+                  to={`/products/${product.handle}`}
+                  className="relative flex cursor-pointer items-center"
+                >
                   <img
                     loading="lazy"
                     src={product.imageSmall.edges[0].node.url}
@@ -49,9 +52,14 @@ const AllProducts: React.FC = () => {
                       Stoc epuizat
                     </div>
                   )}
-                </div>
+                </Link>
                 <div className=" z-10 border-t border-secondaryBackground py-8 px-8 text-subtitle xs:my-8 xs:border-t-0 xs:border-l xs:py-0">
-                  <div>{product.title}</div>
+                  <Link
+                    className="hover:text-primary"
+                    to={`/products/${product.handle}`}
+                  >
+                    {product.title}
+                  </Link>
                   <p className="text-primary">
                     {product.productType === "Gift Cards"
                       ? "de la "

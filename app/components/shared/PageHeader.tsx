@@ -1,6 +1,7 @@
 import { useLocation } from "@remix-run/react";
 import { Link } from "./Link";
 import { MENU_ITEMS } from "../Menu";
+import { Breadcrumb } from "./Breadcrumb";
 
 export const PageHeader: React.FC = () => {
   const path = useLocation().pathname;
@@ -10,11 +11,7 @@ export const PageHeader: React.FC = () => {
       <h1 className="text-title capitalize tracking-tighter text-primary lg:text-3xl">
         {name}
       </h1>
-      <div className="flex gap-1.5">
-        <Link to="/">Acasa </Link>
-        <span>/</span>
-        <span>{name}</span>
-      </div>
+      <Breadcrumb name={name} />
     </div>
   );
 };

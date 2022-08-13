@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import React from "react";
 import { BsBasket } from "react-icons/bs";
 import type { Products } from "~/routes";
@@ -20,21 +21,24 @@ export const ProductsHighlights: React.FC<Props> = ({ products }) => {
           }
           return (
             <div key={product.id} className={`${additionalClasses}`}>
-              <img
-                className="cursor-pointer transition duration-400 hover:scale-110"
-                loading="lazy"
-                src={product.imageSmall.edges[0].node.url}
-                alt={product.imageSmall.edges[0].node.altText ?? ""}
-                width={215}
-                height={143}
-              />
+              <Link to={`/products/${product.handle}`} prefetch="intent">
+                <img
+                  className="cursor-pointer transition duration-400 hover:scale-110"
+                  loading="lazy"
+                  src={product.imageSmall.edges[0].node.url}
+                  alt={product.imageSmall.edges[0].node.altText ?? ""}
+                  width={215}
+                  height={143}
+                />
+              </Link>
               <div className="flex items-start justify-between  pt-2">
-                <a
+                <Link
                   className="max-w-fit text-subtitle hover:text-primary"
-                  href={`/produse/${product.handle}`}
+                  to={`/produse/${product.handle}`}
+                  prefetch="intent"
                 >
                   {product.title}
-                </a>
+                </Link>
                 <a className="ml-4 hover:opacity-70" href="/add-to-basket">
                   <BsBasket fontSize={18} />
                 </a>

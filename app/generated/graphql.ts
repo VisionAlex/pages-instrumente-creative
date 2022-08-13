@@ -6575,6 +6575,13 @@ export type GetProductsQueryVariables = Exact<{
 
 export type GetProductsQuery = { __typename?: 'QueryRoot', products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, productType: string, title: string, handle: string, availableForSale: boolean, priceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, imageSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imageMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> } } }> } };
 
+export type GetProductByHandleQueryVariables = Exact<{
+  handle: Scalars['String'];
+}>;
+
+
+export type GetProductByHandleQuery = { __typename?: 'QueryRoot', product?: { __typename?: 'Product', id: string, handle: string, availableForSale: boolean, productType: string, tags: Array<string>, title: string, description: string, descriptionHtml: any, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, requiresShipping: boolean, priceV2: { __typename?: 'MoneyV2', amount: any, currencyCode: CurrencyCode } } }> } } | null };
+
 
 export const GetProductsDocument = gql`
     query getProducts($first: Int, $query: String, $sortKey: ProductSortKeys = BEST_SELLING) {
@@ -6616,11 +6623,53 @@ export const GetProductsDocument = gql`
   }
 }
     `;
+export const GetProductByHandleDocument = gql`
+    query getProductByHandle($handle: String!) {
+  product(handle: $handle) {
+    id
+    handle
+    availableForSale
+    productType
+    tags
+    title
+    description
+    descriptionHtml
+    images(first: 20) {
+      edges {
+        node {
+          url(transform: {maxWidth: 880})
+          altText
+          width
+          height
+        }
+      }
+    }
+    variants(first: 20) {
+      edges {
+        node {
+          id
+          sku
+          availableForSale
+          currentlyNotInStock
+          requiresShipping
+          priceV2 {
+            amount
+            currencyCode
+          }
+        }
+      }
+    }
+  }
+}
+    `;
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
     getProducts(variables?: GetProductsQueryVariables, options?: C): Promise<GetProductsQuery> {
       return requester<GetProductsQuery, GetProductsQueryVariables>(GetProductsDocument, variables, options);
+    },
+    getProductByHandle(variables: GetProductByHandleQueryVariables, options?: C): Promise<GetProductByHandleQuery> {
+      return requester<GetProductByHandleQuery, GetProductByHandleQueryVariables>(GetProductByHandleDocument, variables, options);
     }
   };
 }

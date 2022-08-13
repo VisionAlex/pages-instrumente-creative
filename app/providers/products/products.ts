@@ -12,6 +12,10 @@ export function getProducts(
   return sdk.getProducts({ first, query, sortKey }, options);
 }
 
+export function getProductByHandle(handle: string, options?: QueryOptions) {
+  return sdk.getProductByHandle({ handle }, options);
+}
+
 gql`
   query getProducts(
     $first: Int
@@ -49,6 +53,47 @@ gql`
                 width
                 height
               }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+gql`
+  query getProductByHandle($handle: String!) {
+    product(handle: $handle) {
+      id
+      handle
+      availableForSale
+      productType
+
+      tags
+      title
+      description
+      descriptionHtml
+      images(first: 20) {
+        edges {
+          node {
+            url(transform: { maxWidth: 880 })
+            altText
+            width
+            height
+          }
+        }
+      }
+      variants(first: 20) {
+        edges {
+          node {
+            id
+            sku
+            availableForSale
+            currentlyNotInStock
+            requiresShipping
+            priceV2 {
+              amount
+              currencyCode
             }
           }
         }

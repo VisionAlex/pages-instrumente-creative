@@ -42,7 +42,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="text-primary">
         <ShoppingCart showCart={showCart} setShowCart={setShowCart} />
         <Navbar>
           <Logo />

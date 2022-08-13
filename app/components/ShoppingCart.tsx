@@ -74,12 +74,12 @@ export const ShoppingCart: React.FC<Props> = ({ showCart, setShowCart }) => {
                         <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"
-                            className="-m-2 p-2 text-primary hover:text-subtitle"
+                            className="-m-2 p-2 text-primary outline-none hover:text-subtitle"
                             onClick={() => setShowCart(false)}
                           >
                             <span className="sr-only">Close panel</span>
                             <XIcon
-                              className="-none h-6 w-6"
+                              className="-none h-5 w-5"
                               aria-hidden="true"
                             />
                           </button>
@@ -148,13 +148,13 @@ export const ShoppingCart: React.FC<Props> = ({ showCart, setShowCart }) => {
                           to="#"
                           text="Finalizează Comanda"
                           variant="dark"
-                          className="mb-3 text-lg"
+                          className="mb-3 lg:text-lg"
                         />
                         <LinkButton
                           to="#"
                           text="Vezi Coșul de cumpărături"
                           variant="light"
-                          className="text-lg"
+                          className="lg:text-lg"
                         />
                       </div>
                     </div>
