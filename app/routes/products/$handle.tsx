@@ -80,7 +80,7 @@ const SingleProduct: React.FC = () => {
             type="number"
             step="1"
             min="1"
-            className="h-11 w-11 border-y text-center align-middle text-subtitle outline-none"
+            className="w-11 border-y text-center align-middle text-subtitle outline-none"
             onChange={(e) => {
               setQuantity(Number(e.target.value));
             }}
@@ -111,11 +111,11 @@ const SingleProduct: React.FC = () => {
         <span
           className={`${
             product.variants.edges[selectedVariant].node.currentlyNotInStock
-              ? "text-primary"
-              : "text-red-500"
+              ? "text-red-500"
+              : "text-primary"
           }`}
         >
-          {!product.variants.edges[selectedVariant].node.currentlyNotInStock
+          {product.variants.edges[selectedVariant].node.currentlyNotInStock
             ? "Stoc epuizat"
             : "In stoc"}
         </span>

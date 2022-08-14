@@ -8,6 +8,7 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import { useState } from "react";
+import AccountModal from "./components/AccountModal";
 import { Footer } from "./components/Footer";
 import { FooterMenu } from "./components/FooterMenu";
 import { Logo } from "./components/Logo";
@@ -16,6 +17,7 @@ import { Navbar } from "./components/Navbar";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { ShoppingCart } from "./components/ShoppingCart";
 import { Toolbar } from "./components/Toolbar";
+import { Wishlist } from "./components/Wishlist";
 import styles from "./styles/app.css";
 
 export const meta: MetaFunction = () => ({
@@ -36,6 +38,8 @@ export const links = () => {
 
 export default function App() {
   const [showCart, setShowCart] = useState(false);
+  const [showWishlist, setShowWishlist] = useState(false);
+  const [showAccountModal, setShowAccountModal] = useState(false);
   return (
     <html lang="ro">
       <head>
@@ -44,10 +48,22 @@ export default function App() {
       </head>
       <body className="text-primary">
         <ShoppingCart showCart={showCart} setShowCart={setShowCart} />
+        <Wishlist
+          showWishlist={showWishlist}
+          setShowWishlist={setShowWishlist}
+        />
+        <AccountModal
+          open={showAccountModal}
+          onClose={() => setShowAccountModal(false)}
+        />
         <Navbar>
           <Logo />
           <Menu />
-          <Toolbar setShowCart={setShowCart} />
+          <Toolbar
+            setShowCart={setShowCart}
+            setShowWishlist={setShowWishlist}
+            setShowAccountModal={setShowAccountModal}
+          />
         </Navbar>
         <ScrollToTop />
         <div className={`pt-[123px] pb-[50px] lg:pb-0`}>
@@ -56,7 +72,11 @@ export default function App() {
           </main>
           <Footer />
         </div>
-        <FooterMenu setShowCart={setShowCart} />
+        <FooterMenu
+          setShowCart={setShowCart}
+          setShowWishlist={setShowWishlist}
+          setShowAccountModal={setShowAccountModal}
+        />
 
         <ScrollRestoration />
         <Scripts />

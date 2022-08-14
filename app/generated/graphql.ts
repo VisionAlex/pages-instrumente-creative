@@ -6566,6 +6566,13 @@ export enum WeightUnit {
   Pounds = 'POUNDS'
 }
 
+export type CustomerCreateMutationVariables = Exact<{
+  input: CustomerCreateInput;
+}>;
+
+
+export type CustomerCreateMutation = { __typename?: 'Mutation', customerCreate?: { __typename?: 'CustomerCreatePayload', customer?: { __typename?: 'Customer', id: string, email?: string | null } | null, customerUserErrors: Array<{ __typename?: 'CustomerUserError', code?: CustomerErrorCode | null, field?: Array<string> | null, message: string }> } | null };
+
 export type GetProductsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
   query?: InputMaybe<Scalars['String']>;
@@ -6583,6 +6590,21 @@ export type GetProductByHandleQueryVariables = Exact<{
 export type GetProductByHandleQuery = { __typename?: 'QueryRoot', product?: { __typename?: 'Product', id: string, handle: string, availableForSale: boolean, productType: string, tags: Array<string>, title: string, description: string, descriptionHtml: any, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, requiresShipping: boolean, priceV2: { __typename?: 'MoneyV2', amount: any, currencyCode: CurrencyCode } } }> } } | null };
 
 
+export const CustomerCreateDocument = gql`
+    mutation customerCreate($input: CustomerCreateInput!) {
+  customerCreate(input: $input) {
+    customer {
+      id
+      email
+    }
+    customerUserErrors {
+      code
+      field
+      message
+    }
+  }
+}
+    `;
 export const GetProductsDocument = gql`
     query getProducts($first: Int, $query: String, $sortKey: ProductSortKeys = BEST_SELLING) {
   products(first: $first, query: $query, sortKey: $sortKey) {
@@ -6665,6 +6687,9 @@ export const GetProductByHandleDocument = gql`
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
+    customerCreate(variables: CustomerCreateMutationVariables, options?: C): Promise<CustomerCreateMutation> {
+      return requester<CustomerCreateMutation, CustomerCreateMutationVariables>(CustomerCreateDocument, variables, options);
+    },
     getProducts(variables?: GetProductsQueryVariables, options?: C): Promise<GetProductsQuery> {
       return requester<GetProductsQuery, GetProductsQueryVariables>(GetProductsDocument, variables, options);
     },

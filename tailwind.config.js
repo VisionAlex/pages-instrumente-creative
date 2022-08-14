@@ -13,6 +13,7 @@ module.exports = {
         primary: "#2c2c2c",
         subtitle: "#707070",
         lightGrey: "#f1f1f1",
+        input: "#9a9a9a",
         line: "#d2d2d2",
         tag: "#8f8f8f",
       },
