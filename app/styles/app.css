@@ -817,6 +817,10 @@ input[type="number"] {
   margin-bottom: 0.75rem;
 }
 
+.mt-16 {
+  margin-top: 4rem;
+}
+
 .mb-5 {
   margin-bottom: 1.25rem;
 }
@@ -837,6 +841,14 @@ input[type="number"] {
   margin-bottom: 10rem;
 }
 
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.mb-48 {
+  margin-bottom: 12rem;
+}
+
 .mb-8 {
   margin-bottom: 2rem;
 }
@@ -855,34 +867,6 @@ input[type="number"] {
 
 .mt-5 {
   margin-top: 1.25rem;
-}
-
-.mt-16 {
-  margin-top: 4rem;
-}
-
-.mb-1 {
-  margin-bottom: 0.25rem;
-}
-
-.mb-44 {
-  margin-bottom: 11rem;
-}
-
-.mb-60 {
-  margin-bottom: 15rem;
-}
-
-.mb-48 {
-  margin-bottom: 12rem;
-}
-
-.mt-8 {
-  margin-top: 2rem;
-}
-
-.mt-2 {
-  margin-top: 0.5rem;
 }
 
 .block {
@@ -953,20 +937,16 @@ input[type="number"] {
   height: 3rem;
 }
 
+.h-14 {
+  height: 3.5rem;
+}
+
 .h-6 {
   height: 1.5rem;
 }
 
 .h-\[36px\] {
   height: 36px;
-}
-
-.h-96 {
-  height: 24rem;
-}
-
-.h-14 {
-  height: 3.5rem;
 }
 
 .max-h-\[550px\] {
@@ -1003,6 +983,10 @@ input[type="number"] {
   width: 1.25rem;
 }
 
+.w-1\/2 {
+  width: 50%;
+}
+
 .w-6 {
   width: 1.5rem;
 }
@@ -1013,10 +997,6 @@ input[type="number"] {
 
 .w-\[36px\] {
   width: 36px;
-}
-
-.w-1\/2 {
-  width: 50%;
 }
 
 .min-w-\[16px\] {
@@ -1037,6 +1017,10 @@ input[type="number"] {
   max-width: fit-content;
 }
 
+.max-w-xl {
+  max-width: 36rem;
+}
+
 .max-w-\[490px\] {
   max-width: 490px;
 }
@@ -1047,14 +1031,6 @@ input[type="number"] {
 
 .max-w-md {
   max-width: 28rem;
-}
-
-.max-w-5xl {
-  max-width: 64rem;
-}
-
-.max-w-xl {
-  max-width: 36rem;
 }
 
 .flex-1 {
@@ -1182,10 +1158,6 @@ input[type="number"] {
   gap: 1.5rem;
 }
 
-.gap-5 {
-  gap: 1.25rem;
-}
-
 .divide-y > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-y-reverse: 0;
   border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
@@ -1297,11 +1269,6 @@ input[type="number"] {
 .bg-tag {
   --tw-bg-opacity: 1;
   background-color: rgb(143 143 143 / var(--tw-bg-opacity));
-}
-
-.bg-red-300 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(252 165 165 / var(--tw-bg-opacity));
 }
 
 .bg-opacity-25 {
@@ -1434,11 +1401,6 @@ input[type="number"] {
   padding-bottom: 0px;
 }
 
-.px-10 {
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
-}
-
 .pt-\[123px\] {
   padding-top: 123px;
 }
@@ -1459,6 +1421,10 @@ input[type="number"] {
   padding-top: 0.5rem;
 }
 
+.pt-2\.5 {
+  padding-top: 0.625rem;
+}
+
 .pl-10 {
   padding-left: 2.5rem;
 }
@@ -1467,24 +1433,16 @@ input[type="number"] {
   padding-bottom: 1.5rem;
 }
 
-.pb-3 {
-  padding-bottom: 0.75rem;
-}
-
-.pt-2\.5 {
-  padding-top: 0.625rem;
-}
-
 .pb-7 {
   padding-bottom: 1.75rem;
 }
 
-.text-center {
-  text-align: center;
+.pb-3 {
+  padding-bottom: 0.75rem;
 }
 
-.text-right {
-  text-align: right;
+.text-center {
+  text-align: center;
 }
 
 .align-middle {
@@ -1518,18 +1476,14 @@ input[type="number"] {
   font-size: 0.625rem;
 }
 
-.text-sm {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-
 .text-4xl {
   font-size: 2.25rem;
   line-height: 2.5rem;
 }
 
-.font-medium {
-  font-weight: 500;
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 
 .uppercase {
@@ -1554,10 +1508,6 @@ input[type="number"] {
 
 .leading-tight {
   line-height: 1.25;
-}
-
-.leading-\[50px\] {
-  line-height: 50px;
 }
 
 .tracking-wider {
@@ -1625,14 +1575,6 @@ input[type="number"] {
 .outline-none {
   outline: 2px solid transparent;
   outline-offset: 2px;
-}
-
-.outline-1 {
-  outline-width: 1px;
-}
-
-.outline-primary {
-  outline-color: #2c2c2c;
 }
 
 .filter {
@@ -1778,14 +1720,14 @@ input[type="number"] {
   bottom: 0px;
 }
 
-.after\:top-1\/2::after {
-  content: var(--tw-content);
-  top: 50%;
-}
-
 .after\:right-\[-3px\]::after {
   content: var(--tw-content);
   right: -3px;
+}
+
+.after\:top-1\/2::after {
+  content: var(--tw-content);
+  top: 50%;
 }
 
 .after\:block::after {
@@ -1899,14 +1841,6 @@ input[type="number"] {
 .focus\:border-primary:focus {
   --tw-border-opacity: 1;
   border-color: rgb(44 44 44 / var(--tw-border-opacity));
-}
-
-.focus\:outline-1:focus {
-  outline-width: 1px;
-}
-
-.focus\:outline-primary:focus {
-  outline-color: #2c2c2c;
 }
 
 @media (min-width: 640px) {

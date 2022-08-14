@@ -39,9 +39,7 @@ export const Drawer: React.FC<Props> = ({ title, open, onClose, children }) => {
                   <div className="flex h-full overflow-y-auto bg-white pb-6 shadow-xl">
                     <div className="flex-1 overflow-y-auto">
                       <div className="flex items-center justify-between bg-secondaryBackground py-6 px-6">
-                        <Dialog.Title className="text-lg font-medium">
-                          {title}
-                        </Dialog.Title>
+                        <Dialog.Title className="text-lg">{title}</Dialog.Title>
                         <div>
                           <span className="sr-only">Close wishlist</span>
                           <button
