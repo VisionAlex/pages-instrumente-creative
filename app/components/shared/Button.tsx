@@ -23,7 +23,7 @@ export const Button: React.FC<Props> = ({
         variant === "light"
           ? "bg-white text-primary hover:bg-primary hover:text-white"
           : "",
-        "h-[50px] border border-primary px-4 text-base leading-[50px] tracking-wider antialiased transition-colors duration-300",
+        "flex h-[50px] items-center justify-center border border-primary px-4 text-base tracking-wider antialiased transition-colors duration-300",
         className
       )}
       {...buttonProps}

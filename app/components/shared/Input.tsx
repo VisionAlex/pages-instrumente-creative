@@ -1,16 +1,16 @@
 import React from "react";
+import { classNames } from "~/shared/utils/classNames";
 
-interface Props {
-  type?: React.HTMLInputTypeAttribute;
-  placeholder?: string;
-}
+interface Props extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-export const Input: React.FC<Props> = ({ type, placeholder }) => {
+export const Input: React.FC<Props> = ({ className, ...props }) => {
   return (
     <input
-      type={type}
-      placeholder={placeholder}
-      className="mb-5 h-12 w-full border border-secondaryBackground py-1.5 px-5 text-input outline-none"
+      {...props}
+      className={classNames(
+        "mb-5 h-12 w-full border border-secondaryBackground py-1.5 px-5 text-input outline-none",
+        className
+      )}
     />
   );
 };
