@@ -769,6 +769,16 @@ input[type="number"] {
   margin-bottom: -1.5rem;
 }
 
+.mx-10 {
+  margin-left: 2.5rem;
+  margin-right: 2.5rem;
+}
+
+.mx-9 {
+  margin-left: 2.25rem;
+  margin-right: 2.25rem;
+}
+
 .mt-20 {
   margin-top: 5rem;
 }
@@ -1486,6 +1496,27 @@ input[type="number"] {
   line-height: 1.25rem;
 }
 
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.text-\[8\.6vw\] {
+  font-size: 8.6vw;
+}
+
+.text-\[3\.6vw\] {
+  font-size: 3.6vw;
+}
+
+.text-\[3\.8vw\] {
+  font-size: 3.8vw;
+}
+
+.text-\[4vw\] {
+  font-size: 4vw;
+}
+
 .uppercase {
   text-transform: uppercase;
 }
@@ -1844,9 +1875,23 @@ input[type="number"] {
 }
 
 @media (min-width: 640px) {
+  .sm\:mx-5 {
+    margin-left: 1.25rem;
+    margin-right: 1.25rem;
+  }
+
   .sm\:px-5 {
     padding-left: 1.25rem;
     padding-right: 1.25rem;
+  }
+
+  .sm\:text-header {
+    font-size: 2.65rem;
+  }
+
+  .sm\:text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
   }
 }
 

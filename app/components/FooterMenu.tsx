@@ -1,3 +1,4 @@
+import { HomeIcon } from "@heroicons/react/outline";
 import React from "react";
 import { BsBasket, BsHeart, BsPerson } from "react-icons/bs";
 import { HiOutlineHome } from "react-icons/hi";
@@ -23,9 +24,9 @@ export const FooterMenu: React.FC<Props> = ({
       style={{ height: FOOTER_HEIGHT }}
     >
       <Link to="/">
-        <HiOutlineHome
-          fontSize={24}
-          className="cursor-pointer hover:opacity-70"
+        <HomeIcon
+          strokeWidth={1.5}
+          className="h-6 w-6 cursor-pointer hover:opacity-70"
         />
       </Link>
       <BsPerson
