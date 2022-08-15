@@ -1,4 +1,4 @@
-import type { MetaFunction } from "@remix-run/cloudflare";
+import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import {
   Links,
   LiveReload,
@@ -6,6 +6,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 import { useState } from "react";
 import AccountModal from "./components/AccountModal";
@@ -18,6 +19,8 @@ import { ScrollToTop } from "./components/ScrollToTop";
 import { ShoppingCart } from "./components/ShoppingCart";
 import { Toolbar } from "./components/Toolbar";
 import { Wishlist } from "./components/Wishlist";
+import type { GetUserQuery } from "./generated/graphql";
+import { getUser } from "./providers/customers/customers";
 import styles from "./styles/app.css";
 
 export const meta: MetaFunction = () => ({
@@ -36,7 +39,19 @@ export const links = () => {
   ];
 };
 
+type LoaderData = {
+  user: GetUserQuery | null;
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const user = await getUser(request);
+  const loaderData: LoaderData = { user };
+  return loaderData;
+};
+
 export default function App() {
+  const { user } = useLoaderData<LoaderData>();
+
   const [showCart, setShowCart] = useState(false);
   const [showWishlist, setShowWishlist] = useState(false);
   const [showAccountModal, setShowAccountModal] = useState(false);
@@ -60,6 +75,7 @@ export default function App() {
           <Logo />
           <Menu />
           <Toolbar
+            user={user}
             setShowCart={setShowCart}
             setShowWishlist={setShowWishlist}
             setShowAccountModal={setShowAccountModal}

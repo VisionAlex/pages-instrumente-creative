@@ -16,6 +16,7 @@ module.exports = {
         input: "#9a9a9a",
         line: "#d2d2d2",
         tag: "#8f8f8f",
+        error: "#bf0d12",
       },
       fontSize: {
         tiny: "0.625rem",

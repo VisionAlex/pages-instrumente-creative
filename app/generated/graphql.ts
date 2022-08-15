@@ -6566,12 +6566,26 @@ export enum WeightUnit {
   Pounds = 'POUNDS'
 }
 
-export type CustomerCreateMutationVariables = Exact<{
+export type RegisterMutationVariables = Exact<{
   input: CustomerCreateInput;
 }>;
 
 
-export type CustomerCreateMutation = { __typename?: 'Mutation', customerCreate?: { __typename?: 'CustomerCreatePayload', customer?: { __typename?: 'Customer', id: string, email?: string | null } | null, customerUserErrors: Array<{ __typename?: 'CustomerUserError', code?: CustomerErrorCode | null, field?: Array<string> | null, message: string }> } | null };
+export type RegisterMutation = { __typename?: 'Mutation', customerCreate?: { __typename?: 'CustomerCreatePayload', customer?: { __typename?: 'Customer', id: string, email?: string | null, firstName?: string | null, lastName?: string | null } | null, customerUserErrors: Array<{ __typename?: 'CustomerUserError', code?: CustomerErrorCode | null, field?: Array<string> | null, message: string }> } | null };
+
+export type LoginMutationVariables = Exact<{
+  input: CustomerAccessTokenCreateInput;
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', customerAccessTokenCreate?: { __typename?: 'CustomerAccessTokenCreatePayload', customerAccessToken?: { __typename?: 'CustomerAccessToken', accessToken: string, expiresAt: any } | null, customerUserErrors: Array<{ __typename?: 'CustomerUserError', code?: CustomerErrorCode | null, field?: Array<string> | null, message: string }> } | null };
+
+export type GetUserQueryVariables = Exact<{
+  accessToken: Scalars['String'];
+}>;
+
+
+export type GetUserQuery = { __typename?: 'QueryRoot', customer?: { __typename?: 'Customer', id: string, firstName?: string | null, lastName?: string | null, acceptsMarketing: boolean, email?: string | null } | null };
 
 export type GetProductsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
@@ -6590,18 +6604,46 @@ export type GetProductByHandleQueryVariables = Exact<{
 export type GetProductByHandleQuery = { __typename?: 'QueryRoot', product?: { __typename?: 'Product', id: string, handle: string, availableForSale: boolean, productType: string, tags: Array<string>, title: string, description: string, descriptionHtml: any, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, requiresShipping: boolean, priceV2: { __typename?: 'MoneyV2', amount: any, currencyCode: CurrencyCode } } }> } } | null };
 
 
-export const CustomerCreateDocument = gql`
-    mutation customerCreate($input: CustomerCreateInput!) {
+export const RegisterDocument = gql`
+    mutation register($input: CustomerCreateInput!) {
   customerCreate(input: $input) {
     customer {
       id
       email
+      firstName
+      lastName
     }
     customerUserErrors {
       code
       field
       message
     }
+  }
+}
+    `;
+export const LoginDocument = gql`
+    mutation login($input: CustomerAccessTokenCreateInput!) {
+  customerAccessTokenCreate(input: $input) {
+    customerAccessToken {
+      accessToken
+      expiresAt
+    }
+    customerUserErrors {
+      code
+      field
+      message
+    }
+  }
+}
+    `;
+export const GetUserDocument = gql`
+    query getUser($accessToken: String!) {
+  customer(customerAccessToken: $accessToken) {
+    id
+    firstName
+    lastName
+    acceptsMarketing
+    email
   }
 }
     `;
@@ -6687,8 +6729,14 @@ export const GetProductByHandleDocument = gql`
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
-    customerCreate(variables: CustomerCreateMutationVariables, options?: C): Promise<CustomerCreateMutation> {
-      return requester<CustomerCreateMutation, CustomerCreateMutationVariables>(CustomerCreateDocument, variables, options);
+    register(variables: RegisterMutationVariables, options?: C): Promise<RegisterMutation> {
+      return requester<RegisterMutation, RegisterMutationVariables>(RegisterDocument, variables, options);
+    },
+    login(variables: LoginMutationVariables, options?: C): Promise<LoginMutation> {
+      return requester<LoginMutation, LoginMutationVariables>(LoginDocument, variables, options);
+    },
+    getUser(variables: GetUserQueryVariables, options?: C): Promise<GetUserQuery> {
+      return requester<GetUserQuery, GetUserQueryVariables>(GetUserDocument, variables, options);
     },
     getProducts(variables?: GetProductsQueryVariables, options?: C): Promise<GetProductsQuery> {
       return requester<GetProductsQuery, GetProductsQueryVariables>(GetProductsDocument, variables, options);

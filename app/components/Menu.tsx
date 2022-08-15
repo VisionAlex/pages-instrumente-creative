@@ -28,8 +28,6 @@ export const Menu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
-  useOnClickOutside(mobileMenuRef, () => setIsOpen(false));
-
   return (
     <nav className="z-50 order-1 text-primary lg:order-2">
       {isOpen ? (

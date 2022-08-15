@@ -1,9 +1,12 @@
 import { HeartIcon, SearchIcon, UserIcon } from "@heroicons/react/outline";
-import React from "react";
+import { useNavigate } from "@remix-run/react";
+import React, { useMemo } from "react";
 import { BsBasket } from "react-icons/bs";
+import type { GetUserQuery } from "~/generated/graphql";
 import { Counter } from "./shared/Counter";
 
 interface Props {
+  user: GetUserQuery | null;
   setShowCart: React.Dispatch<React.SetStateAction<boolean>>;
   setShowWishlist: React.Dispatch<React.SetStateAction<boolean>>;
   setShowAccountModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,17 +16,26 @@ export const Toolbar: React.FC<Props> = ({
   setShowCart,
   setShowWishlist,
   setShowAccountModal,
+  user,
 }) => {
+  const navigate = useNavigate();
+
+  const handleClickAccount = useMemo(() => {
+    if (user) return () => navigate("/account");
+    return () => setShowAccountModal(true);
+  }, [navigate, setShowAccountModal, user]);
+
   return (
     <div className="order-3 flex items-center  gap-4 text-primary antialiased">
       <SearchIcon
         strokeWidth={1}
         className="h-5 w-5 cursor-pointer hover:opacity-70"
       />
+
       <UserIcon
         strokeWidth={1}
         className="hidden h-5 w-5 cursor-pointer hover:opacity-70 lg:block"
-        onClick={() => setShowAccountModal(true)}
+        onClick={handleClickAccount}
       />
       <Counter count={0} hideOnLg onClick={() => setShowCart(true)}>
         <BsBasket />

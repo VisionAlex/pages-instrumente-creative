@@ -1,9 +1,47 @@
+import type { ActionFunction } from "@remix-run/cloudflare";
+import { redirect } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { useActionData } from "@remix-run/react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "~/components/shared/Button";
 import { Input } from "~/components/shared/Input";
+import { login } from "~/providers/customers/customers";
+import { storage } from "~/session.server";
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+  const email = formData.get("email");
+  const password = formData.get("password");
+
+  if (
+    !email ||
+    !password ||
+    typeof email !== "string" ||
+    typeof password !== "string"
+  ) {
+    return json({ error: "Adresă de e-mail sau parolă incorectă." });
+  }
+
+  const data = await login({ email, password });
+  if (!data.customerAccessTokenCreate?.customerAccessToken) {
+    return json({ error: "Adresă de e-mail sau parolă incorectă." });
+  } else {
+    const session = await storage.getSession();
+    session.set(
+      "accessToken",
+      data.customerAccessTokenCreate.customerAccessToken.accessToken
+    );
+    return redirect("/", {
+      headers: {
+        "Set-Cookie": await storage.commitSession(session),
+      },
+    });
+  }
+};
 
 const Login: React.FC = () => {
+  const actionData = useActionData();
   return (
     <div>
       <div className="flex items-center justify-center pb-7 text-title antialiased">
@@ -17,7 +55,10 @@ const Login: React.FC = () => {
           Creează un cont
         </Link>
       </div>
-      <form className="mb-5">
+      {actionData && actionData.error && (
+        <div className="text-error">{actionData.error}</div>
+      )}
+      <form className="mb-5" method="post" action="/account/login">
         <div>
           <label className="mb-1 text-lg text-subtitle" htmlFor="email">
             Email*

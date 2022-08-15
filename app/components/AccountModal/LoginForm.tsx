@@ -9,9 +9,9 @@ interface Props {
 
 export const LoginForm: React.FC<Props> = ({ setForm }) => {
   return (
-    <form className="mt-10">
-      <Input type="email" placeholder="Email*" />
-      <Input type="password" placeholder="Parolă*" />
+    <form className="mt-10" method="post" action="/account/login">
+      <Input name="email" type="email" placeholder="Email*" />
+      <Input name="password" type="password" placeholder="Parolă*" />
       <div className="flex justify-end text-subtitle hover:text-primary">
         <button type="button" onClick={() => setForm("reset")}>
           Ți-ai uitat parola?

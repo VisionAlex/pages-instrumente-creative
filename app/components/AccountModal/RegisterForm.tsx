@@ -9,11 +9,11 @@ interface Props {
 
 export const RegisterForm: React.FC<Props> = ({ setForm }) => {
   return (
-    <form className="mt-10">
-      <Input type="text" placeholder="Prenume" />
-      <Input type="text" placeholder="Nume de familie" />
-      <Input type="email" placeholder="Email*" />
-      <Input type="password" placeholder="Parolă*" />
+    <form className="mt-10" method="post" action="/account/register">
+      <Input name="firstName" type="text" placeholder="Prenume" />
+      <Input name="lastName" type="text" placeholder="Nume de familie" />
+      <Input name="email" type="email" placeholder="Email*" />
+      <Input name="password" type="password" placeholder="Parolă*" />
       <div className="flex justify-end text-subtitle hover:text-primary">
         <button>Ți-ai uitat parola?</button>
       </div>
