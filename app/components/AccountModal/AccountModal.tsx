@@ -34,7 +34,7 @@ export const AccountModal: React.FC<Props> = ({ open, onClose }) => {
         >
           <div className="fixed inset-0 bg-primary bg-opacity-25"></div>
         </Transition.Child>
-        <div className="fixed inset-0 px-1.5 py-4">
+        <div className="fixed inset-0">
           <Transition.Child
             as={Fragment}
             enter="transform transition ease-in-out duration-400"
@@ -44,7 +44,7 @@ export const AccountModal: React.FC<Props> = ({ open, onClose }) => {
             leaveFrom="scale-100 opacity-100"
             leaveTo="scale-125 opacity-0"
           >
-            <Dialog.Panel className="absolute inset-0 m-auto max-h-fit w-screen max-w-[490px] bg-white px-5 py-8 md:px-12 md:py-14">
+            <Dialog.Panel className="absolute inset-0 m-auto max-h-fit w-[95vw] max-w-[490px] bg-white px-5 py-8 md:px-12 md:py-14">
               <Dialog.Title className="text-center text-title md:text-3xl">
                 {title}
               </Dialog.Title>

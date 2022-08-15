@@ -6,10 +6,10 @@ export const Hero: React.FC = () => {
     <div className="relative h-[110vw] max-h-[550px] w-full bg-[#fcf8f5]">
       <div className="absolute bottom-0 z-0 h-[100.7px] w-full bg-[#e8e2db]"></div>
       <div className="absolute z-20 flex w-full flex-col items-center justify-center p-5 text-center">
-        <h2 className="text-[8.6vw] leading-tight text-primary sm:text-header ">
+        <h2 className="text-[8.6vw] leading-tight text-primary sm:mb-6 sm:text-header ">
           Editura Instrumente Creative
         </h2>
-        <p className="mx-9 mb-6 block text-[4vw] text-subtitle sm:mx-5 sm:text-lg">
+        <p className="mx-9 mb-6 block text-[4vw] text-subtitle sm:mx-5 sm:text-lg md:mb-12">
           Produse create de psihologi și logopezi. Toate ilustrațiile sunt
           originale
         </p>

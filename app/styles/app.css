@@ -759,6 +759,11 @@ input[type="number"] {
   margin-right: 1.25rem;
 }
 
+.mx-9 {
+  margin-left: 2.25rem;
+  margin-right: 2.25rem;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -769,14 +774,9 @@ input[type="number"] {
   margin-bottom: -1.5rem;
 }
 
-.mx-10 {
-  margin-left: 2.5rem;
-  margin-right: 2.5rem;
-}
-
-.mx-9 {
-  margin-left: 2.25rem;
-  margin-right: 2.25rem;
+.mx-4 {
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 .mt-20 {
@@ -907,6 +907,10 @@ input[type="number"] {
   height: 2rem;
 }
 
+.h-6 {
+  height: 1.5rem;
+}
+
 .h-\[110vw\] {
   height: 110vw;
 }
@@ -951,10 +955,6 @@ input[type="number"] {
   height: 3.5rem;
 }
 
-.h-6 {
-  height: 1.5rem;
-}
-
 .h-\[36px\] {
   height: 36px;
 }
@@ -981,6 +981,10 @@ input[type="number"] {
   width: 100vw;
 }
 
+.w-6 {
+  width: 1.5rem;
+}
+
 .w-\[26px\] {
   width: 26px;
 }
@@ -997,16 +1001,16 @@ input[type="number"] {
   width: 50%;
 }
 
-.w-6 {
-  width: 1.5rem;
-}
-
 .w-11 {
   width: 2.75rem;
 }
 
 .w-\[36px\] {
   width: 36px;
+}
+
+.w-\[95vw\] {
+  width: 95vw;
 }
 
 .min-w-\[16px\] {
@@ -1459,13 +1463,12 @@ input[type="number"] {
   vertical-align: middle;
 }
 
-.text-header {
-  font-size: 2.65rem;
+.text-\[8\.6vw\] {
+  font-size: 8.6vw;
 }
 
-.text-lg {
-  font-size: 1.125rem;
-  line-height: 1.75rem;
+.text-\[4vw\] {
+  font-size: 4vw;
 }
 
 .text-3xl {
@@ -1476,6 +1479,11 @@ input[type="number"] {
 .text-base {
   font-size: 1rem;
   line-height: 1.5rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
 }
 
 .text-title {
@@ -1494,27 +1502,6 @@ input[type="number"] {
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
-}
-
-.text-2xl {
-  font-size: 1.5rem;
-  line-height: 2rem;
-}
-
-.text-\[8\.6vw\] {
-  font-size: 8.6vw;
-}
-
-.text-\[3\.6vw\] {
-  font-size: 3.6vw;
-}
-
-.text-\[3\.8vw\] {
-  font-size: 3.8vw;
-}
-
-.text-\[4vw\] {
-  font-size: 4vw;
 }
 
 .uppercase {
@@ -1844,6 +1831,14 @@ input[type="number"] {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.hover\:placeholder-opacity-70:hover::-moz-placeholder {
+  --tw-placeholder-opacity: 0.7;
+}
+
+.hover\:placeholder-opacity-70:hover::placeholder {
+  --tw-placeholder-opacity: 0.7;
+}
+
 .hover\:opacity-70:hover {
   opacity: 0.7;
 }
@@ -1880,6 +1875,10 @@ input[type="number"] {
     margin-right: 1.25rem;
   }
 
+  .sm\:mb-6 {
+    margin-bottom: 1.5rem;
+  }
+
   .sm\:px-5 {
     padding-left: 1.25rem;
     padding-right: 1.25rem;
@@ -1898,6 +1897,10 @@ input[type="number"] {
 @media (min-width: 768px) {
   .md\:col-span-1 {
     grid-column: span 1 / span 1;
+  }
+
+  .md\:mb-12 {
+    margin-bottom: 3rem;
   }
 
   .md\:grid-cols-3 {
@@ -1953,6 +1956,10 @@ input[type="number"] {
 
   .lg\:mb-44 {
     margin-bottom: 11rem;
+  }
+
+  .lg\:mb-12 {
+    margin-bottom: 3rem;
   }
 
   .lg\:block {

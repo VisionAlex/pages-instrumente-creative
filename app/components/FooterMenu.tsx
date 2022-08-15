@@ -1,9 +1,8 @@
-import { HomeIcon } from "@heroicons/react/outline";
+import { HeartIcon, HomeIcon, UserIcon } from "@heroicons/react/outline";
+import { Link } from "@remix-run/react";
 import React from "react";
 import { BsBasket, BsHeart, BsPerson } from "react-icons/bs";
-import { HiOutlineHome } from "react-icons/hi";
 import { Counter } from "./shared/Counter";
-import { Link } from "./shared/Link";
 
 export const FOOTER_HEIGHT = 50;
 
@@ -20,25 +19,28 @@ export const FooterMenu: React.FC<Props> = ({
 }) => {
   return (
     <nav
-      className="fixed bottom-0 z-50 flex w-screen items-center justify-evenly bg-white text-primary shadow-2xl lg:hidden"
+      className="fixed bottom-0 z-50 flex w-screen items-center justify-evenly bg-white text-primary antialiased shadow-2xl lg:hidden"
       style={{ height: FOOTER_HEIGHT }}
     >
-      <Link to="/">
+      <Link to="/" prefetch="intent">
         <HomeIcon
-          strokeWidth={1.5}
+          strokeWidth={1}
           className="h-6 w-6 cursor-pointer hover:opacity-70"
         />
       </Link>
-      <BsPerson
-        fontSize={24}
-        className="cursor-pointer hover:opacity-70"
+      <UserIcon
+        strokeWidth={1}
+        className="h-6 w-6 cursor-pointer hover:opacity-70"
         onClick={() => setShowAccountModal(true)}
       />
       <Counter count={0} onClick={() => setShowCart(true)}>
-        <BsBasket fontSize={18} />
+        <BsBasket size={18} />
       </Counter>
       <Counter count={0} onClick={() => setShowWishlist(true)}>
-        <BsHeart fontSize={18} />
+        <HeartIcon
+          strokeWidth={1}
+          className="h-6 w-6 cursor-pointer hover:opacity-70"
+        />
       </Counter>
     </nav>
   );

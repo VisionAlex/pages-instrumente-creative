@@ -1,5 +1,6 @@
+import { HeartIcon, SearchIcon, UserIcon } from "@heroicons/react/outline";
 import React from "react";
-import { BsBasket, BsHeart, BsPerson, BsSearch } from "react-icons/bs";
+import { BsBasket } from "react-icons/bs";
 import { Counter } from "./shared/Counter";
 
 interface Props {
@@ -14,18 +15,24 @@ export const Toolbar: React.FC<Props> = ({
   setShowAccountModal,
 }) => {
   return (
-    <div className={`order-3 flex items-center  gap-4 text-primary`}>
-      <BsSearch className="cursor-pointer hover:opacity-70" />
-      <BsPerson
-        fontSize={20}
-        className="hidden cursor-pointer hover:opacity-70 lg:block"
+    <div className="order-3 flex items-center  gap-4 text-primary antialiased">
+      <SearchIcon
+        strokeWidth={1}
+        className="h-5 w-5 cursor-pointer hover:opacity-70"
+      />
+      <UserIcon
+        strokeWidth={1}
+        className="hidden h-5 w-5 cursor-pointer hover:opacity-70 lg:block"
         onClick={() => setShowAccountModal(true)}
       />
       <Counter count={0} hideOnLg onClick={() => setShowCart(true)}>
         <BsBasket />
       </Counter>
       <Counter count={0} hideOnLg onClick={() => setShowWishlist(true)}>
-        <BsHeart />
+        <HeartIcon
+          strokeWidth={1}
+          className="h-5 w-5 cursor-pointer hover:placeholder-opacity-70"
+        />
       </Counter>
     </div>
   );
