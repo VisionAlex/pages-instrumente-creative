@@ -1,16 +1,21 @@
 import type { ActionFunction } from "@remix-run/cloudflare";
+import { redirect } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useActionData } from "@remix-run/react";
 import { Link } from "react-router-dom";
 import { Button } from "~/components/shared/Button";
 import { FormField } from "~/pages/account/FormField";
+
 import {
+  formatRegisterErrors,
   validateEmail,
   validateFirstName,
   validateLastName,
   validatePassword,
 } from "~/pages/account/validate.server";
-import { register } from "~/providers/customers/customers";
+import { login, register } from "~/providers/customers/customers";
+import { FormError } from "~/pages/account/FormError";
+import { storage } from "~/session.server";
 
 export type RegisterActionData = {
   formError?: string;
@@ -59,7 +64,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   const hasErrors = Object.values(fieldErrors).some((error) => error);
   if (hasErrors) {
-    return json({ fieldErrors, fields });
+    return json({ fieldErrors, fields }, { status: 400 });
   }
 
   const response = await register({
@@ -70,10 +75,30 @@ export const action: ActionFunction = async ({ request }) => {
   });
 
   if (response.customerCreate?.customerUserErrors) {
-    console.log(response.customerCreate.customerUserErrors);
-    throw new Error("Need to implement error handling");
+    const { fieldErrors, formError } = formatRegisterErrors(
+      response.customerCreate.customerUserErrors
+    );
+    if (fieldErrors) {
+      return json({ fieldErrors, fields }, { status: 400 });
+    } else {
+      return json({ formError }, { status: 400 });
+    }
   } else {
-    throw new Error("Need to implement success handling");
+    const response = await login({ email, password });
+    if (response.customerAccessTokenCreate?.customerAccessToken?.accessToken) {
+      const session = await storage.getSession();
+      session.set(
+        "accessToken",
+        response.customerAccessTokenCreate.customerAccessToken.accessToken
+      );
+      return redirect("/", {
+        headers: {
+          "Set-Cookie": await storage.commitSession(session),
+        },
+      });
+    } else {
+      return redirect("/");
+    }
   }
 };
 
@@ -93,6 +118,7 @@ const Register: React.FC = () => {
           Autentificare
         </Link>
       </div>
+      <FormError error={actionData?.formError} />
       <form className="mb-5" method="post" action="/account/register">
         <FormField
           label="Prenume"

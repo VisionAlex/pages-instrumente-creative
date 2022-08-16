@@ -3,6 +3,8 @@ import React from "react";
 import { Button } from "~/components/shared/Button";
 import { Input } from "~/components/shared/Input";
 
+// https://community.shopify.com/c/shopify-apis-and-sdks/reset-password-token-in-notification-email/td-p/367455
+
 const Reset: React.FC = () => {
   const navigate = useNavigate();
   return (

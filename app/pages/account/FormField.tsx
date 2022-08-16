@@ -22,7 +22,10 @@ export const FormField: React.FC<Props> = ({
 }) => {
   return (
     <div>
-      <label className="mb-1 text-lg text-subtitle" htmlFor={name}>
+      <label
+        className="mb-1 text-base text-subtitle md:text-lg "
+        htmlFor={name}
+      >
         {label}
       </label>
       <Input

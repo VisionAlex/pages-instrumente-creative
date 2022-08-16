@@ -6,8 +6,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "~/components/shared/Button";
 import { Input } from "~/components/shared/Input";
+import { FormError } from "~/pages/account/FormError";
 import { login } from "~/providers/customers/customers";
 import { storage } from "~/session.server";
+
+type ActionData = {
+  formError: string;
+};
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
@@ -20,12 +25,18 @@ export const action: ActionFunction = async ({ request }) => {
     typeof email !== "string" ||
     typeof password !== "string"
   ) {
-    return json({ error: "Adresă de e-mail sau parolă incorectă." });
+    return json(
+      { error: "Adresă de e-mail sau parolă incorectă." },
+      { status: 401 }
+    );
   }
 
   const data = await login({ email, password });
   if (!data.customerAccessTokenCreate?.customerAccessToken) {
-    return json({ error: "Adresă de e-mail sau parolă incorectă." });
+    return json(
+      { formError: "Adresă de e-mail sau parolă incorectă." },
+      { status: 401 }
+    );
   } else {
     const session = await storage.getSession();
     session.set(
@@ -41,7 +52,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 const Login: React.FC = () => {
-  const actionData = useActionData();
+  const actionData = useActionData<ActionData>();
   return (
     <div>
       <div className="flex items-center justify-center pb-7 text-title antialiased">
@@ -55,23 +66,27 @@ const Login: React.FC = () => {
           Creează un cont
         </Link>
       </div>
-      {actionData && actionData.error && (
-        <div className="text-error">{actionData.error}</div>
-      )}
+      <FormError error={actionData?.formError} />
       <form className="mb-5" method="post" action="/account/login">
         <div>
-          <label className="mb-1 text-lg text-subtitle" htmlFor="email">
+          <label className="mb-1 text-subtitle md:text-lg" htmlFor="email">
             Email*
           </label>
-          <Input name="email" type="email" className="focus:border-primary" />
+          <Input
+            required
+            name="email"
+            type="email"
+            className="focus:border-primary"
+          />
         </div>
         <div>
-          <label className="mb-1" htmlFor="password">
+          <label className="mb-1 text-subtitle md:text-lg" htmlFor="password">
             Parolă*
           </label>
           <Input
             name="password"
             type="password"
+            required
             className="focus:border-primary"
           />
         </div>

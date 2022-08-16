@@ -9,6 +9,7 @@ module.exports = {
       colors: {
         background: "#efefef",
         secondaryBackground: "#ebeeee",
+        errorBackground: "#ffc0cf",
         secondaryLine: "#dbdbdb",
         primary: "#2c2c2c",
         subtitle: "#707070",

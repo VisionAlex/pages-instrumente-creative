@@ -1,3 +1,5 @@
+import { CustomerErrorCode } from "~/generated/graphql";
+
 export const validateEmail = (email: FormDataEntryValue | null) => {
   if (!email) {
     return "Email-ul trebuie completat.";
@@ -36,4 +38,45 @@ export const validateLastName = (lastName: FormDataEntryValue | null) => {
     return "Maxim 30 de caractere";
   }
   return undefined;
+};
+
+type CustomerUserError = Array<{
+  __typename?: "CustomerUserError";
+  code?: CustomerErrorCode | null;
+  field?: Array<string> | null;
+  message: string;
+}>;
+
+export type RegisterFieldErrors = {
+  email?: string;
+  password?: string;
+  firstName?: string;
+  lastName?: string;
+};
+
+export const formatRegisterErrors = (errors: CustomerUserError) => {
+  let formError: string | undefined;
+  let fieldErrors: RegisterFieldErrors = {};
+  for (const error of errors) {
+    if (error.field && error.field[1] === "email") {
+      if (error.code === CustomerErrorCode.Taken) {
+        fieldErrors.email = "Adresa de Email este deja folosita.";
+      } else {
+        fieldErrors.email = error.message;
+      }
+    } else if (error.field && error.field[1] === "password") {
+      fieldErrors.password = error.message;
+    } else if (error.field && error.field[1] === "firstName") {
+      fieldErrors.firstName = error.message;
+    } else if (error.field && error.field[1] === "lastName") {
+      fieldErrors.lastName = error.message;
+    } else {
+      formError =
+        "Unul sau mai multe câmpuri au o eroare. Vă rugăm să verificați și să încercați din nou.";
+    }
+  }
+  return {
+    formError,
+    fieldErrors: Object.keys(fieldErrors).length > 0 ? fieldErrors : undefined,
+  };
 };
