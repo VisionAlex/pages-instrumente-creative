@@ -1,4 +1,4 @@
-import { Paragraph } from "~/components/pages/about/Paragraph";
+import { Paragraph } from "~/pages/about/Paragraph";
 import { PageHeader } from "~/components/shared/PageHeader";
 
 const About: React.FC = () => {

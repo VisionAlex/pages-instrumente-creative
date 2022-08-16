@@ -1,8 +1,85 @@
+import type { ActionFunction } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { useActionData } from "@remix-run/react";
 import { Link } from "react-router-dom";
 import { Button } from "~/components/shared/Button";
-import { Input } from "~/components/shared/Input";
+import { FormField } from "~/pages/account/FormField";
+import {
+  validateEmail,
+  validateFirstName,
+  validateLastName,
+  validatePassword,
+} from "~/pages/account/validate.server";
+import { register } from "~/providers/customers/customers";
+
+export type RegisterActionData = {
+  formError?: string;
+  fieldErrors?: {
+    email?: string | undefined;
+    password?: string | undefined;
+    firstName?: string | undefined;
+    lastName?: string | undefined;
+  };
+  fields?: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  };
+};
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await request.formData();
+  const email = formData.get("email");
+  const password = formData.get("password");
+  const firstName = formData.get("firstName");
+  const lastName = formData.get("lastName");
+
+  if (
+    typeof email !== "string" ||
+    typeof password !== "string" ||
+    typeof firstName !== "string" ||
+    typeof lastName !== "string"
+  ) {
+    return json({ formError: "Formularul nu este valid" }, { status: 400 });
+  }
+
+  const fieldErrors = {
+    email: validateEmail(email),
+    password: validatePassword(password),
+    firstName: validateFirstName(firstName),
+    lastName: validateLastName(lastName),
+  };
+  const fields = {
+    firstName,
+    lastName,
+    email,
+    password,
+  };
+
+  const hasErrors = Object.values(fieldErrors).some((error) => error);
+  if (hasErrors) {
+    return json({ fieldErrors, fields });
+  }
+
+  const response = await register({
+    email,
+    password,
+    firstName: firstName ?? undefined,
+    lastName: lastName ?? undefined,
+  });
+
+  if (response.customerCreate?.customerUserErrors) {
+    console.log(response.customerCreate.customerUserErrors);
+    throw new Error("Need to implement error handling");
+  } else {
+    throw new Error("Need to implement success handling");
+  }
+};
 
 const Register: React.FC = () => {
+  const actionData = useActionData<RegisterActionData>();
+
   return (
     <div>
       <div className="flex items-center justify-center pb-7 text-title antialiased">
@@ -17,34 +94,34 @@ const Register: React.FC = () => {
         </Link>
       </div>
       <form className="mb-5" method="post" action="/account/register">
-        <div>
-          <label className="mb-1 text-lg text-subtitle" htmlFor="firstname">
-            Prenume
-          </label>
-          <Input name="firstName" className="focus:border-primary" />
-        </div>
-        <div>
-          <label className="mb-1 text-lg text-subtitle" htmlFor="lastname">
-            Nume de familie
-          </label>
-          <Input name="lastName" className="focus:border-primary" />
-        </div>
-        <div>
-          <label className="mb-1 text-lg text-subtitle" htmlFor="email">
-            Email*
-          </label>
-          <Input name="email" type="email" className="focus:border-primary" />
-        </div>
-        <div>
-          <label className="mb-1" htmlFor="password">
-            Parolă*
-          </label>
-          <Input
-            name="password"
-            type="password"
-            className="focus:border-primary"
-          />
-        </div>
+        <FormField
+          label="Prenume"
+          name="firstName"
+          defaultValue={actionData?.fields?.firstName}
+          error={actionData?.fieldErrors?.firstName}
+        />
+        <FormField
+          label="Nume de familie"
+          name="lastName"
+          defaultValue={actionData?.fields?.lastName}
+          error={actionData?.fieldErrors?.lastName}
+        />
+        <FormField
+          label="Email*"
+          name="email"
+          type="email"
+          required
+          defaultValue={actionData?.fields?.email}
+          error={actionData?.fieldErrors?.email}
+        />
+        <FormField
+          label="Parola*"
+          name="password"
+          type="password"
+          required
+          defaultValue={actionData?.fields?.password}
+          error={actionData?.fieldErrors?.password}
+        />
         <div className="mb-48 mt-4 flex items-center justify-between">
           <Button type="submit" full>
             Înregistrează-Te
