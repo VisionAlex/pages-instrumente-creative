@@ -3,6 +3,7 @@ import { useNavigate } from "@remix-run/react";
 import React, { useMemo } from "react";
 import { BsBasket } from "react-icons/bs";
 import type { GetUserQuery } from "~/generated/graphql";
+import { AccountIcon } from "./AccountIcon";
 import { Counter } from "./shared/Counter";
 
 interface Props {
@@ -18,13 +19,6 @@ export const Toolbar: React.FC<Props> = ({
   setShowAccountModal,
   user,
 }) => {
-  const navigate = useNavigate();
-
-  const handleClickAccount = useMemo(() => {
-    if (user) return () => navigate("/account");
-    return () => setShowAccountModal(true);
-  }, [navigate, setShowAccountModal, user]);
-
   return (
     <div className="order-3 flex items-center  gap-4 text-primary antialiased">
       <SearchIcon
@@ -32,10 +26,10 @@ export const Toolbar: React.FC<Props> = ({
         className="h-5 w-5 cursor-pointer hover:opacity-70"
       />
 
-      <UserIcon
-        strokeWidth={1}
-        className="hidden h-5 w-5 cursor-pointer hover:opacity-70 lg:block"
-        onClick={handleClickAccount}
+      <AccountIcon
+        openModal={() => setShowAccountModal(true)}
+        user={user}
+        className="hidden lg:block"
       />
       <Counter count={0} hideOnLg onClick={() => setShowCart(true)}>
         <BsBasket />

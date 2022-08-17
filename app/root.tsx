@@ -92,6 +92,7 @@ export default function App() {
           setShowCart={setShowCart}
           setShowWishlist={setShowWishlist}
           setShowAccountModal={setShowAccountModal}
+          user={user}
         />
 
         <ScrollRestoration />
