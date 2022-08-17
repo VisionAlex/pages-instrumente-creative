@@ -55,7 +55,7 @@ const Login: React.FC = () => {
   const actionData = useActionData<ActionData>();
   return (
     <div>
-      <div className="flex items-center justify-center pb-7 text-title antialiased">
+      <div className="flex items-center justify-center pb-7 text-lg antialiased md:text-title">
         <h1 className="relative px-4 after:absolute after:right-[-3px] after:top-1/2 after:block after:h-[5px] after:w-[5px] after:bg-primary">
           Autentificare
         </h1>

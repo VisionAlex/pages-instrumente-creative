@@ -729,6 +729,10 @@ input[type="number"] {
   z-index: 30;
 }
 
+.z-40 {
+  z-index: 40;
+}
+
 .order-2 {
   order: 2;
 }
@@ -842,16 +846,24 @@ input[type="number"] {
   margin-bottom: 1.25rem;
 }
 
+.mt-5 {
+  margin-top: 1.25rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mr-3 {
+  margin-right: 0.75rem;
+}
+
 .mb-1 {
   margin-bottom: 0.25rem;
 }
 
 .-mt-4 {
   margin-top: -1rem;
-}
-
-.mb-2 {
-  margin-bottom: 0.5rem;
 }
 
 .mb-40 {
@@ -870,16 +882,8 @@ input[type="number"] {
   margin-bottom: 4rem;
 }
 
-.mr-3 {
-  margin-right: 0.75rem;
-}
-
 .ml-3 {
   margin-left: 0.75rem;
-}
-
-.mt-5 {
-  margin-top: 1.25rem;
 }
 
 .block {
@@ -1288,19 +1292,14 @@ input[type="number"] {
   background-color: rgb(241 241 241 / var(--tw-bg-opacity));
 }
 
-.bg-red-400 {
+.bg-errorBackground {
   --tw-bg-opacity: 1;
-  background-color: rgb(248 113 113 / var(--tw-bg-opacity));
+  background-color: rgb(255 192 207 / var(--tw-bg-opacity));
 }
 
 .bg-tag {
   --tw-bg-opacity: 1;
   background-color: rgb(143 143 143 / var(--tw-bg-opacity));
-}
-
-.bg-errorBackground {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 192 207 / var(--tw-bg-opacity));
 }
 
 .bg-opacity-25 {
@@ -1897,6 +1896,10 @@ input[type="number"] {
     margin-bottom: 1.5rem;
   }
 
+  .sm\:mt-8 {
+    margin-top: 2rem;
+  }
+
   .sm\:px-5 {
     padding-left: 1.25rem;
     padding-right: 1.25rem;
@@ -1919,6 +1922,10 @@ input[type="number"] {
 
   .md\:mb-12 {
     margin-bottom: 3rem;
+  }
+
+  .md\:mt-16 {
+    margin-top: 4rem;
   }
 
   .md\:grid-cols-3 {
@@ -1957,19 +1964,13 @@ input[type="number"] {
     line-height: 2.25rem;
   }
 
-  .md\:text-base {
-    font-size: 1rem;
-    line-height: 1.5rem;
-  }
-
   .md\:text-lg {
     font-size: 1.125rem;
     line-height: 1.75rem;
   }
 
-  .md\:text-subtitle {
-    --tw-text-opacity: 1;
-    color: rgb(112 112 112 / var(--tw-text-opacity));
+  .md\:text-title {
+    font-size: 1.625rem;
   }
 }
 
