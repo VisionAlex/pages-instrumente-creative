@@ -9,7 +9,7 @@ interface Props {
 
 export const LoginForm: React.FC<Props> = ({ setForm }) => {
   return (
-    <form className="mt-10" method="post" action="/account/login">
+    <form className="mt-10" method="post" action="/auth/login">
       <Input name="email" type="email" placeholder="Email*" />
       <Input name="password" type="password" placeholder="Parolă*" />
       <div className="flex justify-end text-subtitle hover:text-primary">

@@ -31,7 +31,7 @@ const Reset: React.FC = () => {
             variant="light"
             type="button"
             className="h-14"
-            onClick={() => navigate("/account/login")}
+            onClick={() => navigate("/auth/login")}
           >
             Anulează
           </Button>

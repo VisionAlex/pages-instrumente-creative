@@ -61,13 +61,13 @@ const Login: React.FC = () => {
         </h1>
         <Link
           className="px-4 text-input hover:text-primary"
-          to="/account/register"
+          to="/auth/register"
         >
           Creează un cont
         </Link>
       </div>
       <FormError error={actionData?.formError} />
-      <form className="mb-5" method="post" action="/account/login">
+      <form className="mb-5" method="post" action="/auth/login">
         <div>
           <label className="mb-1 text-subtitle md:text-lg" htmlFor="email">
             Email*
@@ -92,7 +92,7 @@ const Login: React.FC = () => {
         </div>
         <div className="mb-48 flex items-center justify-between">
           <Button className="w-1/2">Autentifica-te</Button>
-          <Link to="/account/reset" className="text-subtitle">
+          <Link to="/auth/reset" className="text-subtitle">
             Ți-ai uitat parola?
           </Link>
         </div>

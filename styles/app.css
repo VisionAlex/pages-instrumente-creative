@@ -31,3 +31,7 @@
 .description li {
   margin-bottom: 0.5rem;
 }
+
+.link-parent:hover .link-child {
+  @apply bg-primary text-white;
+}

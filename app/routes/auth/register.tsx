@@ -111,15 +111,12 @@ const Register: React.FC = () => {
         <h1 className="relative px-4 after:absolute after:right-[-3px] after:top-1/2 after:block after:h-[5px] after:w-[5px] after:bg-primary">
           Creează un cont
         </h1>
-        <Link
-          className="px-4 text-input hover:text-primary"
-          to="/account/login"
-        >
+        <Link className="px-4 text-input hover:text-primary" to="/auth/login">
           Autentificare
         </Link>
       </div>
       <FormError error={actionData?.formError} />
-      <form className="mb-5" method="post" action="/account/register">
+      <form className="mb-5" method="post" action="/auth/register">
         <FormField
           label="Prenume"
           name="firstName"

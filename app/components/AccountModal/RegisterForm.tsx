@@ -9,7 +9,7 @@ interface Props {
 
 export const RegisterForm: React.FC<Props> = ({ setForm }) => {
   return (
-    <form className="mt-10" method="post" action="/account/register">
+    <form className="mt-10" method="post" action="/auth/register">
       <Input name="firstName" type="text" placeholder="Prenume" />
       <Input name="lastName" type="text" placeholder="Nume de familie" />
       <Input name="email" type="email" placeholder="Email*" />

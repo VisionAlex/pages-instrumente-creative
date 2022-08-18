@@ -834,6 +834,10 @@ input[type="number"] {
   margin-bottom: 2.5rem;
 }
 
+.mt-12 {
+  margin-top: 3rem;
+}
+
 .mr-\[11px\] {
   margin-right: 11px;
 }
@@ -934,6 +938,10 @@ input[type="number"] {
   height: 42px;
 }
 
+.h-10 {
+  height: 2.5rem;
+}
+
 .h-4 {
   height: 1rem;
 }
@@ -994,6 +1002,10 @@ input[type="number"] {
 
 .w-\[26px\] {
   width: 26px;
+}
+
+.w-10 {
+  width: 2.5rem;
 }
 
 .w-\[95vw\] {
@@ -1358,6 +1370,11 @@ input[type="number"] {
   padding-bottom: 1.5rem;
 }
 
+.py-5 {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
@@ -1445,6 +1462,10 @@ input[type="number"] {
 
 .pt-2\.5 {
   padding-top: 0.625rem;
+}
+
+.pl-3 {
+  padding-left: 0.75rem;
 }
 
 .pl-10 {
@@ -1680,6 +1701,13 @@ input[type="number"] {
   margin-bottom: 0.5rem;
 }
 
+.link-parent:hover .link-child {
+  --tw-bg-opacity: 1;
+  background-color: rgb(44 44 44 / var(--tw-bg-opacity));
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
 .before\:absolute::before {
   content: var(--tw-content);
   position: absolute;
@@ -1875,6 +1903,16 @@ input[type="number"] {
 .hover\:after\:w-full:hover::after {
   content: var(--tw-content);
   width: 100%;
+}
+
+.hover\:first\:bg-primary:first-child:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(44 44 44 / var(--tw-bg-opacity));
+}
+
+.hover\:first\:text-white:first-child:hover {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .focus\:border-primary:focus {
