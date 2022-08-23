@@ -38,7 +38,7 @@ export const action: ActionFunction = async ({ request }) => {
       { status: 401 }
     );
   } else {
-    const session = await storage.getSession();
+    const session = await storage.getSession(request.headers.get("Cookie"));
     session.set(
       "accessToken",
       data.customerAccessTokenCreate.customerAccessToken.accessToken

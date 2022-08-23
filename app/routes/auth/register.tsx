@@ -86,7 +86,7 @@ export const action: ActionFunction = async ({ request }) => {
   } else {
     const response = await login({ email, password });
     if (response.customerAccessTokenCreate?.customerAccessToken?.accessToken) {
-      const session = await storage.getSession();
+      const session = await storage.getSession(request.headers.get("Cookie"));
       session.set(
         "accessToken",
         response.customerAccessTokenCreate.customerAccessToken.accessToken

@@ -1905,16 +1905,6 @@ input[type="number"] {
   width: 100%;
 }
 
-.hover\:first\:bg-primary:first-child:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(44 44 44 / var(--tw-bg-opacity));
-}
-
-.hover\:first\:text-white:first-child:hover {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
 .focus\:border-primary:focus {
   --tw-border-opacity: 1;
   border-color: rgb(44 44 44 / var(--tw-border-opacity));
