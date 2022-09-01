@@ -18,13 +18,37 @@ export function getProductByHandle(handle: string, options?: QueryOptions) {
 }
 
 export interface WishlistItem {
-  productId: string;
+  id: string;
+  title: string;
+  handle: string;
+  featuredImage: {
+    altText: string | null;
+    url: string;
+    width: number | null;
+    height: number | null;
+  };
+  variants: {
+    edges: {
+      node: {
+        id: string;
+        sku?: string | null;
+        availableForSale: boolean;
+        currentlyInStock: boolean;
+        priceV2: { amount: string };
+      };
+    }[];
+  };
 }
 
 export async function getWishlist(request: Request) {
   const session = await storage.getSession(request.headers.get("Cookie"));
   const wishlist = JSON.parse(session.get("wishlist") || "[]") as string[];
   return wishlist;
+}
+
+export async function getWishlistInfo(wishlist: string[]) {
+  const products = await sdk.getWishlistInfo({ ids: wishlist });
+  return products.nodes as WishlistItem[];
 }
 
 gql`
@@ -78,9 +102,10 @@ gql`
       id
       ... on Product {
         title
+        handle
         featuredImage {
           altText
-          url(transform: { maxWidth: 100 })
+          url(transform: { maxWidth: 200 })
           width
           height
         }

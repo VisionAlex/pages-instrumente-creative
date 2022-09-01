@@ -21,6 +21,10 @@ export const action: ActionFunction = async ({ request }) => {
       }
       break;
     }
+    case "remove": {
+      newWishlist = wishlist.filter((id) => id !== productId);
+      break;
+    }
     default: {
       newWishlist = wishlist;
     }

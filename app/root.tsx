@@ -21,7 +21,8 @@ import { Toolbar } from "./components/Toolbar";
 import { Wishlist } from "./components/Wishlist";
 import type { GetUserQuery } from "./generated/graphql";
 import { getUser } from "./providers/customers/customers";
-import { getWishlist } from "./providers/products/products";
+import type { WishlistItem } from "./providers/products/products";
+import { getWishlist, getWishlistInfo } from "./providers/products/products";
 import styles from "./styles/app.css";
 
 export const meta: MetaFunction = () => ({
@@ -42,13 +43,14 @@ export const links = () => {
 
 type LoaderData = {
   user: GetUserQuery | null;
-  wishlist: string[];
+  wishlist: WishlistItem[];
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUser(request);
   const wishlist = await getWishlist(request);
-  const loaderData: LoaderData = { user, wishlist };
+  const wishlistInfo = await getWishlistInfo(wishlist);
+  const loaderData: LoaderData = { user, wishlist: wishlistInfo };
   return loaderData;
 };
 
@@ -67,6 +69,7 @@ export default function App() {
       <body className="text-primary">
         <ShoppingCart showCart={showCart} setShowCart={setShowCart} />
         <Wishlist
+          wishlist={wishlist}
           showWishlist={showWishlist}
           setShowWishlist={setShowWishlist}
         />

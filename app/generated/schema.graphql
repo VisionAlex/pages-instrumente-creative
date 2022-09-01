@@ -1404,6 +1404,9 @@ enum CheckoutErrorCode {
   """Checkout is locked."""
   LOCKED
 
+  """Maximum number of discount codes limit reached."""
+  MAXIMUM_DISCOUNT_CODE_LIMIT_REACHED
+
   """Missing payment input."""
   MISSING_PAYMENT_INPUT
 
@@ -5287,17 +5290,13 @@ type Mutation {
     customerAccessToken: String!
   ): CustomerDefaultAddressUpdatePayload
 
-  """
-  Sends a reset password email to the customer, as the first step in the reset password process.
-  """
+  "\"Sends a reset password email to the customer. The reset password email contains a reset password URL and token that you can pass to the [`customerResetByUrl`](https://shopify.dev/api/storefront/latest/mutations/customerResetByUrl) or [`customerReset`](https://shopify.dev/api/storefront/latest/mutations/customerReset) mutation to reset the customer password.\"\n"
   customerRecover(
     """The email address of the customer to recover."""
     email: String!
   ): CustomerRecoverPayload
 
-  """
-  Resets a customer’s password with a token received from `CustomerRecover`.
-  """
+  "\"Resets a customer’s password with the token received from a reset password email. You can send a reset password email with the [`customerRecover`](https://shopify.dev/api/storefront/latest/mutations/customerRecover) mutation.\"\n"
   customerReset(
     """Specifies the customer to reset."""
     id: ID!
@@ -5306,9 +5305,7 @@ type Mutation {
     input: CustomerResetInput!
   ): CustomerResetPayload
 
-  """
-  Resets a customer’s password with the reset password url received from `CustomerRecover`.
-  """
+  "\"Resets a customer’s password with the reset password URL received from a reset password email. You can send a reset password email with the [`customerRecover`](https://shopify.dev/api/storefront/latest/mutations/customerRecover) mutation.\"\n"
   customerResetByUrl(
     """New password that will be set as part of the reset password process."""
     password: String!
@@ -7003,6 +7000,8 @@ type SellingPlanGroupEdge {
 
 """
 Represents an option on a selling plan group that's available in the drop-down list in the storefront.
+
+Individual selling plans contribute their options to the associated selling plan group. For example, a selling plan group might have an option called `option1: Delivery every`. One selling plan in that group could contribute `option1: 2 weeks` with the pricing for that option, and another selling plan could contribute `option1: 4 weeks`, with different pricing.
 """
 type SellingPlanGroupOption {
   """The name of the option. For example, 'Delivery every'."""

@@ -1,11 +1,18 @@
 import type { LoaderArgs, LoaderFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import { useLoaderData } from "@remix-run/react";
+import {
+  Form,
+  useLoaderData,
+  useLocation,
+  useOutletContext,
+} from "@remix-run/react";
 import { sdk } from "graphqlWrapper";
 import React, { useState } from "react";
 import { Breadcrumb } from "~/components/shared/Breadcrumb";
 import type { GetProductByHandleQuery } from "~/generated/graphql";
 import { PlusSmIcon, MinusSmIcon, HeartIcon } from "@heroicons/react/outline";
+import { classNames } from "~/shared/utils/classNames";
+import type { WishlistItem } from "~/providers/products/products";
 
 type ProductLoaderData = {
   product: GetProductByHandleQuery["product"];
@@ -33,8 +40,14 @@ export const loader: LoaderFunction = async ({
 
 const SingleProduct: React.FC = () => {
   const { product } = useLoaderData<ProductLoaderData>();
+  const { wishlist } = useOutletContext<{ wishlist: WishlistItem[] }>();
+
+  const location = useLocation();
   const [selectedVariant] = useState(0);
+
   const [quantity, setQuantity] = useState<number>(1);
+
+  const isFavorite = wishlist.some((item) => item.id === product?.id);
 
   const addQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -97,9 +110,25 @@ const SingleProduct: React.FC = () => {
         <button className="grow bg-primary px-4 py-2 text-sm uppercase tracking-widest text-white">
           Adaugă în coș
         </button>
-        <div className="ml-3 flex cursor-pointer select-none items-center justify-center border border-background px-2 transition-colors duration-300 hover:bg-primary hover:text-white">
-          <HeartIcon strokeWidth={1} className="h-5 w-5" />
-        </div>
+
+        <Form
+          method="post"
+          action="/wishlist"
+          className="ml-3 flex cursor-pointer select-none items-center justify-center border border-background px-2 transition-colors duration-300 hover:bg-primary hover:text-white"
+        >
+          <input type="hidden" name="productId" value={product.id} />
+          <input type="hidden" name="_action" value="add" />
+          <input type="hidden" name="redirectTo" value={location.pathname} />
+          <button>
+            <HeartIcon
+              strokeWidth={1}
+              className={classNames(
+                "h-5 w-5 fill-primary transition-all duration-300 ease-in-out"
+              )}
+              fillOpacity={isFavorite ? 1 : 0}
+            />
+          </button>
+        </Form>
       </div>
       <div className="mt-4">
         <button className="w-full bg-primary py-3 text-sm uppercase tracking-widest text-white">

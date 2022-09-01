@@ -1245,6 +1245,8 @@ export enum CheckoutErrorCode {
   LineItemNotFound = 'LINE_ITEM_NOT_FOUND',
   /** Checkout is locked. */
   Locked = 'LOCKED',
+  /** Maximum number of discount codes limit reached. */
+  MaximumDiscountCodeLimitReached = 'MAXIMUM_DISCOUNT_CODE_LIMIT_REACHED',
   /** Missing payment input. */
   MissingPaymentInput = 'MISSING_PAYMENT_INPUT',
   /** Not enough in stock. */
@@ -4343,11 +4345,20 @@ export type Mutation = {
   customerCreate?: Maybe<CustomerCreatePayload>;
   /** Updates the default address of an existing customer. */
   customerDefaultAddressUpdate?: Maybe<CustomerDefaultAddressUpdatePayload>;
-  /** Sends a reset password email to the customer, as the first step in the reset password process. */
+  /**
+   * "Sends a reset password email to the customer. The reset password email contains a reset password URL and token that you can pass to the [`customerResetByUrl`](https://shopify.dev/api/storefront/latest/mutations/customerResetByUrl) or [`customerReset`](https://shopify.dev/api/storefront/latest/mutations/customerReset) mutation to reset the customer password."
+   *
+   */
   customerRecover?: Maybe<CustomerRecoverPayload>;
-  /** Resets a customer’s password with a token received from `CustomerRecover`. */
+  /**
+   * "Resets a customer’s password with the token received from a reset password email. You can send a reset password email with the [`customerRecover`](https://shopify.dev/api/storefront/latest/mutations/customerRecover) mutation."
+   *
+   */
   customerReset?: Maybe<CustomerResetPayload>;
-  /** Resets a customer’s password with the reset password url received from `CustomerRecover`. */
+  /**
+   * "Resets a customer’s password with the reset password URL received from a reset password email. You can send a reset password email with the [`customerRecover`](https://shopify.dev/api/storefront/latest/mutations/customerRecover) mutation."
+   *
+   */
   customerResetByUrl?: Maybe<CustomerResetByUrlPayload>;
   /** Updates an existing customer. */
   customerUpdate?: Maybe<CustomerUpdatePayload>;
@@ -6129,7 +6140,11 @@ export type SellingPlanGroupEdge = {
   node: SellingPlanGroup;
 };
 
-/** Represents an option on a selling plan group that's available in the drop-down list in the storefront. */
+/**
+ * Represents an option on a selling plan group that's available in the drop-down list in the storefront.
+ *
+ * Individual selling plans contribute their options to the associated selling plan group. For example, a selling plan group might have an option called `option1: Delivery every`. One selling plan in that group could contribute `option1: 2 weeks` with the pricing for that option, and another selling plan could contribute `option1: 4 weeks`, with different pricing.
+ */
 export type SellingPlanGroupOption = {
   __typename?: 'SellingPlanGroupOption';
   /** The name of the option. For example, 'Delivery every'. */
@@ -6596,6 +6611,13 @@ export type GetProductsQueryVariables = Exact<{
 
 export type GetProductsQuery = { __typename?: 'QueryRoot', products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, productType: string, title: string, handle: string, availableForSale: boolean, priceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, imageSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imageMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> } } }> } };
 
+export type GetWishlistInfoQueryVariables = Exact<{
+  ids: Array<Scalars['ID']> | Scalars['ID'];
+}>;
+
+
+export type GetWishlistInfoQuery = { __typename?: 'QueryRoot', nodes: Array<{ __typename?: 'AppliedGiftCard', id: string } | { __typename?: 'Article', id: string } | { __typename?: 'Blog', id: string } | { __typename?: 'Cart', id: string } | { __typename?: 'CartLine', id: string } | { __typename?: 'Checkout', id: string } | { __typename?: 'CheckoutLineItem', id: string } | { __typename?: 'Collection', id: string } | { __typename?: 'Comment', id: string } | { __typename?: 'ExternalVideo', id: string } | { __typename?: 'GenericFile', id: string } | { __typename?: 'Location', id: string } | { __typename?: 'MailingAddress', id: string } | { __typename?: 'MediaImage', id: string } | { __typename?: 'Menu', id: string } | { __typename?: 'MenuItem', id: string } | { __typename?: 'Metafield', id: string } | { __typename?: 'Model3d', id: string } | { __typename?: 'Order', id: string } | { __typename?: 'Page', id: string } | { __typename?: 'Payment', id: string } | { __typename?: 'Product', title: string, handle: string, id: string, featuredImage?: { __typename?: 'Image', altText?: string | null, url: any, width?: number | null, height?: number | null } | null, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, priceV2: { __typename?: 'MoneyV2', amount: any } } }> } } | { __typename?: 'ProductOption', id: string } | { __typename?: 'ProductVariant', id: string } | { __typename?: 'Shop', id: string } | { __typename?: 'ShopPolicy', id: string } | { __typename?: 'UrlRedirect', id: string } | { __typename?: 'Video', id: string } | null> };
+
 export type GetProductByHandleQueryVariables = Exact<{
   handle: Scalars['String'];
 }>;
@@ -6687,6 +6709,36 @@ export const GetProductsDocument = gql`
   }
 }
     `;
+export const GetWishlistInfoDocument = gql`
+    query getWishlistInfo($ids: [ID!]!) {
+  nodes(ids: $ids) {
+    id
+    ... on Product {
+      title
+      handle
+      featuredImage {
+        altText
+        url(transform: {maxWidth: 200})
+        width
+        height
+      }
+      variants(first: 20) {
+        edges {
+          node {
+            id
+            sku
+            availableForSale
+            currentlyNotInStock
+            priceV2 {
+              amount
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
 export const GetProductByHandleDocument = gql`
     query getProductByHandle($handle: String!) {
   product(handle: $handle) {
@@ -6740,6 +6792,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getProducts(variables?: GetProductsQueryVariables, options?: C): Promise<GetProductsQuery> {
       return requester<GetProductsQuery, GetProductsQueryVariables>(GetProductsDocument, variables, options);
+    },
+    getWishlistInfo(variables: GetWishlistInfoQueryVariables, options?: C): Promise<GetWishlistInfoQuery> {
+      return requester<GetWishlistInfoQuery, GetWishlistInfoQueryVariables>(GetWishlistInfoDocument, variables, options);
     },
     getProductByHandle(variables: GetProductByHandleQueryVariables, options?: C): Promise<GetProductByHandleQuery> {
       return requester<GetProductByHandleQuery, GetProductByHandleQueryVariables>(GetProductByHandleDocument, variables, options);
