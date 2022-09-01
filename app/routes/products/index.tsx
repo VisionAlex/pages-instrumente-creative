@@ -9,9 +9,8 @@ import {
   useOutletContext,
 } from "@remix-run/react";
 import React from "react";
-import { BsBasket, BsHeart, BsSearch } from "react-icons/bs";
+import { BsBasket, BsSearch } from "react-icons/bs";
 import { PageHeader } from "~/components/shared/PageHeader";
-import type { WishlistItem } from "~/providers/products/products";
 import { getProducts } from "~/providers/products/products";
 import { classNames } from "~/shared/utils/classNames";
 import type { Products } from "..";
@@ -35,7 +34,7 @@ export const loader = async () => {
 };
 const AllProducts: React.FC = () => {
   const { products } = useLoaderData<ProductsLoaderData>();
-  const { wishlist } = useOutletContext<{ wishlist: WishlistItem[] }>();
+  const { wishlist } = useOutletContext<{ wishlist: string[] }>();
   const location = useLocation();
   return (
     <div>
@@ -43,9 +42,7 @@ const AllProducts: React.FC = () => {
       <div>
         <div className="mx-5 grid grid-cols-1 gap-6">
           {products.map(({ node: product }) => {
-            const isFavorite = wishlist.find(
-              ({ productId }) => productId === product.id
-            );
+            const isFavorite = wishlist.find((item) => item === product.id);
             return (
               <div
                 key={product.id}

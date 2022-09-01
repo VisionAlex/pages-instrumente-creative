@@ -2,13 +2,12 @@ import React from "react";
 import { HeartIcon, SearchIcon } from "@heroicons/react/outline";
 import { BsBasket } from "react-icons/bs";
 import type { GetUserQuery } from "~/generated/graphql";
-import type { WishlistItem } from "~/providers/products/products";
 import { AccountIcon } from "./AccountIcon";
 import { Counter } from "./shared/Counter";
 
 interface Props {
   user: GetUserQuery | null;
-  wishlist: WishlistItem[];
+  wishlistSize: number;
   setShowCart: React.Dispatch<React.SetStateAction<boolean>>;
   setShowWishlist: React.Dispatch<React.SetStateAction<boolean>>;
   setShowAccountModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,7 +18,7 @@ export const Toolbar: React.FC<Props> = ({
   setShowWishlist,
   setShowAccountModal,
   user,
-  wishlist,
+  wishlistSize,
 }) => {
   return (
     <div className="order-3 flex items-center  gap-4 text-primary antialiased">
@@ -37,7 +36,7 @@ export const Toolbar: React.FC<Props> = ({
         <BsBasket />
       </Counter>
       <Counter
-        count={wishlist ? wishlist.length : 0}
+        count={wishlistSize}
         hideOnLg
         onClick={() => setShowWishlist(true)}
       >

@@ -42,7 +42,7 @@ export const links = () => {
 
 type LoaderData = {
   user: GetUserQuery | null;
-  wishlist: any[];
+  wishlist: string[];
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -79,7 +79,7 @@ export default function App() {
           <Menu />
           <Toolbar
             user={user}
-            wishlist={wishlist}
+            wishlistSize={wishlist.length}
             setShowCart={setShowCart}
             setShowWishlist={setShowWishlist}
             setShowAccountModal={setShowAccountModal}
@@ -93,7 +93,7 @@ export default function App() {
           <Footer />
         </div>
         <FooterMenu
-          wishlist={wishlist}
+          wishlistSize={wishlist.length}
           setShowCart={setShowCart}
           setShowWishlist={setShowWishlist}
           setShowAccountModal={setShowAccountModal}

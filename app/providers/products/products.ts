@@ -23,9 +23,7 @@ export interface WishlistItem {
 
 export async function getWishlist(request: Request) {
   const session = await storage.getSession(request.headers.get("Cookie"));
-  const wishlist = JSON.parse(
-    session.get("wishlist") || "[]"
-  ) as WishlistItem[];
+  const wishlist = JSON.parse(session.get("wishlist") || "[]") as string[];
   return wishlist;
 }
 
@@ -65,6 +63,36 @@ gql`
                 altText
                 width
                 height
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+gql`
+  query getWishlistInfo($ids: [ID!]!) {
+    nodes(ids: $ids) {
+      id
+      ... on Product {
+        title
+        featuredImage {
+          altText
+          url(transform: { maxWidth: 100 })
+          width
+          height
+        }
+        variants(first: 20) {
+          edges {
+            node {
+              id
+              sku
+              availableForSale
+              currentlyNotInStock
+              priceV2 {
+                amount
               }
             }
           }
