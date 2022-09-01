@@ -1,10 +1,19 @@
+import { HeartIcon } from "@heroicons/react/outline";
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import { Link, useLoaderData } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useLoaderData,
+  useLocation,
+  useOutletContext,
+} from "@remix-run/react";
 import React from "react";
 import { BsBasket, BsHeart, BsSearch } from "react-icons/bs";
 import { PageHeader } from "~/components/shared/PageHeader";
+import type { WishlistItem } from "~/providers/products/products";
 import { getProducts } from "~/providers/products/products";
+import { classNames } from "~/shared/utils/classNames";
 import type { Products } from "..";
 
 export type ProductsLoaderData = {
@@ -26,13 +35,17 @@ export const loader = async () => {
 };
 const AllProducts: React.FC = () => {
   const { products } = useLoaderData<ProductsLoaderData>();
-
+  const { wishlist } = useOutletContext<{ wishlist: WishlistItem[] }>();
+  const location = useLocation();
   return (
     <div>
       <PageHeader />
       <div>
         <div className="mx-5 grid grid-cols-1 gap-6">
           {products.map(({ node: product }) => {
+            const isFavorite = wishlist.find(
+              ({ productId }) => productId === product.id
+            );
             return (
               <div
                 key={product.id}
@@ -73,9 +86,28 @@ const AllProducts: React.FC = () => {
                     <div className="flex h-[36px] w-[36px] cursor-pointer items-center justify-center border border-primary">
                       <BsSearch />
                     </div>
-                    <div className="flex h-[36px] w-[36px] cursor-pointer items-center justify-center border border-primary">
-                      <BsHeart />
-                    </div>
+                    <Form method="post" action="/wishlist">
+                      <input
+                        type="hidden"
+                        name="productId"
+                        value={product.id}
+                      />
+                      <input type="hidden" name="_action" value="add" />
+                      <input
+                        type="hidden"
+                        name="redirectTo"
+                        value={location.pathname}
+                      />
+                      <button className="flex h-[36px] w-[36px] cursor-pointer items-center justify-center border border-primary">
+                        <HeartIcon
+                          strokeWidth={1}
+                          className={classNames(
+                            "h-5 w-5 fill-primary transition-all duration-300 ease-in-out"
+                          )}
+                          fillOpacity={isFavorite ? 1 : 0}
+                        />
+                      </button>
+                    </Form>
                   </div>
                 </div>
               </div>

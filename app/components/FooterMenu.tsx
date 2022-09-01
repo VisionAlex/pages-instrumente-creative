@@ -3,6 +3,7 @@ import { Link } from "@remix-run/react";
 import React from "react";
 import { BsBasket } from "react-icons/bs";
 import type { GetUserQuery } from "~/generated/graphql";
+import type { WishlistItem } from "~/providers/products/products";
 import { AccountIcon } from "./AccountIcon";
 import { Counter } from "./shared/Counter";
 
@@ -13,6 +14,7 @@ interface Props {
   setShowWishlist: React.Dispatch<React.SetStateAction<boolean>>;
   setShowAccountModal: React.Dispatch<React.SetStateAction<boolean>>;
   user: GetUserQuery | null;
+  wishlist: WishlistItem[];
 }
 
 export const FooterMenu: React.FC<Props> = ({
@@ -20,6 +22,7 @@ export const FooterMenu: React.FC<Props> = ({
   setShowWishlist,
   setShowAccountModal,
   user,
+  wishlist,
 }) => {
   return (
     <nav
@@ -40,7 +43,7 @@ export const FooterMenu: React.FC<Props> = ({
       <Counter count={0} onClick={() => setShowCart(true)}>
         <BsBasket size={18} />
       </Counter>
-      <Counter count={0} onClick={() => setShowWishlist(true)}>
+      <Counter count={wishlist.length} onClick={() => setShowWishlist(true)}>
         <HeartIcon
           strokeWidth={1}
           className="h-6 w-6 cursor-pointer hover:opacity-70"

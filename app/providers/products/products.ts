@@ -2,6 +2,7 @@ import gql from "graphql-tag";
 import type { QueryOptions } from "graphqlWrapper";
 import { sdk } from "graphqlWrapper";
 import type { ProductSortKeys } from "~/generated/graphql";
+import { storage } from "~/session.server";
 
 export function getProducts(
   first: number,
@@ -14,6 +15,18 @@ export function getProducts(
 
 export function getProductByHandle(handle: string, options?: QueryOptions) {
   return sdk.getProductByHandle({ handle }, options);
+}
+
+export interface WishlistItem {
+  productId: string;
+}
+
+export async function getWishlist(request: Request) {
+  const session = await storage.getSession(request.headers.get("Cookie"));
+  const wishlist = JSON.parse(
+    session.get("wishlist") || "[]"
+  ) as WishlistItem[];
+  return wishlist;
 }
 
 gql`

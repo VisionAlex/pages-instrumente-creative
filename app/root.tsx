@@ -21,6 +21,7 @@ import { Toolbar } from "./components/Toolbar";
 import { Wishlist } from "./components/Wishlist";
 import type { GetUserQuery } from "./generated/graphql";
 import { getUser } from "./providers/customers/customers";
+import { getWishlist } from "./providers/products/products";
 import styles from "./styles/app.css";
 
 export const meta: MetaFunction = () => ({
@@ -41,16 +42,18 @@ export const links = () => {
 
 type LoaderData = {
   user: GetUserQuery | null;
+  wishlist: any[];
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUser(request);
-  const loaderData: LoaderData = { user };
+  const wishlist = await getWishlist(request);
+  const loaderData: LoaderData = { user, wishlist };
   return loaderData;
 };
 
 export default function App() {
-  const { user } = useLoaderData<LoaderData>();
+  const { user, wishlist } = useLoaderData<LoaderData>();
 
   const [showCart, setShowCart] = useState(false);
   const [showWishlist, setShowWishlist] = useState(false);
@@ -76,6 +79,7 @@ export default function App() {
           <Menu />
           <Toolbar
             user={user}
+            wishlist={wishlist}
             setShowCart={setShowCart}
             setShowWishlist={setShowWishlist}
             setShowAccountModal={setShowAccountModal}
@@ -84,11 +88,12 @@ export default function App() {
         <ScrollToTop />
         <div className={`pt-[123px] pb-[50px] lg:pb-0`}>
           <main>
-            <Outlet />
+            <Outlet context={{ wishlist }} />
           </main>
           <Footer />
         </div>
         <FooterMenu
+          wishlist={wishlist}
           setShowCart={setShowCart}
           setShowWishlist={setShowWishlist}
           setShowAccountModal={setShowAccountModal}
