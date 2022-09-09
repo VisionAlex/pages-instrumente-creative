@@ -8,6 +8,7 @@ import { Counter } from "./shared/Counter";
 interface Props {
   user: GetUserQuery | null;
   wishlistSize: number;
+  cartSize: number;
   setShowCart: React.Dispatch<React.SetStateAction<boolean>>;
   setShowWishlist: React.Dispatch<React.SetStateAction<boolean>>;
   setShowAccountModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,6 +19,7 @@ export const Toolbar: React.FC<Props> = ({
   setShowWishlist,
   setShowAccountModal,
   user,
+  cartSize,
   wishlistSize,
 }) => {
   return (
@@ -32,7 +34,7 @@ export const Toolbar: React.FC<Props> = ({
         user={user}
         className="hidden lg:block"
       />
-      <Counter count={0} hideOnLg onClick={() => setShowCart(true)}>
+      <Counter count={cartSize} hideOnLg onClick={() => setShowCart(true)}>
         <BsBasket />
       </Counter>
       <Counter

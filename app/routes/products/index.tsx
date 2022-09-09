@@ -2,7 +2,9 @@ import { HeartIcon } from "@heroicons/react/outline";
 import type { MetaFunction } from "@remix-run/cloudflare";
 import { Form, Link, useLocation, useOutletContext } from "@remix-run/react";
 import React from "react";
-import { BsBasket, BsSearch } from "react-icons/bs";
+import { BsSearch } from "react-icons/bs";
+import { AddToCart } from "~/components/AddToCart";
+import { AddToWishlist } from "~/components/AddToWishlist";
 import { PageHeader } from "~/components/shared/PageHeader";
 import type { Products } from "~/root";
 import { classNames } from "~/shared/utils/classNames";
@@ -20,7 +22,6 @@ type OutletContextType = {
 
 const AllProducts: React.FC = () => {
   const { wishlist, products } = useOutletContext<OutletContextType>();
-  const location = useLocation();
   if (!products) return null;
   return (
     <div>
@@ -63,34 +64,14 @@ const AllProducts: React.FC = () => {
                     {Number(product.priceRange.minVariantPrice.amount)} lei
                   </p>
                   <div className="mt-5 flex items-center gap-1.5 text-primary">
-                    <div className="flex h-[36px] w-[36px] cursor-pointer items-center justify-center border border-primary">
-                      <BsBasket />
-                    </div>
+                    <AddToCart product={product} />
                     <div className="flex h-[36px] w-[36px] cursor-pointer items-center justify-center border border-primary">
                       <BsSearch />
                     </div>
-                    <Form method="post" action="/wishlist">
-                      <input
-                        type="hidden"
-                        name="productId"
-                        value={product.id}
-                      />
-                      <input type="hidden" name="_action" value="add" />
-                      <input
-                        type="hidden"
-                        name="redirectTo"
-                        value={location.pathname}
-                      />
-                      <button className="flex h-[36px] w-[36px] cursor-pointer items-center justify-center border border-primary">
-                        <HeartIcon
-                          strokeWidth={1}
-                          className={classNames(
-                            "h-5 w-5 fill-primary transition-all duration-300 ease-in-out"
-                          )}
-                          fillOpacity={isFavorite ? 1 : 0}
-                        />
-                      </button>
-                    </Form>
+                    <AddToWishlist
+                      productID={product.id}
+                      isFavorite={isFavorite}
+                    />
                   </div>
                 </div>
               </div>

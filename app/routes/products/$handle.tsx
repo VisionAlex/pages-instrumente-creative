@@ -12,7 +12,6 @@ import { Breadcrumb } from "~/components/shared/Breadcrumb";
 import type { GetProductByHandleQuery } from "~/generated/graphql";
 import { PlusSmIcon, MinusSmIcon, HeartIcon } from "@heroicons/react/outline";
 import { classNames } from "~/shared/utils/classNames";
-import type { WishlistItem } from "~/providers/products/products";
 
 type ProductLoaderData = {
   product: GetProductByHandleQuery["product"];
@@ -40,14 +39,14 @@ export const loader: LoaderFunction = async ({
 
 const SingleProduct: React.FC = () => {
   const { product } = useLoaderData<ProductLoaderData>();
-  const { wishlist } = useOutletContext<{ wishlist: WishlistItem[] }>();
+  const { wishlist } = useOutletContext<{ wishlist: string[] }>();
 
   const location = useLocation();
   const [selectedVariant] = useState(0);
 
   const [quantity, setQuantity] = useState<number>(1);
 
-  const isFavorite = wishlist.some((item) => item.id === product?.id);
+  const isFavorite = wishlist.some((item) => item === product?.id);
 
   const addQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -116,7 +115,7 @@ const SingleProduct: React.FC = () => {
           action="/wishlist"
           className="ml-3 flex cursor-pointer select-none items-center justify-center border border-background px-2 transition-colors duration-300 hover:bg-primary hover:text-white"
         >
-          <input type="hidden" name="productId" value={product.id} />
+          <input type="hidden" name="productID" value={product.id} />
           <input type="hidden" name="_action" value="add" />
           <input type="hidden" name="redirectTo" value={location.pathname} />
           <button>

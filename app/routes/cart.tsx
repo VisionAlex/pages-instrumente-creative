@@ -6,34 +6,48 @@ export const headers: HeadersFunction = ({ actionHeaders }) => {
   return actionHeaders;
 };
 
+export interface CartItem {
+  id: string;
+  quantity: number;
+}
 export const action: ActionFunction = async ({ request }) => {
   const session = await storage.getSession(request.headers.get("Cookie"));
   const formData = await request.formData();
   const action = formData.get("_action");
   const redirectTo = (formData.get("redirectTo") || "/") as string;
-  const productID = formData.get("productID") as string;
-  const wishlist = JSON.parse(session.get("wishlist") || "[]") as string[];
+  const variantID = formData.get("variantID") as string;
+  const cart = JSON.parse(session.get("cart") || "[]") as CartItem[];
 
-  let newWishlist = wishlist;
+  let newCart = cart;
   switch (action) {
     case "add": {
-      const product = wishlist.find((id) => id === productID);
-      if (!product) {
-        newWishlist = [...wishlist, productID];
+      const foundItem = cart.find((item) => item.id === variantID);
+      if (foundItem) {
+        newCart = cart.map((item) => {
+          if (item.id === variantID) {
+            return { ...item, quantity: item.quantity + 1 };
+          }
+          return item;
+        });
       } else {
-        newWishlist = wishlist.filter((id) => id !== productID);
+        newCart = [...cart, { id: variantID, quantity: 1 }];
       }
       break;
     }
     case "remove": {
-      newWishlist = wishlist.filter((id) => id !== productID);
+      newCart = cart.map((item) => {
+        if (item.id === variantID) {
+          return { ...item, quantity: item.quantity - 1 };
+        }
+        return item;
+      });
       break;
     }
     default: {
-      newWishlist = wishlist;
+      newCart = cart;
     }
   }
-  session.set("wishlist", JSON.stringify(newWishlist));
+  session.set("cart", JSON.stringify(newCart));
   return redirect(redirectTo, {
     headers: {
       "Set-Cookie": await storage.commitSession(session),

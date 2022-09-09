@@ -22,7 +22,7 @@ export const Wishlist: React.FC<Props> = ({
   const wishlistInfo = useMemo(() => {
     return products.filter((product) => wishlist.includes(product.node.id));
   }, [products, wishlist]);
-  console.log({ wishlistInfo, products, wishlist });
+
   return (
     <Drawer
       title="Produse Favorite"
@@ -73,7 +73,7 @@ export const Wishlist: React.FC<Props> = ({
                     </Button>
                   </div>
                   <Form method="post" action="/wishlist">
-                    <input type="hidden" name="productId" value={item.id} />
+                    <input type="hidden" name="productID" value={item.id} />
                     <input type="hidden" name="_action" value="remove" />
                     <input
                       type="hidden"

@@ -20,9 +20,11 @@ import { ShoppingCart } from "./components/ShoppingCart";
 import { Toolbar } from "./components/Toolbar";
 import { Wishlist } from "./components/Wishlist";
 import type { GetProductsQuery, GetUserQuery } from "./generated/graphql";
+import { getCart } from "./providers/cart/cart";
 import { getUser } from "./providers/customers/customers";
 import { getProducts } from "./providers/products/products";
 import { getWishlist } from "./providers/products/products";
+import type { CartItem } from "./routes/cart";
 import styles from "./styles/app.css";
 
 export const meta: MetaFunction = () => ({
@@ -46,6 +48,7 @@ export type Products = GetProductsQuery["products"]["edges"];
 type LoaderData = {
   user: GetUserQuery | null;
   wishlist: string[];
+  cart: CartItem[];
   products: Products;
 };
 
@@ -53,8 +56,10 @@ export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUser(request);
   const products = await getProducts(20);
   const wishlist = await getWishlist(request);
+  const cart = await getCart(request);
   const loaderData: LoaderData = {
     user,
+    cart,
     wishlist: wishlist,
     products: products.products.edges,
   };
@@ -62,11 +67,12 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function App() {
-  const { user, wishlist, products } = useLoaderData<LoaderData>();
+  const { user, wishlist, products, cart } = useLoaderData<LoaderData>();
 
   const [showCart, setShowCart] = useState(false);
   const [showWishlist, setShowWishlist] = useState(false);
   const [showAccountModal, setShowAccountModal] = useState(false);
+  const cartSize = getCartSize(cart);
   return (
     <html lang="ro">
       <head>
@@ -90,6 +96,7 @@ export default function App() {
           <Menu />
           <Toolbar
             user={user}
+            cartSize={cartSize}
             wishlistSize={wishlist.length}
             setShowCart={setShowCart}
             setShowWishlist={setShowWishlist}
@@ -104,6 +111,7 @@ export default function App() {
           <Footer />
         </div>
         <FooterMenu
+          cartSize={cartSize}
           wishlistSize={wishlist.length}
           setShowCart={setShowCart}
           setShowWishlist={setShowWishlist}
@@ -118,3 +126,6 @@ export default function App() {
     </html>
   );
 }
+
+const getCartSize = (cart: CartItem[]) =>
+  cart.reduce((quantity, item) => quantity + item.quantity, 0);

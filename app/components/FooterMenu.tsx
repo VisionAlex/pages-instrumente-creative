@@ -13,6 +13,7 @@ interface Props {
   setShowWishlist: React.Dispatch<React.SetStateAction<boolean>>;
   setShowAccountModal: React.Dispatch<React.SetStateAction<boolean>>;
   user: GetUserQuery | null;
+  cartSize: number;
   wishlistSize: number;
 }
 
@@ -21,6 +22,7 @@ export const FooterMenu: React.FC<Props> = ({
   setShowWishlist,
   setShowAccountModal,
   user,
+  cartSize,
   wishlistSize,
 }) => {
   return (
@@ -39,7 +41,7 @@ export const FooterMenu: React.FC<Props> = ({
         openModal={() => setShowAccountModal(true)}
         className="h-6 w-6"
       />
-      <Counter count={0} onClick={() => setShowCart(true)}>
+      <Counter count={cartSize} onClick={() => setShowCart(true)}>
         <BsBasket size={18} />
       </Counter>
       <Counter count={wishlistSize} onClick={() => setShowWishlist(true)}>
