@@ -1,13 +1,14 @@
 import { Link } from "@remix-run/react";
 import React from "react";
 import { BsBasket } from "react-icons/bs";
-import type { Products } from "~/routes";
+import type { Products } from "~/root";
 
 interface Props {
   products: Products;
 }
 
 export const ProductsHighlights: React.FC<Props> = ({ products }) => {
+  if (!products) return null;
   return (
     <div className="mx-auto max-w-3xl py-4 px-5">
       <h3 className="mb-7 text-center text-3xl leading-tight text-primary">

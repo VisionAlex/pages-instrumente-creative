@@ -19,10 +19,10 @@ import { ScrollToTop } from "./components/ScrollToTop";
 import { ShoppingCart } from "./components/ShoppingCart";
 import { Toolbar } from "./components/Toolbar";
 import { Wishlist } from "./components/Wishlist";
-import type { GetUserQuery } from "./generated/graphql";
+import type { GetProductsQuery, GetUserQuery } from "./generated/graphql";
 import { getUser } from "./providers/customers/customers";
-import type { WishlistItem } from "./providers/products/products";
-import { getWishlist, getWishlistInfo } from "./providers/products/products";
+import { getProducts } from "./providers/products/products";
+import { getWishlist } from "./providers/products/products";
 import styles from "./styles/app.css";
 
 export const meta: MetaFunction = () => ({
@@ -41,21 +41,28 @@ export const links = () => {
   ];
 };
 
+export type Products = GetProductsQuery["products"]["edges"];
+
 type LoaderData = {
   user: GetUserQuery | null;
-  wishlist: WishlistItem[];
+  wishlist: string[];
+  products: Products;
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUser(request);
+  const products = await getProducts(20);
   const wishlist = await getWishlist(request);
-  const wishlistInfo = await getWishlistInfo(wishlist);
-  const loaderData: LoaderData = { user, wishlist: wishlistInfo };
+  const loaderData: LoaderData = {
+    user,
+    wishlist: wishlist,
+    products: products.products.edges,
+  };
   return loaderData;
 };
 
 export default function App() {
-  const { user, wishlist } = useLoaderData<LoaderData>();
+  const { user, wishlist, products } = useLoaderData<LoaderData>();
 
   const [showCart, setShowCart] = useState(false);
   const [showWishlist, setShowWishlist] = useState(false);
@@ -69,6 +76,7 @@ export default function App() {
       <body className="text-primary">
         <ShoppingCart showCart={showCart} setShowCart={setShowCart} />
         <Wishlist
+          products={products as Products}
           wishlist={wishlist}
           showWishlist={showWishlist}
           setShowWishlist={setShowWishlist}
@@ -91,7 +99,7 @@ export default function App() {
         <ScrollToTop />
         <div className={`pt-[123px] pb-[50px] lg:pb-0`}>
           <main>
-            <Outlet context={{ wishlist }} />
+            <Outlet context={{ wishlist, products }} />
           </main>
           <Footer />
         </div>

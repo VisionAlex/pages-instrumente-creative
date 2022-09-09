@@ -17,38 +17,10 @@ export function getProductByHandle(handle: string, options?: QueryOptions) {
   return sdk.getProductByHandle({ handle }, options);
 }
 
-export interface WishlistItem {
-  id: string;
-  title: string;
-  handle: string;
-  featuredImage: {
-    altText: string | null;
-    url: string;
-    width: number | null;
-    height: number | null;
-  };
-  variants: {
-    edges: {
-      node: {
-        id: string;
-        sku?: string | null;
-        availableForSale: boolean;
-        currentlyInStock: boolean;
-        priceV2: { amount: string };
-      };
-    }[];
-  };
-}
-
 export async function getWishlist(request: Request) {
   const session = await storage.getSession(request.headers.get("Cookie"));
   const wishlist = JSON.parse(session.get("wishlist") || "[]") as string[];
   return wishlist;
-}
-
-export async function getWishlistInfo(wishlist: string[]) {
-  const products = await sdk.getWishlistInfo({ ids: wishlist });
-  return products.nodes as WishlistItem[];
 }
 
 gql`
@@ -70,7 +42,13 @@ gql`
               amount
             }
           }
-          imageSmall: images(first: 2) {
+          thumbnail: featuredImage {
+            url(transform: { maxWidth: 200 })
+            altText
+            width
+            height
+          }
+          imageSmall: images(first: 10) {
             edges {
               node {
                 url(transform: { maxWidth: 436 })
@@ -80,7 +58,7 @@ gql`
               }
             }
           }
-          imageMedium: images(first: 2) {
+          imageMedium: images(first: 10) {
             edges {
               node {
                 url(transform: { maxWidth: 720 })
@@ -90,34 +68,16 @@ gql`
               }
             }
           }
-        }
-      }
-    }
-  }
-`;
-
-gql`
-  query getWishlistInfo($ids: [ID!]!) {
-    nodes(ids: $ids) {
-      id
-      ... on Product {
-        title
-        handle
-        featuredImage {
-          altText
-          url(transform: { maxWidth: 200 })
-          width
-          height
-        }
-        variants(first: 20) {
-          edges {
-            node {
-              id
-              sku
-              availableForSale
-              currentlyNotInStock
-              priceV2 {
-                amount
+          variants(first: 10) {
+            edges {
+              node {
+                id
+                sku
+                availableForSale
+                currentlyNotInStock
+                priceV2 {
+                  amount
+                }
               }
             }
           }

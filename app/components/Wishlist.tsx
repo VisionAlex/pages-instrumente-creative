@@ -1,21 +1,28 @@
 import { XIcon } from "@heroicons/react/outline";
 import { Form, useLocation, useNavigate } from "@remix-run/react";
-import type { WishlistItem } from "~/providers/products/products";
+import { useMemo } from "react";
+import type { Products } from "~/root";
 import { Button } from "./shared/Button";
 import { Drawer } from "./shared/Drawer";
 
 interface Props {
-  wishlist: WishlistItem[];
+  wishlist: string[];
+  products: Products;
   showWishlist: boolean;
   setShowWishlist: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export const Wishlist: React.FC<Props> = ({
   wishlist,
+  products,
   showWishlist,
   setShowWishlist,
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const wishlistInfo = useMemo(() => {
+    return products.filter((product) => wishlist.includes(product.node.id));
+  }, [products, wishlist]);
+  console.log({ wishlistInfo, products, wishlist });
   return (
     <Drawer
       title="Produse Favorite"
@@ -27,7 +34,7 @@ export const Wishlist: React.FC<Props> = ({
           <div className="text-subtitle">Gol</div>
         ) : (
           <ul>
-            {wishlist.map((item) => {
+            {wishlistInfo.map(({ node: item }) => {
               const hasVariants = item.variants.edges.length > 1;
               const isAvailable = item.variants.edges[0].node.availableForSale;
               return (
@@ -36,11 +43,11 @@ export const Wishlist: React.FC<Props> = ({
                   key={item.id}
                 >
                   <img
-                    src={item.featuredImage.url}
+                    src={item.thumbnail?.url ?? ""}
                     width={100}
                     height={67}
                     className="h-[67px] w-[100px]"
-                    alt={item.featuredImage.altText ?? ""}
+                    alt={item.thumbnail?.altText ?? ""}
                   />
                   <div className="pr-4">
                     <p className="mb-2">{item.title}</p>

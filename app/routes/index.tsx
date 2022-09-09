@@ -1,31 +1,18 @@
-import { json } from "@remix-run/cloudflare";
-import { useLoaderData } from "@remix-run/react";
+import { useOutletContext } from "@remix-run/react";
 import { Hero } from "~/components/Hero";
 import { ProductsHighlights } from "~/components/ProductHighlights";
-import type { GetProductsQuery } from "~/generated/graphql";
-import { getProducts } from "~/providers/products/products";
-
-export type Products = GetProductsQuery["products"]["edges"];
-
-export type IndexLoaderData = {
-  products: Products;
-};
-
-export const loader = async () => {
-  const products = await getProducts(3, "available_for_sale:true");
-
-  const loaderData: IndexLoaderData = {
-    products: products.products.edges,
-  };
-  return json(loaderData);
-};
+import type { Products } from "~/root";
 
 const Index: React.FC = () => {
-  const { products } = useLoaderData<IndexLoaderData>();
+  const { products } = useOutletContext<{ products: Products }>();
   return (
     <div>
       <Hero />
-      <ProductsHighlights products={products as Products} />
+      <ProductsHighlights
+        products={products
+          .filter((product) => product.node.availableForSale)
+          .slice(0, 3)}
+      />
     </div>
   );
 };

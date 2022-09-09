@@ -1,24 +1,11 @@
 import { HeartIcon } from "@heroicons/react/outline";
 import type { MetaFunction } from "@remix-run/cloudflare";
-import { json } from "@remix-run/cloudflare";
-import {
-  Form,
-  Link,
-  useLoaderData,
-  useLocation,
-  useOutletContext,
-} from "@remix-run/react";
+import { Form, Link, useLocation, useOutletContext } from "@remix-run/react";
 import React from "react";
 import { BsBasket, BsSearch } from "react-icons/bs";
 import { PageHeader } from "~/components/shared/PageHeader";
-import type { WishlistItem } from "~/providers/products/products";
-import { getProducts } from "~/providers/products/products";
+import type { Products } from "~/root";
 import { classNames } from "~/shared/utils/classNames";
-import type { Products } from "..";
-
-export type ProductsLoaderData = {
-  products: Products;
-};
 
 export const meta: MetaFunction = () => {
   return {
@@ -26,24 +13,22 @@ export const meta: MetaFunction = () => {
   };
 };
 
-export const loader = async () => {
-  const products = await getProducts(20);
-  const loaderData: ProductsLoaderData = {
-    products: products.products.edges,
-  };
-  return json(loaderData);
+type OutletContextType = {
+  wishlist: string[];
+  products: Products;
 };
+
 const AllProducts: React.FC = () => {
-  const { products } = useLoaderData<ProductsLoaderData>();
-  const { wishlist } = useOutletContext<{ wishlist: WishlistItem[] }>();
+  const { wishlist, products } = useOutletContext<OutletContextType>();
   const location = useLocation();
+  if (!products) return null;
   return (
     <div>
       <PageHeader />
       <div>
         <div className="mx-5 grid grid-cols-1 gap-6">
           {products.map(({ node: product }) => {
-            const isFavorite = wishlist.some((item) => item.id === product.id);
+            const isFavorite = wishlist.some((item) => item === product.id);
             return (
               <div
                 key={product.id}

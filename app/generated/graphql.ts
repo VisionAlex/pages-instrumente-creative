@@ -6609,14 +6609,7 @@ export type GetProductsQueryVariables = Exact<{
 }>;
 
 
-export type GetProductsQuery = { __typename?: 'QueryRoot', products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, productType: string, title: string, handle: string, availableForSale: boolean, priceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, imageSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imageMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> } } }> } };
-
-export type GetWishlistInfoQueryVariables = Exact<{
-  ids: Array<Scalars['ID']> | Scalars['ID'];
-}>;
-
-
-export type GetWishlistInfoQuery = { __typename?: 'QueryRoot', nodes: Array<{ __typename?: 'AppliedGiftCard', id: string } | { __typename?: 'Article', id: string } | { __typename?: 'Blog', id: string } | { __typename?: 'Cart', id: string } | { __typename?: 'CartLine', id: string } | { __typename?: 'Checkout', id: string } | { __typename?: 'CheckoutLineItem', id: string } | { __typename?: 'Collection', id: string } | { __typename?: 'Comment', id: string } | { __typename?: 'ExternalVideo', id: string } | { __typename?: 'GenericFile', id: string } | { __typename?: 'Location', id: string } | { __typename?: 'MailingAddress', id: string } | { __typename?: 'MediaImage', id: string } | { __typename?: 'Menu', id: string } | { __typename?: 'MenuItem', id: string } | { __typename?: 'Metafield', id: string } | { __typename?: 'Model3d', id: string } | { __typename?: 'Order', id: string } | { __typename?: 'Page', id: string } | { __typename?: 'Payment', id: string } | { __typename?: 'Product', title: string, handle: string, id: string, featuredImage?: { __typename?: 'Image', altText?: string | null, url: any, width?: number | null, height?: number | null } | null, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, priceV2: { __typename?: 'MoneyV2', amount: any } } }> } } | { __typename?: 'ProductOption', id: string } | { __typename?: 'ProductVariant', id: string } | { __typename?: 'Shop', id: string } | { __typename?: 'ShopPolicy', id: string } | { __typename?: 'UrlRedirect', id: string } | { __typename?: 'Video', id: string } | null> };
+export type GetProductsQuery = { __typename?: 'QueryRoot', products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, productType: string, title: string, handle: string, availableForSale: boolean, priceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, thumbnail?: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } | null, imageSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imageMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, priceV2: { __typename?: 'MoneyV2', amount: any } } }> } } }> } };
 
 export type GetProductByHandleQueryVariables = Exact<{
   handle: Scalars['String'];
@@ -6684,7 +6677,13 @@ export const GetProductsDocument = gql`
             amount
           }
         }
-        imageSmall: images(first: 2) {
+        thumbnail: featuredImage {
+          url(transform: {maxWidth: 200})
+          altText
+          width
+          height
+        }
+        imageSmall: images(first: 10) {
           edges {
             node {
               url(transform: {maxWidth: 436})
@@ -6694,7 +6693,7 @@ export const GetProductsDocument = gql`
             }
           }
         }
-        imageMedium: images(first: 2) {
+        imageMedium: images(first: 10) {
           edges {
             node {
               url(transform: {maxWidth: 720})
@@ -6704,33 +6703,16 @@ export const GetProductsDocument = gql`
             }
           }
         }
-      }
-    }
-  }
-}
-    `;
-export const GetWishlistInfoDocument = gql`
-    query getWishlistInfo($ids: [ID!]!) {
-  nodes(ids: $ids) {
-    id
-    ... on Product {
-      title
-      handle
-      featuredImage {
-        altText
-        url(transform: {maxWidth: 200})
-        width
-        height
-      }
-      variants(first: 20) {
-        edges {
-          node {
-            id
-            sku
-            availableForSale
-            currentlyNotInStock
-            priceV2 {
-              amount
+        variants(first: 10) {
+          edges {
+            node {
+              id
+              sku
+              availableForSale
+              currentlyNotInStock
+              priceV2 {
+                amount
+              }
             }
           }
         }
@@ -6792,9 +6774,6 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getProducts(variables?: GetProductsQueryVariables, options?: C): Promise<GetProductsQuery> {
       return requester<GetProductsQuery, GetProductsQueryVariables>(GetProductsDocument, variables, options);
-    },
-    getWishlistInfo(variables: GetWishlistInfoQueryVariables, options?: C): Promise<GetWishlistInfoQuery> {
-      return requester<GetWishlistInfoQuery, GetWishlistInfoQueryVariables>(GetWishlistInfoDocument, variables, options);
     },
     getProductByHandle(variables: GetProductByHandleQueryVariables, options?: C): Promise<GetProductByHandleQuery> {
       return requester<GetProductByHandleQuery, GetProductByHandleQueryVariables>(GetProductByHandleDocument, variables, options);
