@@ -1,6 +1,6 @@
 import type { ActionFunction, HeadersFunction } from "@remix-run/cloudflare";
 import { redirect } from "@remix-run/cloudflare";
-import type { Cart } from "~/providers/cart/cart";
+import type { Cart, CartItem } from "~/providers/cart/cart";
 import { storage } from "~/session.server";
 
 export const headers: HeadersFunction = ({ actionHeaders }) => {
@@ -32,12 +32,15 @@ export const action: ActionFunction = async ({ request }) => {
       break;
     }
     case "remove": {
-      newCart = cart.map((item) => {
+      newCart = cart.reduce((result: CartItem[], item) => {
         if (item.id === variantID) {
-          return { ...item, quantity: item.quantity - 1 };
+          if (item.quantity > 1) {
+            return [...result, { ...item, quantity: item.quantity - 1 }];
+          }
+          return result;
         }
-        return item;
-      });
+        return [...result, item];
+      }, []);
       break;
     }
     default: {

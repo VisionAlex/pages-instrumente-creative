@@ -1,7 +1,7 @@
 import { XIcon } from "@heroicons/react/outline";
 import { Form, useLocation, useNavigate } from "@remix-run/react";
 import { useMemo } from "react";
-import type { Products } from "~/root";
+import type { Products } from "~/types";
 import { Button } from "./shared/Button";
 import { Drawer } from "./shared/Drawer";
 

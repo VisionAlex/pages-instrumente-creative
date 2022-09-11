@@ -894,6 +894,10 @@ input[type="number"] {
   display: block;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .flex {
   display: flex;
 }
@@ -982,6 +986,14 @@ input[type="number"] {
   height: 3.5rem;
 }
 
+.h-\[41px\] {
+  height: 41px;
+}
+
+.h-\[60px\] {
+  height: 60px;
+}
+
 .max-h-\[550px\] {
   max-height: 550px;
 }
@@ -1044,6 +1056,14 @@ input[type="number"] {
   width: 2.75rem;
 }
 
+.w-\[60px\] {
+  width: 60px;
+}
+
+.w-\[87px\] {
+  width: 87px;
+}
+
 .min-w-\[16px\] {
   min-width: 16px;
 }
@@ -1080,6 +1100,14 @@ input[type="number"] {
 
 .flex-1 {
   flex: 1 1 0%;
+}
+
+.flex-shrink {
+  flex-shrink: 1;
+}
+
+.shrink {
+  flex-shrink: 1;
 }
 
 .grow {
@@ -1201,6 +1229,10 @@ input[type="number"] {
 
 .gap-6 {
   gap: 1.5rem;
+}
+
+.gap-5 {
+  gap: 1.25rem;
 }
 
 .divide-y > :not([hidden]) ~ :not([hidden]) {
@@ -1511,6 +1543,14 @@ input[type="number"] {
 
 .pb-3 {
   padding-bottom: 0.75rem;
+}
+
+.pb-5 {
+  padding-bottom: 1.25rem;
+}
+
+.pt-5 {
+  padding-top: 1.25rem;
 }
 
 .text-center {
@@ -1872,8 +1912,16 @@ input[type="number"] {
   transition-duration: 300ms;
 }
 
+.first\:mt-0:first-child {
+  margin-top: 0px;
+}
+
 .first\:border-none:first-child {
   border-style: none;
+}
+
+.first\:pt-0:first-child {
+  padding-top: 0px;
 }
 
 .hover\:scale-110:hover {

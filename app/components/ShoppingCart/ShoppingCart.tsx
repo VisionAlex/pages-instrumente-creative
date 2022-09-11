@@ -1,0 +1,122 @@
+import { LinkButton } from "../shared/LinkButton";
+import { Drawer } from "../shared/Drawer";
+import type { Cart } from "~/providers/cart/cart";
+import type { Products, VariantInfo, Variants } from "~/types";
+import { useMemo } from "react";
+import { getCartSize } from "./utils";
+import { CartItem } from "./CartItem";
+
+interface Props {
+  cart: Cart;
+  products: Products;
+  showCart: boolean;
+  setShowCart: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const ShoppingCart: React.FC<Props> = ({
+  cart,
+  products,
+  showCart,
+  setShowCart,
+}) => {
+  const cartSize = useMemo(() => getCartSize(cart), [cart]);
+  const cartInfo = useMemo(() => {
+    return getCartInfo(cart, products);
+  }, [cart, products]);
+
+  console.log(cartInfo);
+
+  return (
+    <Drawer
+      title={`Coșul Tău (${cartSize})`}
+      open={showCart}
+      onClose={() => setShowCart(false)}
+    >
+      <div className="mt-10 px-6">
+        <div className="flow-root">
+          <ul className="-my-6 divide-y divide-gray-200">
+            {cartSize === 0 ? (
+              <div>Coșul tău este momentan gol.</div>
+            ) : (
+              cartInfo.cartItems.map((item) => {
+                return (
+                  <CartItem
+                    key={item.id}
+                    cartItem={item}
+                    setShowCart={setShowCart}
+                  />
+                );
+              })
+            )}
+          </ul>
+        </div>
+      </div>
+      <div>
+        {cartSize > 0 && (
+          <div className="py-6 px-6">
+            <div className="flex justify-between text-base  text-primary">
+              <p>Subtotal</p>
+              <p className="text-lg text-subtitle">{cartInfo.cartTotal} lei</p>
+            </div>
+            <div className="mt-6">
+              <LinkButton
+                to="#"
+                text="Finalizează Comanda"
+                variant="dark"
+                className="mb-3 lg:text-lg"
+              />
+              <LinkButton
+                to="#"
+                text="Vezi Coșul de cumpărături"
+                variant="light"
+                className="lg:text-lg"
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    </Drawer>
+  );
+};
+
+export const getCartInfo = (cart: Cart, products: Products) => {
+  console.log({ cart, products });
+  const cartSize = getCartSize(cart);
+  const cartItems = products.reduce((result: VariantInfo[], product) => {
+    const productInCart = product.node.variants.edges.some((variant) => {
+      return cart.some((item) => item.id === variant.node.id);
+    });
+
+    if (productInCart) {
+      const variants: Variants = product.node.variants.edges.filter(
+        (variant) => {
+          return cart.some((item) => item.id === variant.node.id);
+        }
+      );
+      let variantsWithInfo = [];
+      for (const variant of variants) {
+        variantsWithInfo.push({
+          productID: product.node.id,
+          title: product.node.title,
+          handle: product.node.handle,
+          thumbnail: product.node.thumbnail,
+          quantity:
+            cart.find((item) => item.id === variant.node.id)?.quantity || 0,
+          ...variant.node,
+        });
+      }
+      return [...result, ...variantsWithInfo];
+    }
+    return result;
+  }, []);
+
+  const cartTotal = cartItems.reduce((total, item) => {
+    return total + parseInt(item.priceV2.amount) * item.quantity;
+  }, 0);
+
+  return {
+    cartTotal,
+    cartSize,
+    cartItems,
+  };
+};

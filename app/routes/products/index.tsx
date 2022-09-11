@@ -5,7 +5,7 @@ import { BsSearch } from "react-icons/bs";
 import { AddToCart } from "~/components/AddToCart";
 import { AddToWishlist } from "~/components/AddToWishlist";
 import { PageHeader } from "~/components/shared/PageHeader";
-import type { Products } from "~/root";
+import type { Products } from "~/types";
 
 export const meta: MetaFunction = () => {
   return {

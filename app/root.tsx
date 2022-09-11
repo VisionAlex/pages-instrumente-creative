@@ -8,7 +8,7 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import AccountModal from "./components/AccountModal";
 import { Footer } from "./components/Footer";
 import { FooterMenu } from "./components/FooterMenu";
@@ -16,16 +16,18 @@ import { Logo } from "./components/Logo";
 import { Menu } from "./components/Menu";
 import { Navbar } from "./components/Navbar";
 import { ScrollToTop } from "./components/ScrollToTop";
-import { ShoppingCart } from "./components/ShoppingCart";
+import { ShoppingCart } from "./components/ShoppingCart/ShoppingCart";
+import { getCartSize } from "./components/ShoppingCart/utils";
 import { Toolbar } from "./components/Toolbar";
 import { Wishlist } from "./components/Wishlist";
-import type { GetProductsQuery, GetUserQuery } from "./generated/graphql";
+import type { GetUserQuery } from "./generated/graphql";
 import type { Cart } from "./providers/cart/cart";
 import { getCart } from "./providers/cart/cart";
 import { getUser } from "./providers/customers/customers";
 import { getProducts } from "./providers/products/products";
 import { getWishlist } from "./providers/products/products";
 import styles from "./styles/app.css";
+import type { Products } from "./types";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -42,8 +44,6 @@ export const links = () => {
     { rel: "preconnect", href: "//cdn.shopify.com/", crossOrigin: "true" },
   ];
 };
-
-export type Products = GetProductsQuery["products"]["edges"];
 
 type LoaderData = {
   user: GetUserQuery | null;
@@ -72,7 +72,7 @@ export default function App() {
   const [showCart, setShowCart] = useState(false);
   const [showWishlist, setShowWishlist] = useState(false);
   const [showAccountModal, setShowAccountModal] = useState(false);
-  const cartSize = getCartSize(cart);
+  const cartSize = useMemo(() => getCartSize(cart), [cart]);
   return (
     <html lang="ro">
       <head>
@@ -80,7 +80,12 @@ export default function App() {
         <Links />
       </head>
       <body className="text-primary">
-        <ShoppingCart showCart={showCart} setShowCart={setShowCart} />
+        <ShoppingCart
+          cart={cart}
+          products={products as Products}
+          showCart={showCart}
+          setShowCart={setShowCart}
+        />
         <Wishlist
           products={products as Products}
           wishlist={wishlist}
@@ -126,6 +131,3 @@ export default function App() {
     </html>
   );
 }
-
-const getCartSize = (cart: Cart) =>
-  cart.reduce((quantity, item) => quantity + item.quantity, 0);

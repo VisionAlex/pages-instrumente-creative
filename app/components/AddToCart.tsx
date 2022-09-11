@@ -1,11 +1,10 @@
 import { Form, useLocation } from "@remix-run/react";
 import React from "react";
 import { BsBasket } from "react-icons/bs";
-import type { Products } from "~/root";
-import type { ArrayElement } from "~/types";
+import type { Product } from "~/types";
 
 interface Props {
-  product: ArrayElement<Products>["node"];
+  product: Product;
 }
 
 export const AddToCart: React.FC<Props> = ({ product }) => {
@@ -28,7 +27,7 @@ export const AddToCart: React.FC<Props> = ({ product }) => {
   if (isReadyToBuy)
     return (
       <Form method="post" action="/cart">
-        <input type="hidden" name="variantID" value={product.id} />
+        <input type="hidden" name="variantID" value={variant.id} />
         <input type="hidden" name="_action" value="add" />
         <input type="hidden" name="redirectTo" value={location.pathname} />
         <button className="flex h-[36px] w-[36px] cursor-pointer items-center justify-center border border-primary ">
