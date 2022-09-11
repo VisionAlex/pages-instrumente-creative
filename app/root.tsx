@@ -20,11 +20,11 @@ import { ShoppingCart } from "./components/ShoppingCart";
 import { Toolbar } from "./components/Toolbar";
 import { Wishlist } from "./components/Wishlist";
 import type { GetProductsQuery, GetUserQuery } from "./generated/graphql";
+import type { Cart } from "./providers/cart/cart";
 import { getCart } from "./providers/cart/cart";
 import { getUser } from "./providers/customers/customers";
 import { getProducts } from "./providers/products/products";
 import { getWishlist } from "./providers/products/products";
-import type { CartItem } from "./routes/cart";
 import styles from "./styles/app.css";
 
 export const meta: MetaFunction = () => ({
@@ -48,7 +48,7 @@ export type Products = GetProductsQuery["products"]["edges"];
 type LoaderData = {
   user: GetUserQuery | null;
   wishlist: string[];
-  cart: CartItem[];
+  cart: Cart;
   products: Products;
 };
 
@@ -127,5 +127,5 @@ export default function App() {
   );
 }
 
-const getCartSize = (cart: CartItem[]) =>
+const getCartSize = (cart: Cart) =>
   cart.reduce((quantity, item) => quantity + item.quantity, 0);

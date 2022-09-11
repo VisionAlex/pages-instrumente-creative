@@ -1,22 +1,19 @@
 import type { ActionFunction, HeadersFunction } from "@remix-run/cloudflare";
 import { redirect } from "@remix-run/cloudflare";
+import type { Cart } from "~/providers/cart/cart";
 import { storage } from "~/session.server";
 
 export const headers: HeadersFunction = ({ actionHeaders }) => {
   return actionHeaders;
 };
 
-export interface CartItem {
-  id: string;
-  quantity: number;
-}
 export const action: ActionFunction = async ({ request }) => {
   const session = await storage.getSession(request.headers.get("Cookie"));
   const formData = await request.formData();
   const action = formData.get("_action");
   const redirectTo = (formData.get("redirectTo") || "/") as string;
   const variantID = formData.get("variantID") as string;
-  const cart = JSON.parse(session.get("cart") || "[]") as CartItem[];
+  const cart = JSON.parse(session.get("cart") || "[]") as Cart;
 
   let newCart = cart;
   switch (action) {

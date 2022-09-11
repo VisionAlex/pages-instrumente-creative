@@ -1,13 +1,11 @@
-import { HeartIcon } from "@heroicons/react/outline";
 import type { MetaFunction } from "@remix-run/cloudflare";
-import { Form, Link, useLocation, useOutletContext } from "@remix-run/react";
+import { Link, useOutletContext } from "@remix-run/react";
 import React from "react";
 import { BsSearch } from "react-icons/bs";
 import { AddToCart } from "~/components/AddToCart";
 import { AddToWishlist } from "~/components/AddToWishlist";
 import { PageHeader } from "~/components/shared/PageHeader";
 import type { Products } from "~/root";
-import { classNames } from "~/shared/utils/classNames";
 
 export const meta: MetaFunction = () => {
   return {
