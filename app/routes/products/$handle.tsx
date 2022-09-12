@@ -105,10 +105,19 @@ const SingleProduct: React.FC = () => {
             />
           </button>
         </div>
-
-        <button className="grow bg-primary px-4 py-2 text-sm uppercase tracking-widest text-white">
-          Adaugă în coș
-        </button>
+        <Form method="post" action="/cart" className="grow">
+          <input
+            type="hidden"
+            name="variantID"
+            value={product.variants.edges[selectedVariant].node.id}
+          />
+          <input type="hidden" name="_action" value="add" />
+          <input type="hidden" name="quantity" value={quantity} />
+          <input type="hidden" name="redirectTo" value={location.pathname} />
+          <button className="h-12 w-full bg-primary px-4 py-2 text-sm uppercase tracking-widest text-white transition-all hover:border hover:border-primary hover:bg-white hover:text-primary">
+            Adaugă în coș
+          </button>
+        </Form>
 
         <Form
           method="post"
@@ -130,7 +139,7 @@ const SingleProduct: React.FC = () => {
         </Form>
       </div>
       <div className="mt-4">
-        <button className="w-full bg-primary py-3 text-sm uppercase tracking-widest text-white">
+        <button className="w-full border border-primary bg-primary py-3 text-sm uppercase tracking-widest text-white transition-all duration-300 hover:bg-white hover:text-primary">
           Cumpără acum
         </button>
       </div>

@@ -13,16 +13,18 @@ export const action: ActionFunction = async ({ request }) => {
   const action = formData.get("_action");
   const redirectTo = (formData.get("redirectTo") || "/") as string;
   const variantID = formData.get("variantID") as string;
+  const formQuantity = formData.get("quantity") as string | null;
   const cart = JSON.parse(session.get("cart") || "[]") as Cart;
 
   let newCart = cart;
   switch (action) {
     case "add": {
       const foundItem = cart.find((item) => item.id === variantID);
+      const quantity = formQuantity ? parseInt(formQuantity) : 1;
       if (foundItem) {
         newCart = cart.map((item) => {
           if (item.id === variantID) {
-            return { ...item, quantity: item.quantity + 1 };
+            return { ...item, quantity: item.quantity + quantity };
           }
           return item;
         });
