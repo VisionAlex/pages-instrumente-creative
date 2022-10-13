@@ -1,7 +1,7 @@
 import { storage } from "~/session.server";
 
 export interface CartItem {
-  id: string;
+  variantId: string;
   quantity: number;
 }
 

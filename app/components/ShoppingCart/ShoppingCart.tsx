@@ -5,6 +5,8 @@ import type { Products, VariantInfo, Variants } from "~/types";
 import { useMemo } from "react";
 import { getCartSize } from "./utils";
 import { CartItem } from "./CartItem";
+import { Form, useLocation } from "@remix-run/react";
+import { ButtonBase } from "../shared/ButtonBase";
 
 interface Props {
   cart: Cart;
@@ -19,12 +21,11 @@ export const ShoppingCart: React.FC<Props> = ({
   showCart,
   setShowCart,
 }) => {
+  const location = useLocation();
   const cartSize = useMemo(() => getCartSize(cart), [cart]);
   const cartInfo = useMemo(() => {
     return getCartInfo(cart, products);
   }, [cart, products]);
-
-  console.log(cartInfo);
 
   return (
     <Drawer
@@ -59,12 +60,20 @@ export const ShoppingCart: React.FC<Props> = ({
               <p className="text-lg text-subtitle">{cartInfo.cartTotal} lei</p>
             </div>
             <div className="mt-6">
-              <LinkButton
-                to="#"
-                text="Finalizează Comanda"
-                variant="dark"
-                className="mb-3 lg:text-lg"
-              />
+              <Form method="post" action="/checkout">
+                <input
+                  type="hidden"
+                  name="redirectTo"
+                  value={location.pathname}
+                />
+                <button type="submit" className="w-full">
+                  <ButtonBase
+                    text="Finalizează Comanda"
+                    variant="dark"
+                    className="mb-3 cursor-pointer select-none lg:text-lg"
+                  />
+                </button>
+              </Form>
               <LinkButton
                 to="#"
                 text="Vezi Coșul de cumpărături"
@@ -80,17 +89,16 @@ export const ShoppingCart: React.FC<Props> = ({
 };
 
 export const getCartInfo = (cart: Cart, products: Products) => {
-  console.log({ cart, products });
   const cartSize = getCartSize(cart);
   const cartItems = products.reduce((result: VariantInfo[], product) => {
     const productInCart = product.node.variants.edges.some((variant) => {
-      return cart.some((item) => item.id === variant.node.id);
+      return cart.some((item) => item.variantId === variant.node.id);
     });
 
     if (productInCart) {
       const variants: Variants = product.node.variants.edges.filter(
         (variant) => {
-          return cart.some((item) => item.id === variant.node.id);
+          return cart.some((item) => item.variantId === variant.node.id);
         }
       );
       let variantsWithInfo = [];
@@ -101,7 +109,8 @@ export const getCartInfo = (cart: Cart, products: Products) => {
           handle: product.node.handle,
           thumbnail: product.node.thumbnail,
           quantity:
-            cart.find((item) => item.id === variant.node.id)?.quantity || 0,
+            cart.find((item) => item.variantId === variant.node.id)?.quantity ||
+            0,
           ...variant.node,
         });
       }

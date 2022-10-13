@@ -40,14 +40,14 @@ export type AppliedGiftCard = Node & {
   __typename?: 'AppliedGiftCard';
   /**
    * The amount that was taken from the gift card by applying it.
-   * @deprecated Use `amountUsedV2` instead
+   * @deprecated Use `amountUsedV2` instead.
    */
   amountUsed: Scalars['Money'];
   /** The amount that was taken from the gift card by applying it. */
   amountUsedV2: MoneyV2;
   /**
    * The amount left on the gift card.
-   * @deprecated Use `balanceV2` instead
+   * @deprecated Use `balanceV2` instead.
    */
   balance: Scalars['Money'];
   /** The amount left on the gift card. */
@@ -65,7 +65,7 @@ export type Article = HasMetafields & Node & OnlineStorePublishable & {
   __typename?: 'Article';
   /**
    * The article's author.
-   * @deprecated Use `authorV2` instead
+   * @deprecated Use `authorV2` instead.
    */
   author: ArticleAuthor;
   /** The article's author. */
@@ -377,7 +377,13 @@ export enum CardBrand {
   Visa = 'VISA'
 }
 
-/** A cart represents the merchandise that a buyer intends to purchase, and the estimated cost associated with the cart. To learn how to interact with a cart during a customer's session, refer to [Manage a cart with the Storefront API](https://shopify.dev/api/examples/cart). */
+/**
+ * A cart represents the merchandise that a buyer intends to purchase,
+ * and the estimated cost associated with the cart. Learn how to
+ * [interact with a cart](https://shopify.dev/custom-storefronts/internationalization/international-pricing)
+ * during a customer's session.
+ *
+ */
 export type Cart = Node & {
   __typename?: 'Cart';
   /** An attribute associated with the cart. */
@@ -388,7 +394,7 @@ export type Cart = Node & {
   buyerIdentity: CartBuyerIdentity;
   /** The URL of the checkout for the cart. */
   checkoutUrl: Scalars['URL'];
-  /** The estimated costs that the buyer will pay at checkout. The costs are subject to change and changes will be reflected at checkout. The `cost` field uses the `buyerIdentity` field to determine [international pricing](https://shopify.dev/api/examples/international-pricing#create-a-cart). */
+  /** The estimated costs that the buyer will pay at checkout. The costs are subject to change and changes will be reflected at checkout. The `cost` field uses the `buyerIdentity` field to determine [international pricing](https://shopify.dev/custom-storefronts/internationalization/international-pricing). */
   cost: CartCost;
   /** The date and time when the cart was created. */
   createdAt: Scalars['DateTime'];
@@ -402,8 +408,12 @@ export type Cart = Node & {
    */
   discountCodes: Array<CartDiscountCode>;
   /**
-   * The estimated costs that the buyer will pay at checkout. The estimated costs are subject to change and changes will be reflected at checkout. The `estimatedCost` field uses the `buyerIdentity` field to determine [international pricing](https://shopify.dev/api/examples/international-pricing#create-a-cart).
-   * @deprecated Use `cost` instead
+   * The estimated costs that the buyer will pay at checkout.
+   * The estimated costs are subject to change and changes will be reflected at checkout.
+   * The `estimatedCost` field uses the `buyerIdentity` field to determine
+   * [international pricing](https://shopify.dev/custom-storefronts/internationalization/international-pricing).
+   *
+   * @deprecated Use `cost` instead.
    */
   estimatedCost: CartEstimatedCost;
   /** A globally-unique identifier. */
@@ -419,13 +429,25 @@ export type Cart = Node & {
 };
 
 
-/** A cart represents the merchandise that a buyer intends to purchase, and the estimated cost associated with the cart. To learn how to interact with a cart during a customer's session, refer to [Manage a cart with the Storefront API](https://shopify.dev/api/examples/cart). */
+/**
+ * A cart represents the merchandise that a buyer intends to purchase,
+ * and the estimated cost associated with the cart. Learn how to
+ * [interact with a cart](https://shopify.dev/custom-storefronts/internationalization/international-pricing)
+ * during a customer's session.
+ *
+ */
 export type CartAttributeArgs = {
   key: Scalars['String'];
 };
 
 
-/** A cart represents the merchandise that a buyer intends to purchase, and the estimated cost associated with the cart. To learn how to interact with a cart during a customer's session, refer to [Manage a cart with the Storefront API](https://shopify.dev/api/examples/cart). */
+/**
+ * A cart represents the merchandise that a buyer intends to purchase,
+ * and the estimated cost associated with the cart. Learn how to
+ * [interact with a cart](https://shopify.dev/custom-storefronts/internationalization/international-pricing)
+ * during a customer's session.
+ *
+ */
 export type CartDeliveryGroupsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -435,7 +457,13 @@ export type CartDeliveryGroupsArgs = {
 };
 
 
-/** A cart represents the merchandise that a buyer intends to purchase, and the estimated cost associated with the cart. To learn how to interact with a cart during a customer's session, refer to [Manage a cart with the Storefront API](https://shopify.dev/api/examples/cart). */
+/**
+ * A cart represents the merchandise that a buyer intends to purchase,
+ * and the estimated cost associated with the cart. Learn how to
+ * [interact with a cart](https://shopify.dev/custom-storefronts/internationalization/international-pricing)
+ * during a customer's session.
+ *
+ */
 export type CartLinesArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -478,7 +506,7 @@ export type CartBuyerIdentity = {
 /**
  * Specifies the input fields to update the buyer information associated with a cart.
  * Buyer identity is used to determine
- * [international pricing](https://shopify.dev/api/examples/international-pricing#create-a-checkout)
+ * [international pricing](https://shopify.dev/custom-storefronts/internationalization/international-pricing)
  * and should match the customer's shipping address.
  *
  */
@@ -513,8 +541,8 @@ export type CartCodeDiscountAllocation = CartDiscountAllocation & {
 
 /**
  * The costs that the buyer will pay at checkout.
- * It uses [`CartBuyerIdentity`](https://shopify.dev/api/storefront/reference/cart/cartbuyeridentity) to determine
- * [international pricing](https://shopify.dev/api/examples/international-pricing#create-a-cart).
+ * The cart cost uses [`CartBuyerIdentity`](https://shopify.dev/api/storefront/reference/cart/cartbuyeridentity) to determine
+ * [international pricing](https://shopify.dev/custom-storefronts/internationalization/international-pricing).
  *
  */
 export type CartCost = {
@@ -661,8 +689,10 @@ export enum CartErrorCode {
 
 /**
  * The estimated costs that the buyer will pay at checkout.
- * It uses [`CartBuyerIdentity`](https://shopify.dev/api/storefront/reference/cart/cartbuyeridentity) to determine
- * [international pricing](https://shopify.dev/api/examples/international-pricing#create-a-cart).
+ * The estimated cost uses
+ * [`CartBuyerIdentity`](https://shopify.dev/api/storefront/reference/cart/cartbuyeridentity)
+ * to determine
+ * [international pricing](https://shopify.dev/custom-storefronts/internationalization/international-pricing).
  *
  */
 export type CartEstimatedCost = {
@@ -683,7 +713,12 @@ export type CartEstimatedCost = {
 export type CartInput = {
   /** An array of key-value pairs that contains additional information about the cart. */
   attributes?: InputMaybe<Array<AttributeInput>>;
-  /** The customer associated with the cart. Used to determine [international pricing](https://shopify.dev/api/examples/international-pricing#create-a-checkout). Buyer identity should match the customer's shipping address. */
+  /**
+   * The customer associated with the cart. Used to determine [international pricing]
+   * (https://shopify.dev/custom-storefronts/internationalization/international-pricing).
+   * Buyer identity should match the customer's shipping address.
+   *
+   */
   buyerIdentity?: InputMaybe<CartBuyerIdentityInput>;
   /**
    * The case-insensitive discount codes that the customer added at checkout.
@@ -709,7 +744,7 @@ export type CartLine = Node & {
   discountAllocations: Array<CartDiscountAllocation>;
   /**
    * The estimated cost of the merchandise that the buyer will pay for at checkout. The estimated costs are subject to change and changes will be reflected at checkout.
-   * @deprecated Use `cost` instead
+   * @deprecated Use `cost` instead.
    */
   estimatedCost: CartLineEstimatedCost;
   /** A globally-unique identifier. */
@@ -893,7 +928,7 @@ export type Checkout = Node & {
   orderStatusUrl?: Maybe<Scalars['URL']>;
   /**
    * The amount left to be paid. This is equal to the cost of the line items, taxes and shipping minus discounts and gift cards.
-   * @deprecated Use `paymentDueV2` instead
+   * @deprecated Use `paymentDueV2` instead.
    */
   paymentDue: Scalars['Money'];
   /** The amount left to be paid. This is equal to the cost of the line items, duties, taxes, and shipping, minus discounts and gift cards. */
@@ -919,7 +954,7 @@ export type Checkout = Node & {
   shippingLine?: Maybe<ShippingRate>;
   /**
    * Price of the checkout before shipping and taxes.
-   * @deprecated Use `subtotalPriceV2` instead
+   * @deprecated Use `subtotalPriceV2` instead.
    */
   subtotalPrice: Scalars['Money'];
   /** The price at checkout before duties, shipping, and taxes. */
@@ -932,14 +967,14 @@ export type Checkout = Node & {
   totalDuties?: Maybe<MoneyV2>;
   /**
    * The sum of all the prices of all the items in the checkout, taxes and discounts included.
-   * @deprecated Use `totalPriceV2` instead
+   * @deprecated Use `totalPriceV2` instead.
    */
   totalPrice: Scalars['Money'];
   /** The sum of all the prices of all the items in the checkout, including duties, taxes, and discounts. */
   totalPriceV2: MoneyV2;
   /**
    * The sum of all the taxes applied to the line items and shipping lines in the checkout.
-   * @deprecated Use `totalTaxV2` instead
+   * @deprecated Use `totalTaxV2` instead.
    */
   totalTax: Scalars['Money'];
   /** The sum of all the taxes applied to the line items and shipping lines in the checkout. */
@@ -995,7 +1030,7 @@ export type CheckoutAttributesUpdateV2Payload = {
   checkoutUserErrors: Array<CheckoutUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -1027,7 +1062,7 @@ export type CheckoutCompleteFreePayload = {
   checkoutUserErrors: Array<CheckoutUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -1043,7 +1078,7 @@ export type CheckoutCompleteWithCreditCardV2Payload = {
   payment?: Maybe<Payment>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -1059,7 +1094,7 @@ export type CheckoutCompleteWithTokenizedPaymentV3Payload = {
   payment?: Maybe<Payment>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -1098,7 +1133,7 @@ export type CheckoutCreatePayload = {
   queueToken?: Maybe<Scalars['String']>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -1114,7 +1149,7 @@ export type CheckoutCustomerAssociateV2Payload = {
   customer?: Maybe<Customer>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -1128,7 +1163,7 @@ export type CheckoutCustomerDisassociateV2Payload = {
   checkoutUserErrors: Array<CheckoutUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -1142,7 +1177,7 @@ export type CheckoutDiscountCodeApplyV2Payload = {
   checkoutUserErrors: Array<CheckoutUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -1156,7 +1191,7 @@ export type CheckoutDiscountCodeRemovePayload = {
   checkoutUserErrors: Array<CheckoutUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -1170,7 +1205,7 @@ export type CheckoutEmailUpdateV2Payload = {
   checkoutUserErrors: Array<CheckoutUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -1276,7 +1311,7 @@ export type CheckoutGiftCardRemoveV2Payload = {
   checkoutUserErrors: Array<CheckoutUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -1290,7 +1325,7 @@ export type CheckoutGiftCardsAppendPayload = {
   checkoutUserErrors: Array<CheckoutUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -1371,7 +1406,7 @@ export type CheckoutLineItemsAddPayload = {
   checkoutUserErrors: Array<CheckoutUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -1385,7 +1420,7 @@ export type CheckoutLineItemsRemovePayload = {
   checkoutUserErrors: Array<CheckoutUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -1408,7 +1443,7 @@ export type CheckoutLineItemsUpdatePayload = {
   checkoutUserErrors: Array<CheckoutUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -1422,7 +1457,7 @@ export type CheckoutShippingAddressUpdateV2Payload = {
   checkoutUserErrors: Array<CheckoutUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -1436,7 +1471,7 @@ export type CheckoutShippingLineUpdatePayload = {
   checkoutUserErrors: Array<CheckoutUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `checkoutUserErrors` instead
+   * @deprecated Use `checkoutUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -2638,7 +2673,7 @@ export type CustomerAccessTokenCreatePayload = {
   customerUserErrors: Array<CustomerUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `customerUserErrors` instead
+   * @deprecated Use `customerUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -2702,7 +2737,7 @@ export type CustomerActivatePayload = {
   customerUserErrors: Array<CustomerUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `customerUserErrors` instead
+   * @deprecated Use `customerUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -2716,7 +2751,7 @@ export type CustomerAddressCreatePayload = {
   customerUserErrors: Array<CustomerUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `customerUserErrors` instead
+   * @deprecated Use `customerUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -2730,7 +2765,7 @@ export type CustomerAddressDeletePayload = {
   deletedCustomerAddressId?: Maybe<Scalars['String']>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `customerUserErrors` instead
+   * @deprecated Use `customerUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -2744,7 +2779,7 @@ export type CustomerAddressUpdatePayload = {
   customerUserErrors: Array<CustomerUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `customerUserErrors` instead
+   * @deprecated Use `customerUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -2779,7 +2814,7 @@ export type CustomerCreatePayload = {
   customerUserErrors: Array<CustomerUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `customerUserErrors` instead
+   * @deprecated Use `customerUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -2793,7 +2828,7 @@ export type CustomerDefaultAddressUpdatePayload = {
   customerUserErrors: Array<CustomerUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `customerUserErrors` instead
+   * @deprecated Use `customerUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -2839,7 +2874,7 @@ export type CustomerRecoverPayload = {
   customerUserErrors: Array<CustomerUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `customerUserErrors` instead
+   * @deprecated Use `customerUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -2855,7 +2890,7 @@ export type CustomerResetByUrlPayload = {
   customerUserErrors: Array<CustomerUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `customerUserErrors` instead
+   * @deprecated Use `customerUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -2879,7 +2914,7 @@ export type CustomerResetPayload = {
   customerUserErrors: Array<CustomerUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `customerUserErrors` instead
+   * @deprecated Use `customerUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -2920,7 +2955,7 @@ export type CustomerUpdatePayload = {
   customerUserErrors: Array<CustomerUserError>;
   /**
    * The list of errors that occurred from executing the mutation.
-   * @deprecated Use `customerUserErrors` instead
+   * @deprecated Use `customerUserErrors` instead.
    */
   userErrors: Array<UserError>;
 };
@@ -3107,7 +3142,7 @@ export type ExternalVideo = Media & Node & {
   embedUrl: Scalars['URL'];
   /**
    * The URL.
-   * @deprecated Use `originUrl` instead
+   * @deprecated Use `originUrl` instead.
    */
   embeddedUrl: Scalars['URL'];
   /** The host of the external video. */
@@ -3139,7 +3174,7 @@ export type Filter = {
  * The type of data that the filter group represents.
  *
  * For more information, refer to [Filter products in a collection with the Storefront API]
- * (https://shopify.dev/api/examples/filter-products).
+ * (https://shopify.dev/custom-storefronts/products-collections/filter-products).
  *
  */
 export enum FilterType {
@@ -3315,12 +3350,12 @@ export type Image = {
    *
    * If there are any existing transformations in the original source URL, they will remain and not be stripped.
    *
-   * @deprecated Use `url` instead
+   * @deprecated Use `url` instead.
    */
   originalSrc: Scalars['URL'];
   /**
    * The location of the image as a URL.
-   * @deprecated Use `url` instead
+   * @deprecated Use `url` instead.
    */
   src: Scalars['URL'];
   /**
@@ -3854,7 +3889,7 @@ export type MailingAddress = Node & {
    *
    * For example, US.
    *
-   * @deprecated Use `countryCodeV2` instead
+   * @deprecated Use `countryCodeV2` instead.
    */
   countryCode?: Maybe<Scalars['String']>;
   /**
@@ -4254,7 +4289,7 @@ export type Mutation = {
   /**
    * Updates customer information associated with a cart.
    * Buyer identity is used to determine
-   * [international pricing](https://shopify.dev/api/examples/international-pricing#create-a-checkout)
+   * [international pricing](https://shopify.dev/custom-storefronts/internationalization/international-pricing)
    * and should match the customer's shipping address.
    *
    */
@@ -4346,7 +4381,17 @@ export type Mutation = {
   /** Updates the default address of an existing customer. */
   customerDefaultAddressUpdate?: Maybe<CustomerDefaultAddressUpdatePayload>;
   /**
-   * "Sends a reset password email to the customer. The reset password email contains a reset password URL and token that you can pass to the [`customerResetByUrl`](https://shopify.dev/api/storefront/latest/mutations/customerResetByUrl) or [`customerReset`](https://shopify.dev/api/storefront/latest/mutations/customerReset) mutation to reset the customer password."
+   * Sends a reset password email to the customer. The reset password
+   * email contains a reset password URL and token that you can pass to
+   * the [`customerResetByUrl`](https://shopify.dev/api/storefront/latest/mutations/customerResetByUrl) or
+   * [`customerReset`](https://shopify.dev/api/storefront/latest/mutations/customerReset) mutation to reset the
+   * customer password.
+   *
+   * This mutation is throttled by IP. With authenticated access,
+   * you can provide a [`Shopify-Storefront-Buyer-IP`](https://shopify.dev/api/usage/authentication#optional-ip-header) instead of the request IP.
+   *
+   * Make sure that the value provided to `Shopify-Storefront-Buyer-IP` is trusted. Unthrottled access to this
+   * mutation presents a security risk.
    *
    */
   customerRecover?: Maybe<CustomerRecoverPayload>;
@@ -4734,7 +4779,7 @@ export type Order = HasMetafields & Node & {
   statusUrl: Scalars['URL'];
   /**
    * Price of the order before shipping and taxes.
-   * @deprecated Use `subtotalPriceV2` instead
+   * @deprecated Use `subtotalPriceV2` instead.
    */
   subtotalPrice?: Maybe<Scalars['Money']>;
   /** Price of the order before duties, shipping and taxes. */
@@ -4743,28 +4788,28 @@ export type Order = HasMetafields & Node & {
   successfulFulfillments?: Maybe<Array<Fulfillment>>;
   /**
    * The sum of all the prices of all the items in the order, taxes and discounts included (must be positive).
-   * @deprecated Use `totalPriceV2` instead
+   * @deprecated Use `totalPriceV2` instead.
    */
   totalPrice: Scalars['Money'];
   /** The sum of all the prices of all the items in the order, duties, taxes and discounts included (must be positive). */
   totalPriceV2: MoneyV2;
   /**
    * The total amount that has been refunded.
-   * @deprecated Use `totalRefundedV2` instead
+   * @deprecated Use `totalRefundedV2` instead.
    */
   totalRefunded: Scalars['Money'];
   /** The total amount that has been refunded. */
   totalRefundedV2: MoneyV2;
   /**
    * The total cost of shipping.
-   * @deprecated Use `totalShippingPriceV2` instead
+   * @deprecated Use `totalShippingPriceV2` instead.
    */
   totalShippingPrice: Scalars['Money'];
   /** The total cost of shipping. */
   totalShippingPriceV2: MoneyV2;
   /**
    * The total cost of taxes.
-   * @deprecated Use `totalTaxV2` instead
+   * @deprecated Use `totalTaxV2` instead.
    */
   totalTax?: Maybe<Scalars['Money']>;
   /** The total cost of taxes. */
@@ -5060,7 +5105,7 @@ export type Payment = Node & {
   __typename?: 'Payment';
   /**
    * The amount of the payment.
-   * @deprecated Use `amountV2` instead
+   * @deprecated Use `amountV2` instead.
    */
   amount: Scalars['Money'];
   /** The amount of the payment. */
@@ -5508,7 +5553,7 @@ export type ProductVariant = HasMetafields & Node & {
   barcode?: Maybe<Scalars['String']>;
   /**
    * The compare at price of the variant. This can be used to mark a variant as on sale, when `compareAtPrice` is higher than `price`.
-   * @deprecated Use `compareAtPriceV2` instead
+   * @deprecated Use `compareAtPriceV2` instead.
    */
   compareAtPrice?: Maybe<Scalars['Money']>;
   /** The compare at price of the variant. This can be used to mark a variant as on sale, when `compareAtPriceV2` is higher than `priceV2`. */
@@ -5531,7 +5576,7 @@ export type ProductVariant = HasMetafields & Node & {
   metafields: Array<Maybe<Metafield>>;
   /**
    * The product variant’s price.
-   * @deprecated Use `priceV2` instead
+   * @deprecated Use `priceV2` instead.
    */
   price: Scalars['Money'];
   /** The product variant’s price. */
@@ -5648,18 +5693,22 @@ export type QueryRoot = {
   blog?: Maybe<Blog>;
   /**
    * Find a blog by its handle.
-   * @deprecated Use `blog` instead
+   * @deprecated Use `blog` instead.
    */
   blogByHandle?: Maybe<Blog>;
   /** List of the shop's blogs. */
   blogs: BlogConnection;
-  /** Retrieve a cart by its ID. For more information, refer to [Manage a cart with the Storefront API](https://shopify.dev/api/examples/cart). */
+  /**
+   * Retrieve a cart by its ID. For more information, refer to
+   * [Manage a cart with the Storefront API](https://shopify.dev/custom-storefronts/cart/manage).
+   *
+   */
   cart?: Maybe<Cart>;
   /** Fetch a specific `Collection` by one of its unique attributes. */
   collection?: Maybe<Collection>;
   /**
    * Find a collection by its handle.
-   * @deprecated Use `collection` instead
+   * @deprecated Use `collection` instead.
    */
   collectionByHandle?: Maybe<Collection>;
   /** List of the shop’s collections. */
@@ -5685,7 +5734,7 @@ export type QueryRoot = {
   page?: Maybe<Page>;
   /**
    * Find a page by its handle.
-   * @deprecated Use `page` instead
+   * @deprecated Use `page` instead.
    */
   pageByHandle?: Maybe<Page>;
   /** List of the shop's pages. */
@@ -5694,7 +5743,7 @@ export type QueryRoot = {
   product?: Maybe<Product>;
   /**
    * Find a product by its handle.
-   * @deprecated Use `product` instead
+   * @deprecated Use `product` instead.
    */
   productByHandle?: Maybe<Product>;
   /**
@@ -6188,7 +6237,7 @@ export type ShippingRate = {
   handle: Scalars['String'];
   /**
    * Price of this shipping rate.
-   * @deprecated Use `priceV2` instead
+   * @deprecated Use `priceV2` instead.
    */
   price: Scalars['Money'];
   /** Price of this shipping rate. */
@@ -6373,7 +6422,7 @@ export type Transaction = {
   __typename?: 'Transaction';
   /**
    * The amount of money that the transaction was for.
-   * @deprecated Use `amountV2` instead
+   * @deprecated Use `amountV2` instead.
    */
   amount: Scalars['Money'];
   /** The amount of money that the transaction was for. */
@@ -6382,7 +6431,7 @@ export type Transaction = {
   kind: TransactionKind;
   /**
    * The status of the transaction.
-   * @deprecated Use `statusV2` instead
+   * @deprecated Use `statusV2` instead.
    */
   status: TransactionStatus;
   /** The status of the transaction. */
@@ -6581,6 +6630,43 @@ export enum WeightUnit {
   Pounds = 'POUNDS'
 }
 
+export type CreateCheckoutMutationVariables = Exact<{
+  input: CheckoutCreateInput;
+}>;
+
+
+export type CreateCheckoutMutation = { __typename?: 'Mutation', checkoutCreate?: { __typename?: 'CheckoutCreatePayload', checkout?: { __typename?: 'Checkout', id: string, webUrl: any } | null, checkoutUserErrors: Array<{ __typename?: 'CheckoutUserError', code?: CheckoutErrorCode | null, field?: Array<string> | null, message: string }> } | null };
+
+export type CheckoutShippingAddressUpdateV2MutationVariables = Exact<{
+  shippingAddress: MailingAddressInput;
+  checkoutId: Scalars['ID'];
+}>;
+
+
+export type CheckoutShippingAddressUpdateV2Mutation = { __typename?: 'Mutation', checkoutShippingAddressUpdateV2?: { __typename?: 'CheckoutShippingAddressUpdateV2Payload', checkoutUserErrors: Array<{ __typename?: 'CheckoutUserError', code?: CheckoutErrorCode | null, field?: Array<string> | null, message: string }>, checkout?: { __typename?: 'Checkout', id: string, webUrl: any } | null } | null };
+
+export type AssociateCustomerWithCheckoutMutationVariables = Exact<{
+  checkoutId: Scalars['ID'];
+  customerAccessToken: Scalars['String'];
+}>;
+
+
+export type AssociateCustomerWithCheckoutMutation = { __typename?: 'Mutation', checkoutCustomerAssociateV2?: { __typename?: 'CheckoutCustomerAssociateV2Payload', checkout?: { __typename?: 'Checkout', id: string, webUrl: any } | null, checkoutUserErrors: Array<{ __typename?: 'CheckoutUserError', code?: CheckoutErrorCode | null, field?: Array<string> | null, message: string }>, customer?: { __typename?: 'Customer', id: string } | null } | null };
+
+export type GetAddressesQueryVariables = Exact<{
+  customerAccessToken: Scalars['String'];
+}>;
+
+
+export type GetAddressesQuery = { __typename?: 'QueryRoot', customer?: { __typename?: 'Customer', addresses: { __typename?: 'MailingAddressConnection', edges: Array<{ __typename?: 'MailingAddressEdge', node: { __typename?: 'MailingAddress', id: string, name?: string | null, formatted: Array<string> } }> }, defaultAddress?: { __typename?: 'MailingAddress', id: string, name?: string | null, formatted: Array<string> } | null } | null };
+
+export type GetDefaultAddressQueryVariables = Exact<{
+  customerAccessToken: Scalars['String'];
+}>;
+
+
+export type GetDefaultAddressQuery = { __typename?: 'QueryRoot', customer?: { __typename?: 'Customer', defaultAddress?: { __typename?: 'MailingAddress', firstName?: string | null, lastName?: string | null, address1?: string | null, address2?: string | null, city?: string | null, company?: string | null, country?: string | null, province?: string | null, phone?: string | null, zip?: string | null } | null } | null };
+
 export type RegisterMutationVariables = Exact<{
   input: CustomerCreateInput;
 }>;
@@ -6619,6 +6705,98 @@ export type GetProductByHandleQueryVariables = Exact<{
 export type GetProductByHandleQuery = { __typename?: 'QueryRoot', product?: { __typename?: 'Product', id: string, handle: string, availableForSale: boolean, productType: string, tags: Array<string>, title: string, description: string, descriptionHtml: any, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, requiresShipping: boolean, priceV2: { __typename?: 'MoneyV2', amount: any, currencyCode: CurrencyCode } } }> } } | null };
 
 
+export const CreateCheckoutDocument = gql`
+    mutation createCheckout($input: CheckoutCreateInput!) {
+  checkoutCreate(input: $input) {
+    checkout {
+      id
+      webUrl
+    }
+    checkoutUserErrors {
+      code
+      field
+      message
+    }
+  }
+}
+    `;
+export const CheckoutShippingAddressUpdateV2Document = gql`
+    mutation checkoutShippingAddressUpdateV2($shippingAddress: MailingAddressInput!, $checkoutId: ID!) {
+  checkoutShippingAddressUpdateV2(
+    shippingAddress: $shippingAddress
+    checkoutId: $checkoutId
+  ) {
+    checkoutUserErrors {
+      code
+      field
+      message
+    }
+    checkout {
+      id
+      webUrl
+    }
+  }
+}
+    `;
+export const AssociateCustomerWithCheckoutDocument = gql`
+    mutation associateCustomerWithCheckout($checkoutId: ID!, $customerAccessToken: String!) {
+  checkoutCustomerAssociateV2(
+    checkoutId: $checkoutId
+    customerAccessToken: $customerAccessToken
+  ) {
+    checkout {
+      id
+      webUrl
+    }
+    checkoutUserErrors {
+      code
+      field
+      message
+    }
+    customer {
+      id
+    }
+  }
+}
+    `;
+export const GetAddressesDocument = gql`
+    query getAddresses($customerAccessToken: String!) {
+  customer(customerAccessToken: $customerAccessToken) {
+    addresses(first: 5) {
+      edges {
+        node {
+          id
+          name
+          formatted
+        }
+      }
+    }
+    defaultAddress {
+      id
+      name
+      formatted
+    }
+  }
+}
+    `;
+export const GetDefaultAddressDocument = gql`
+    query getDefaultAddress($customerAccessToken: String!) {
+  customer(customerAccessToken: $customerAccessToken) {
+    defaultAddress {
+      firstName
+      lastName
+      address1
+      address2
+      city
+      company
+      country
+      province
+      phone
+      zip
+    }
+  }
+}
+    `;
 export const RegisterDocument = gql`
     mutation register($input: CustomerCreateInput!) {
   customerCreate(input: $input) {
@@ -6763,6 +6941,21 @@ export const GetProductByHandleDocument = gql`
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
+    createCheckout(variables: CreateCheckoutMutationVariables, options?: C): Promise<CreateCheckoutMutation> {
+      return requester<CreateCheckoutMutation, CreateCheckoutMutationVariables>(CreateCheckoutDocument, variables, options);
+    },
+    checkoutShippingAddressUpdateV2(variables: CheckoutShippingAddressUpdateV2MutationVariables, options?: C): Promise<CheckoutShippingAddressUpdateV2Mutation> {
+      return requester<CheckoutShippingAddressUpdateV2Mutation, CheckoutShippingAddressUpdateV2MutationVariables>(CheckoutShippingAddressUpdateV2Document, variables, options);
+    },
+    associateCustomerWithCheckout(variables: AssociateCustomerWithCheckoutMutationVariables, options?: C): Promise<AssociateCustomerWithCheckoutMutation> {
+      return requester<AssociateCustomerWithCheckoutMutation, AssociateCustomerWithCheckoutMutationVariables>(AssociateCustomerWithCheckoutDocument, variables, options);
+    },
+    getAddresses(variables: GetAddressesQueryVariables, options?: C): Promise<GetAddressesQuery> {
+      return requester<GetAddressesQuery, GetAddressesQueryVariables>(GetAddressesDocument, variables, options);
+    },
+    getDefaultAddress(variables: GetDefaultAddressQueryVariables, options?: C): Promise<GetDefaultAddressQuery> {
+      return requester<GetDefaultAddressQuery, GetDefaultAddressQueryVariables>(GetDefaultAddressDocument, variables, options);
+    },
     register(variables: RegisterMutationVariables, options?: C): Promise<RegisterMutation> {
       return requester<RegisterMutation, RegisterMutationVariables>(RegisterDocument, variables, options);
     },

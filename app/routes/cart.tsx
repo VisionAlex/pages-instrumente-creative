@@ -19,23 +19,23 @@ export const action: ActionFunction = async ({ request }) => {
   let newCart = cart;
   switch (action) {
     case "add": {
-      const foundItem = cart.find((item) => item.id === variantID);
+      const foundItem = cart.find((item) => item.variantId === variantID);
       const quantity = formQuantity ? parseInt(formQuantity) : 1;
       if (foundItem) {
         newCart = cart.map((item) => {
-          if (item.id === variantID) {
+          if (item.variantId === variantID) {
             return { ...item, quantity: item.quantity + quantity };
           }
           return item;
         });
       } else {
-        newCart = [...cart, { id: variantID, quantity: 1 }];
+        newCart = [...cart, { variantId: variantID, quantity: 1 }];
       }
       break;
     }
     case "remove": {
       newCart = cart.reduce((result: CartItem[], item) => {
-        if (item.id === variantID) {
+        if (item.variantId === variantID) {
           if (item.quantity > 1) {
             return [...result, { ...item, quantity: item.quantity - 1 }];
           }

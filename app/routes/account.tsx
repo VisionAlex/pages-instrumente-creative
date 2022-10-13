@@ -3,14 +3,16 @@ import {
   LocationMarkerIcon,
   LogoutIcon,
 } from "@heroicons/react/outline";
-import { NavLink, Outlet } from "@remix-run/react";
+import { NavLink, Outlet, useLocation } from "@remix-run/react";
 import React from "react";
 import { classNames } from "~/shared/utils/classNames";
 
-const account: React.FC = () => {
+const Account: React.FC = () => {
+  const pathname = useLocation().pathname;
+  const title = pathname === "/account/address" ? "Adrese" : "Contul meu";
   return (
     <div className="mx-auto mt-4 max-w-xl px-5 pt-2.5 sm:mt-8 md:mt-16">
-      <h1 className="mb-10 mt-12 text-center text-3xl">Contul meu</h1>
+      <h1 className="mb-10 mt-12 text-center text-3xl">{title}</h1>
       <nav className="items-center border border-line py-5">
         <NavLink to="/account" end>
           {({ isActive }) => (
@@ -62,4 +64,4 @@ const account: React.FC = () => {
   );
 };
 
-export default account;
+export default Account;

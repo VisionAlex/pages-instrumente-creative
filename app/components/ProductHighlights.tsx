@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react";
 import React from "react";
 import { BsBasket } from "react-icons/bs";
-import type { Products } from "~/root";
+import type { Products } from "~/types";
 
 interface Props {
   products: Products;

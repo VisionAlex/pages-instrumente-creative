@@ -1,7 +1,7 @@
 import { useOutletContext } from "@remix-run/react";
 import { Hero } from "~/components/Hero";
 import { ProductsHighlights } from "~/components/ProductHighlights";
-import type { Products } from "~/root";
+import type { Products } from "~/types";
 
 const Index: React.FC = () => {
   const { products } = useOutletContext<{ products: Products }>();
