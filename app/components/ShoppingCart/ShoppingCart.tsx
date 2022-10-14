@@ -56,8 +56,19 @@ export const ShoppingCart: React.FC<Props> = ({
         {cartSize > 0 && (
           <div className="py-6 px-6">
             <div className="flex justify-between text-base  text-primary">
-              <p>Subtotal</p>
-              <p className="text-lg text-subtitle">{cartInfo.cartTotal} lei</p>
+              <p>Transport</p>
+              <p className="text-lg text-subtitle">
+                {cartInfo.cartTotal > 193 ? "GRATUIT" : "19 lei"}
+              </p>
+            </div>
+            <div className="flex justify-between text-base  text-primary">
+              <p>Total</p>
+              <p className="text-lg text-subtitle">
+                {cartInfo.cartTotal > 193
+                  ? cartInfo.cartTotal
+                  : cartInfo.cartTotal + 19}{" "}
+                lei
+              </p>
             </div>
             <div className="mt-6">
               <Form method="post" action="/checkout">
