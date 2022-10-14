@@ -2,6 +2,7 @@ import { Link } from "@remix-run/react";
 import React from "react";
 import { BsBasket } from "react-icons/bs";
 import type { Products } from "~/types";
+import { AddToCart } from "./AddToCart";
 
 interface Props {
   products: Products;
@@ -40,9 +41,7 @@ export const ProductsHighlights: React.FC<Props> = ({ products }) => {
                 >
                   {product.title}
                 </Link>
-                <a className="ml-4 hover:opacity-70" href="/add-to-basket">
-                  <BsBasket fontSize={18} />
-                </a>
+                <AddToCart product={product} />
               </div>
               <p className="text-primary">
                 {product.productType === "Gift Cards" ? "de la " : undefined}

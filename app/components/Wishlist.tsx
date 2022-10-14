@@ -1,5 +1,5 @@
 import { XIcon } from "@heroicons/react/outline";
-import { Form, useLocation, useNavigate } from "@remix-run/react";
+import { Form, Link, useLocation, useNavigate } from "@remix-run/react";
 import { useMemo } from "react";
 import type { Products } from "~/types";
 import { Button } from "./shared/Button";
@@ -42,15 +42,27 @@ export const Wishlist: React.FC<Props> = ({
                   className="relative flex gap-4 border-t border-t-secondaryBackground py-5 first:border-none"
                   key={item.id}
                 >
-                  <img
-                    src={item.thumbnail?.url ?? ""}
-                    width={100}
-                    height={67}
-                    className="h-[67px] w-[100px]"
-                    alt={item.thumbnail?.altText ?? ""}
-                  />
+                  <Link
+                    to={`/products/${item.handle}`}
+                    prefetch="intent"
+                    onClick={() => setShowWishlist(false)}
+                  >
+                    <img
+                      src={item.thumbnail?.url ?? ""}
+                      width={100}
+                      height={67}
+                      className="h-[67px] w-[100px]"
+                      alt={item.thumbnail?.altText ?? ""}
+                    />
+                  </Link>
                   <div className="pr-4">
-                    <p className="mb-2">{item.title}</p>
+                    <Link
+                      prefetch="intent"
+                      to={`/products/${item.handle}`}
+                      onClick={() => setShowWishlist(true)}
+                    >
+                      <p className="mb-2">{item.title}</p>
+                    </Link>
                     <p className="mb-2">
                       {item.variants.edges[0].node.priceV2.amount} lei
                     </p>

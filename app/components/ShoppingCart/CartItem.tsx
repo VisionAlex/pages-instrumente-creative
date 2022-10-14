@@ -14,18 +14,27 @@ export const CartItem: React.FC<Props> = ({ cartItem, setShowCart }) => {
       key={cartItem.id}
       className="flex gap-5 border-t border-secondaryBackground pt-5 pb-5 first:border-none first:pt-0"
     >
-      <img
-        src={cartItem.thumbnail?.url ?? ""}
-        width={87}
-        height={60}
-        className="h-[60px] w-[87px]"
-        alt={cartItem.thumbnail?.altText ?? ""}
-      />
+      <Link
+        prefetch="intent"
+        to={`/products/${cartItem.handle}`}
+        onClick={() => {
+          setShowCart(false);
+        }}
+      >
+        <img
+          src={cartItem.thumbnail?.url ?? ""}
+          width={87}
+          height={60}
+          className="h-[60px] w-[87px]"
+          alt={cartItem.thumbnail?.altText ?? ""}
+        />
+      </Link>
       <div className="flex flex-1 flex-col gap-5 ">
         <Link
           prefetch="intent"
           to={`/products/${cartItem.handle}`}
           onClick={() => setShowCart(false)}
+          className="hover:opacity-70"
         >
           {cartItem.title}
         </Link>
