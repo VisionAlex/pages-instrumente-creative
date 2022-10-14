@@ -44,7 +44,7 @@ export const Footer: React.FC = () => {
           aria-describedby="email"
           className="hover:text-primary"
         >
-          contact@instrumentecreative.com
+          instrumentecreative@gmail.com
         </a>
       </div>
     </footer>
