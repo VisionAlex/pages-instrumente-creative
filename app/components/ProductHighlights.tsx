@@ -33,7 +33,6 @@ export const ProductsHighlights: React.FC<Props> = ({ products }) => {
                 to={`/products/${product.handle}`}
                 prefetch="intent"
               >
-                <SaleTag amount={amount} compareAtPrice={compareAtPrice} />
                 <img
                   className="cursor-pointer transition duration-400 hover:scale-110"
                   loading="lazy"
@@ -42,6 +41,7 @@ export const ProductsHighlights: React.FC<Props> = ({ products }) => {
                   width={215}
                   height={143}
                 />
+                <SaleTag amount={amount} compareAtPrice={compareAtPrice} />
               </Link>
               <div className="flex items-start justify-between  pt-2">
                 <Link

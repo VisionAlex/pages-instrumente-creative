@@ -72,12 +72,12 @@ const SingleProduct: React.FC = () => {
     <div className="mx-5">
       <div className=" flex flex-col items-center justify-center border-b border-background">
         <div className="relative border border-background ">
-          <SaleTag amount={price} compareAtPrice={compareAtPrice} />
           <img
             className="object-cover"
             src={product.images.edges[0].node.url}
             alt={product.images.edges[0].node.altText ?? ""}
           />
+          <SaleTag amount={price} compareAtPrice={compareAtPrice} />
         </div>
         <Breadcrumb name={product.title} className="text-subtitle" />
         <h1 className="py-4 text-title text-primary">{product.title}</h1>
@@ -124,8 +124,16 @@ const SingleProduct: React.FC = () => {
           <input type="hidden" name="_action" value="add" />
           <input type="hidden" name="quantity" value={quantity} />
           <input type="hidden" name="redirectTo" value={location.pathname} />
-          <button className="h-12 w-full bg-primary px-4 py-2 text-sm uppercase tracking-widest text-white transition-all hover:border hover:border-primary hover:bg-white hover:text-primary">
-            Adaugă în coș
+          <button
+            disabled={!product.availableForSale}
+            className={classNames(
+              "h-12 w-full bg-primary px-4 py-2 text-sm uppercase tracking-widest text-white transition-all ",
+              !product.availableForSale
+                ? "bg-subtitle"
+                : "hover:border hover:border-primary hover:bg-white hover:text-primary"
+            )}
+          >
+            {product.availableForSale ? "Adaugă în coș" : "Stoc epuizat"}
           </button>
         </Form>
 
@@ -149,7 +157,15 @@ const SingleProduct: React.FC = () => {
         </Form>
       </div>
       <div className="mt-4">
-        <button className="w-full border border-primary bg-primary py-3 text-sm uppercase tracking-widest text-white transition-all duration-300 hover:bg-white hover:text-primary">
+        <button
+          disabled={!product.availableForSale}
+          className={classNames(
+            "w-full border border-primary bg-primary py-3 text-sm uppercase tracking-widest text-white transition-all duration-300 ",
+            product.availableForSale
+              ? "hover:bg-white hover:text-primary"
+              : undefined
+          )}
+        >
           Cumpără acum
         </button>
       </div>
