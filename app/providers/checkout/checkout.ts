@@ -1,15 +1,21 @@
 import gql from "graphql-tag";
 import { sdk } from "graphqlWrapper";
+import type { CheckoutLineItemInput } from "~/generated/graphql";
+import { CountryCode } from "~/generated/graphql";
 import { storage } from "~/session.server";
-import { getCart } from "../cart/cart";
 
-export const checkoutWithWebUrl = async (request: Request) => {
+export const checkoutWithWebUrl = async (
+  request: Request,
+  lineItems: CheckoutLineItemInput[]
+) => {
   const session = await storage.getSession(request.headers.get("Cookie"));
   const customerAccessToken = session.get("accessToken");
-  const cart = await getCart(request);
   const createResponse = await sdk.createCheckout({
     input: {
-      lineItems: [...cart],
+      lineItems,
+      buyerIdentity: {
+        countryCode: CountryCode.Ro,
+      },
     },
   });
   const webUrl = createResponse.checkoutCreate?.checkout?.webUrl;

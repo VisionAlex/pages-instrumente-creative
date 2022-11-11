@@ -57,6 +57,7 @@ const AllProducts: React.FC = () => {
                       compareAtPrice={
                         product.compareAtPriceRange.minVariantPrice.amount
                       }
+                      variant="secondary"
                     />
                   ) : null}
                 </Link>

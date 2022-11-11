@@ -5,6 +5,7 @@ import {
   useLoaderData,
   useLocation,
   useOutletContext,
+  useTransition,
 } from "@remix-run/react";
 import { sdk } from "graphqlWrapper";
 import React, { useState } from "react";
@@ -14,6 +15,7 @@ import { PlusSmIcon, MinusSmIcon, HeartIcon } from "@heroicons/react/outline";
 import { classNames } from "~/shared/utils/classNames";
 import { Price } from "~/components/shared/Price";
 import { SaleTag } from "~/components/shared/SaleTag";
+import { Spinner } from "~/components/shared/Spinner";
 
 type ProductLoaderData = {
   product: GetProductByHandleQuery["product"];
@@ -44,6 +46,10 @@ const SingleProduct: React.FC = () => {
   const { wishlist } = useOutletContext<{ wishlist: string[] }>();
 
   const location = useLocation();
+  const transition = useTransition();
+  const isCheckoutSubmitting =
+    transition.submission?.formData.get("formName") === "checkout" &&
+    transition.state === "submitting";
   const [selectedVariant] = useState(0);
 
   const [quantity, setQuantity] = useState<number>(1);
@@ -77,7 +83,11 @@ const SingleProduct: React.FC = () => {
             src={product.images.edges[0].node.url}
             alt={product.images.edges[0].node.altText ?? ""}
           />
-          <SaleTag amount={price} compareAtPrice={compareAtPrice} />
+          <SaleTag
+            amount={price}
+            compareAtPrice={compareAtPrice}
+            variant="secondary"
+          />
         </div>
         <Breadcrumb name={product.title} className="text-subtitle" />
         <h1 className="py-4 text-title text-primary">{product.title}</h1>
@@ -85,7 +95,7 @@ const SingleProduct: React.FC = () => {
           <Price
             amount={price}
             compareAtPrice={compareAtPrice}
-            isGiftCard={false} // TODO
+            isGiftCard={product.productType === "Gift Cards"}
           />
         </div>
       </div>
@@ -157,17 +167,24 @@ const SingleProduct: React.FC = () => {
         </Form>
       </div>
       <div className="mt-4">
-        <button
-          disabled={!product.availableForSale}
-          className={classNames(
-            "w-full border border-primary bg-primary py-3 text-sm uppercase tracking-widest text-white transition-all duration-300 ",
-            product.availableForSale
-              ? "hover:bg-white hover:text-primary"
-              : undefined
-          )}
-        >
-          Cumpără acum
-        </button>
+        {product.availableForSale ? (
+          <Form method="post" action="/checkout">
+            <input type="hidden" name="redirectTo" value={location.pathname} />
+            <input
+              type="hidden"
+              name="variantId"
+              value={product.variants.edges[selectedVariant].node.id}
+            />
+            <input type="hidden" name="formName" value="checkout" />
+            <button
+              disabled={isCheckoutSubmitting}
+              className="flex h-[46px] w-full items-center justify-center border border-primary bg-primary py-3 text-sm uppercase tracking-widest text-white transition-all duration-300 enabled:hover:bg-white enabled:hover:text-primary disabled:pointer-events-none "
+            >
+              Cumpără acum{" "}
+              {isCheckoutSubmitting && <Spinner className="ml-2 h-4 w-4" />}
+            </button>
+          </Form>
+        ) : null}
       </div>
       <div className="mt-4">
         Disponibilate:{" "}

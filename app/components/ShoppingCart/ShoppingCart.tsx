@@ -5,9 +5,11 @@ import type { Products, VariantInfo, Variants } from "~/types";
 import { useMemo } from "react";
 import { getCartSize } from "./utils";
 import { CartItem } from "./CartItem";
-import { Form, useLocation } from "@remix-run/react";
-import { ButtonBase } from "../shared/ButtonBase";
+import { Form, useLocation, useTransition } from "@remix-run/react";
+import { Spinner } from "../shared/Spinner";
 
+const TRANSPORT = 10;
+const MINIMUM_ORDER_FOR_FREE_TRANSPORT = 193;
 interface Props {
   cart: Cart;
   products: Products;
@@ -26,6 +28,10 @@ export const ShoppingCart: React.FC<Props> = ({
   const cartInfo = useMemo(() => {
     return getCartInfo(cart, products);
   }, [cart, products]);
+
+  const transition = useTransition();
+  console.log("transition state", transition.state);
+  const isSubmitting = transition.state === "submitting";
 
   return (
     <Drawer
@@ -58,15 +64,17 @@ export const ShoppingCart: React.FC<Props> = ({
             <div className="flex justify-between text-base  text-primary">
               <p>Transport</p>
               <p className="text-lg text-subtitle">
-                {cartInfo.cartTotal > 193 ? "GRATUIT" : "19 lei"}
+                {cartInfo.cartTotal > MINIMUM_ORDER_FOR_FREE_TRANSPORT
+                  ? "GRATUIT"
+                  : `${TRANSPORT} lei`}
               </p>
             </div>
             <div className="flex justify-between text-base  text-primary">
               <p>Total</p>
               <p className="text-lg text-subtitle">
-                {cartInfo.cartTotal > 193
+                {cartInfo.cartTotal > MINIMUM_ORDER_FOR_FREE_TRANSPORT
                   ? cartInfo.cartTotal
-                  : cartInfo.cartTotal + 19}{" "}
+                  : cartInfo.cartTotal + TRANSPORT}{" "}
                 lei
               </p>
             </div>
@@ -77,12 +85,19 @@ export const ShoppingCart: React.FC<Props> = ({
                   name="redirectTo"
                   value={location.pathname}
                 />
-                <button type="submit" className="w-full">
-                  <ButtonBase
-                    text="Finalizează Comanda"
-                    variant="dark"
-                    className="mb-3 cursor-pointer select-none lg:text-lg"
-                  />
+                <button
+                  disabled={isSubmitting}
+                  type="submit"
+                  className="relative z-0 mb-3 flex w-full cursor-pointer select-none items-center justify-center overflow-visible border border-primary bg-primary py-4 text-white transition-colors duration-150 before:absolute before:inset-0 before:-z-10 before:w-0 before:origin-[0%_50%] before:transition-all before:duration-400 enabled:hover:bg-transparent enabled:hover:text-primary enabled:hover:before:w-full enabled:hover:before:bg-white disabled:pointer-events-none lg:text-lg"
+                >
+                  {isSubmitting ? (
+                    <>
+                      In curs de finalizare...
+                      <Spinner className="ml-2" />
+                    </>
+                  ) : (
+                    "Finalizează Comanda"
+                  )}
                 </button>
               </Form>
               <LinkButton
