@@ -30,8 +30,9 @@ export const ShoppingCart: React.FC<Props> = ({
   }, [cart, products]);
 
   const transition = useTransition();
-  console.log("transition state", transition.state);
-  const isSubmitting = transition.state === "submitting";
+  const isSubmitting =
+    transition.submission?.formData.get("formName") === "checkout" &&
+    transition.state === "submitting";
 
   return (
     <Drawer
@@ -62,7 +63,11 @@ export const ShoppingCart: React.FC<Props> = ({
         {cartSize > 0 && (
           <div className="py-6 px-6">
             <div className="flex justify-between text-base  text-primary">
-              <p>Transport</p>
+              <p>
+                Transport
+                {cartInfo.cartTotal < MINIMUM_ORDER_FOR_FREE_TRANSPORT &&
+                  " estimat"}
+              </p>
               <p className="text-lg text-subtitle">
                 {cartInfo.cartTotal > MINIMUM_ORDER_FOR_FREE_TRANSPORT
                   ? "GRATUIT"
@@ -80,6 +85,7 @@ export const ShoppingCart: React.FC<Props> = ({
             </div>
             <div className="mt-6">
               <Form method="post" action="/checkout">
+                <input type="hidden" name="formName" value="checkout" />
                 <input
                   type="hidden"
                   name="redirectTo"

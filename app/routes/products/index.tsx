@@ -30,7 +30,6 @@ const AllProducts: React.FC = () => {
         <div className="mx-5 grid grid-cols-1 gap-6">
           {products.map(({ node: product }) => {
             const isFavorite = wishlist.some((item) => item === product.id);
-            console.log(product);
             return (
               <div
                 key={product.id}
