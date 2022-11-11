@@ -1,4 +1,5 @@
 import { UserIcon } from "@heroicons/react/outline";
+import { UserIcon as UserIconSolid } from "@heroicons/react/solid";
 import { useNavigate } from "@remix-run/react";
 import React, { useMemo } from "react";
 import type { GetUserQuery } from "~/generated/graphql";
@@ -21,9 +22,12 @@ export const AccountIcon: React.FC<Props> = ({
     if (user) return () => navigate("/account");
     return openModal;
   }, [navigate, openModal, user]);
-
+  const User = useMemo(() => {
+    if (user) return UserIconSolid;
+    return UserIcon;
+  }, [user]);
   return (
-    <UserIcon
+    <User
       strokeWidth={1}
       className={classNames(
         "h-5 w-5 cursor-pointer text-primary hover:opacity-70",

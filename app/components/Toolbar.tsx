@@ -22,13 +22,11 @@ export const Toolbar: React.FC<Props> = ({
   cartSize,
   wishlistSize,
 }) => {
+  const firstName = user?.customer?.firstName;
+
   return (
     <div className="order-3 flex items-center  gap-4 text-primary antialiased">
-      <SearchIcon
-        strokeWidth={1}
-        className="h-5 w-5 cursor-pointer hover:opacity-70"
-      />
-
+      {firstName ? <div>Hello, {firstName}</div> : null}
       <AccountIcon
         openModal={() => setShowAccountModal(true)}
         user={user}

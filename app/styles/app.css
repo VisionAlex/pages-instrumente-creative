@@ -705,24 +705,12 @@ input[type="number"] {
   top: -4px;
 }
 
-.left-4 {
-  left: 1rem;
-}
-
 .top-8 {
   top: 2rem;
 }
 
 .left-8 {
   left: 2rem;
-}
-
-.top-3 {
-  top: 0.75rem;
-}
-
-.left-3 {
-  left: 0.75rem;
 }
 
 .z-50 {
@@ -854,6 +842,10 @@ input[type="number"] {
   margin-bottom: 0.75rem;
 }
 
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
 .mr-\[11px\] {
   margin-right: 11px;
 }
@@ -904,14 +896,6 @@ input[type="number"] {
 
 .ml-3 {
   margin-left: 0.75rem;
-}
-
-.ml-4 {
-  margin-left: 1rem;
-}
-
-.ml-2 {
-  margin-left: 0.5rem;
 }
 
 .block {
@@ -1014,10 +998,6 @@ input[type="number"] {
   height: 46px;
 }
 
-.h-3 {
-  height: 0.75rem;
-}
-
 .max-h-\[550px\] {
   max-height: 550px;
 }
@@ -1076,20 +1056,16 @@ input[type="number"] {
   width: 87px;
 }
 
+.w-8 {
+  width: 2rem;
+}
+
 .w-1\/2 {
   width: 50%;
 }
 
 .w-11 {
   width: 2.75rem;
-}
-
-.w-8 {
-  width: 2rem;
-}
-
-.w-3 {
-  width: 0.75rem;
 }
 
 .min-w-\[16px\] {
@@ -1161,12 +1137,6 @@ input[type="number"] {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-.scale-50 {
-  --tw-scale-x: .5;
-  --tw-scale-y: .5;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
 .transform {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
@@ -1190,10 +1160,6 @@ input[type="number"] {
 
 .cursor-pointer {
   cursor: pointer;
-}
-
-.cursor-wait {
-  cursor: wait;
 }
 
 .select-none {
@@ -1404,9 +1370,9 @@ input[type="number"] {
   background-color: rgb(241 241 241 / var(--tw-bg-opacity));
 }
 
-.bg-green-500 {
+.bg-green-600 {
   --tw-bg-opacity: 1;
-  background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+  background-color: rgb(22 163 74 / var(--tw-bg-opacity));
 }
 
 .bg-errorBackground {
@@ -1424,16 +1390,6 @@ input[type="number"] {
   background-color: rgb(143 143 143 / var(--tw-bg-opacity));
 }
 
-.bg-green-800 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(22 101 52 / var(--tw-bg-opacity));
-}
-
-.bg-green-600 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(22 163 74 / var(--tw-bg-opacity));
-}
-
 .bg-opacity-25 {
   --tw-bg-opacity: 0.25;
 }
@@ -1444,10 +1400,6 @@ input[type="number"] {
 
 .fill-primary {
   fill: #2c2c2c;
-}
-
-.fill-blue-600 {
-  fill: #2563eb;
 }
 
 .fill-white {
@@ -1746,6 +1698,11 @@ input[type="number"] {
   color: rgb(154 154 154 / var(--tw-text-opacity));
 }
 
+.text-gray-200 {
+  --tw-text-opacity: 1;
+  color: rgb(229 231 235 / var(--tw-text-opacity));
+}
+
 .text-error {
   --tw-text-opacity: 1;
   color: rgb(191 13 18 / var(--tw-text-opacity));
@@ -1754,11 +1711,6 @@ input[type="number"] {
 .text-red-500 {
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity));
-}
-
-.text-gray-200 {
-  --tw-text-opacity: 1;
-  color: rgb(229 231 235 / var(--tw-text-opacity));
 }
 
 .line-through {
