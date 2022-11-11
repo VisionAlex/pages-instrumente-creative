@@ -12,6 +12,8 @@ import { Breadcrumb } from "~/components/shared/Breadcrumb";
 import type { GetProductByHandleQuery } from "~/generated/graphql";
 import { PlusSmIcon, MinusSmIcon, HeartIcon } from "@heroicons/react/outline";
 import { classNames } from "~/shared/utils/classNames";
+import { Price } from "~/components/shared/Price";
+import { SaleTag } from "~/components/shared/SaleTag";
 
 type ProductLoaderData = {
   product: GetProductByHandleQuery["product"];
@@ -61,11 +63,16 @@ const SingleProduct: React.FC = () => {
     });
   };
 
+  const price = product?.variants.edges[selectedVariant].node.price.amount;
+  const compareAtPrice =
+    product?.variants.edges[selectedVariant].node.compareAtPrice?.amount;
+
   if (!product) return <div>Produsul nu a fost gasit.</div>;
   return (
     <div className="mx-5">
       <div className=" flex flex-col items-center justify-center border-b border-background">
         <div className="relative border border-background ">
+          <SaleTag amount={price} compareAtPrice={compareAtPrice} />
           <img
             className="object-cover"
             src={product.images.edges[0].node.url}
@@ -74,10 +81,13 @@ const SingleProduct: React.FC = () => {
         </div>
         <Breadcrumb name={product.title} className="text-subtitle" />
         <h1 className="py-4 text-title text-primary">{product.title}</h1>
-        <p className="pb-3">
-          {Number(product.variants.edges[selectedVariant].node.priceV2.amount)}{" "}
-          lei
-        </p>
+        <div className="pb-3">
+          <Price
+            amount={price}
+            compareAtPrice={compareAtPrice}
+            isGiftCard={false} // TODO
+          />
+        </div>
       </div>
       <div className=" mt-4 flex">
         <div className="mr-3 flex">

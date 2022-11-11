@@ -3,7 +3,7 @@ import { print } from "graphql";
 import { getSdk } from "~/generated/graphql";
 
 const API_URL =
-  "https://instrumentecreative.myshopify.com/api/2022-07/graphql.json";
+  "***REMOVED***";
 const SHOPIFY_ACCESS_TOKEN = "***REMOVED***";
 
 export interface GraphqlResponse<Response> {

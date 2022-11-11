@@ -5,6 +5,8 @@ import { BsSearch } from "react-icons/bs";
 import { AddToCart } from "~/components/AddToCart";
 import { AddToWishlist } from "~/components/AddToWishlist";
 import { PageHeader } from "~/components/shared/PageHeader";
+import { Price } from "~/components/shared/Price";
+import { SaleTag } from "~/components/shared/SaleTag";
 import type { Products } from "~/types";
 
 export const meta: MetaFunction = () => {
@@ -28,6 +30,7 @@ const AllProducts: React.FC = () => {
         <div className="mx-5 grid grid-cols-1 gap-6">
           {products.map(({ node: product }) => {
             const isFavorite = wishlist.some((item) => item === product.id);
+            console.log(product);
             return (
               <div
                 key={product.id}
@@ -47,6 +50,15 @@ const AllProducts: React.FC = () => {
                       Stoc epuizat
                     </div>
                   )}
+                  {product.availableForSale &&
+                  product.productType !== "Gift Cards" ? (
+                    <SaleTag
+                      amount={product.priceRange.minVariantPrice.amount}
+                      compareAtPrice={
+                        product.compareAtPriceRange.minVariantPrice.amount
+                      }
+                    />
+                  ) : null}
                 </Link>
                 <div className=" z-10 border-t border-secondaryBackground py-8 px-8 text-subtitle xs:my-8 xs:border-t-0 xs:border-l xs:py-0">
                   <Link
@@ -55,12 +67,13 @@ const AllProducts: React.FC = () => {
                   >
                     {product.title}
                   </Link>
-                  <p className="text-primary">
-                    {product.productType === "Gift Cards"
-                      ? "de la "
-                      : undefined}
-                    {Number(product.priceRange.minVariantPrice.amount)} lei
-                  </p>
+                  <Price
+                    amount={product.priceRange.minVariantPrice.amount}
+                    compareAtPrice={
+                      product.compareAtPriceRange.minVariantPrice.amount
+                    }
+                    isGiftCard={product.productType === "GiftCards"}
+                  />
                   <div className="mt-5 flex items-center gap-1.5 text-primary">
                     <AddToCart product={product} />
                     <div className="flex h-[36px] w-[36px] cursor-pointer items-center justify-center border border-primary">

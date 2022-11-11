@@ -131,7 +131,7 @@ export const getCartInfo = (cart: Cart, products: Products) => {
   }, []);
 
   const cartTotal = cartItems.reduce((total, item) => {
-    return total + parseInt(item.priceV2.amount) * item.quantity;
+    return total + parseInt(item.price.amount) * item.quantity;
   }, 0);
 
   return {

@@ -64,7 +64,7 @@ export const Wishlist: React.FC<Props> = ({
                       <p className="mb-2">{item.title}</p>
                     </Link>
                     <p className="mb-2">
-                      {item.variants.edges[0].node.priceV2.amount} lei
+                      {item.variants.edges[0].node.price.amount} lei
                     </p>
                     <Button
                       slim

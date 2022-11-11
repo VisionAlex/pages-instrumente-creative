@@ -42,16 +42,16 @@ type ApiVersion {
 """Details about the gift card used on the checkout."""
 type AppliedGiftCard implements Node {
   """The amount that was taken from the gift card by applying it."""
-  amountUsed: Money! @deprecated(reason: "Use `amountUsedV2` instead.")
+  amountUsed: MoneyV2!
 
   """The amount that was taken from the gift card by applying it."""
-  amountUsedV2: MoneyV2!
+  amountUsedV2: MoneyV2! @deprecated(reason: "Use `amountUsed` instead.")
 
   """The amount left on the gift card."""
-  balance: Money! @deprecated(reason: "Use `balanceV2` instead.")
+  balance: MoneyV2!
 
   """The amount left on the gift card."""
-  balanceV2: MoneyV2!
+  balanceV2: MoneyV2! @deprecated(reason: "Use `balance` instead.")
 
   """A globally-unique identifier."""
   id: ID!
@@ -366,6 +366,45 @@ enum BlogSortKeys {
   TITLE
 }
 
+"The store's branding configuration.\n"
+type Brand {
+  """The colors of the store's brand."""
+  colors: BrandColors!
+
+  """The store's cover image."""
+  coverImage: MediaImage
+
+  """The store's default logo."""
+  logo: MediaImage
+
+  """The store's short description."""
+  shortDescription: String
+
+  """The store's slogan."""
+  slogan: String
+
+  """The store's preferred logo for square UI elements."""
+  squareLogo: MediaImage
+}
+
+"A group of related colors for the shop's brand.\n"
+type BrandColorGroup {
+  """The background color."""
+  background: Color
+
+  """The foreground color."""
+  foreground: Color
+}
+
+"The colors of the shop's brand.\n"
+type BrandColors {
+  """The shop's primary brand colors."""
+  primary: [BrandColorGroup!]!
+
+  """The shop's secondary brand colors."""
+  secondary: [BrandColorGroup!]!
+}
+
 """
 Card brand, such as Visa or Mastercard, which can be used for payments.
 """
@@ -416,9 +455,7 @@ type Cart implements Node {
   """The date and time when the cart was created."""
   createdAt: DateTime!
 
-  """
-  The delivery groups available for the cart, based on the default address of the logged-in customer.
-  """
+  "The delivery groups available for the cart, based on the buyer identity default\ndelivery address preference or the default address of the logged-in customer.\n"
   deliveryGroups(
     """Returns the elements that come after the specified cursor."""
     after: String
@@ -510,6 +547,9 @@ type CartBuyerIdentity {
   """The customer account associated with the cart."""
   customer: Customer
 
+  "An ordered set of delivery addresses tied to the buyer that is interacting with the cart.\nThe rank of the preferences is determined by the order of the addresses in the array. Preferences\ncan be used to populate relevant fields in the checkout flow.\n"
+  deliveryAddressPreferences: [DeliveryAddress!]!
+
   """The email address of the buyer that is interacting with the cart."""
   email: String
 
@@ -526,6 +566,9 @@ input CartBuyerIdentityInput {
   The access token used to identify the customer associated with the cart.
   """
   customerAccessToken: String
+
+  "An ordered set of delivery addresses tied to the buyer that is interacting with the cart.\nThe rank of the preferences is determined by the order of the addresses in the array. Preferences\ncan be used to populate relevant fields in the checkout flow.\n"
+  deliveryAddressPreferences: [DeliveryAddressInput!]
 
   """The email address of the buyer that is interacting with the cart."""
   email: String
@@ -638,6 +681,9 @@ type CartDeliveryGroup {
 
   """The ID for the delivery group."""
   id: ID!
+
+  """The selected delivery option for the delivery group."""
+  selectedDeliveryOption: CartDeliveryOption
 }
 
 "An auto-generated type for paginating through multiple CartDeliveryGroups.\n"
@@ -674,6 +720,9 @@ type CartDeliveryOption {
 
   """The estimated cost for the delivery option."""
   estimatedCost: MoneyV2!
+
+  """The unique identifier of the delivery option."""
+  handle: String!
 
   """The title of the delivery option."""
   title: String
@@ -938,6 +987,24 @@ type CartNoteUpdatePayload {
   userErrors: [CartUserError!]!
 }
 
+"The input fields for updating the selected delivery options for a delivery group.\n"
+input CartSelectedDeliveryOptionInput {
+  """The ID of the cart delivery group."""
+  deliveryGroupId: ID!
+
+  """The handle of the selected delivery option."""
+  deliveryOptionHandle: String!
+}
+
+"""Return type for `cartSelectedDeliveryOptionsUpdate` mutation."""
+type CartSelectedDeliveryOptionsUpdatePayload {
+  """The updated cart."""
+  cart: Cart
+
+  """The list of errors that occurred from executing the mutation."""
+  userErrors: [CartUserError!]!
+}
+
 """Represents an error that happens during execution of a cart mutation."""
 type CartUserError implements DisplayableError {
   """The error code."""
@@ -1036,14 +1103,14 @@ type Checkout implements Node {
   orderStatusUrl: URL
 
   """
-  The amount left to be paid. This is equal to the cost of the line items, taxes and shipping minus discounts and gift cards.
+  The amount left to be paid. This is equal to the cost of the line items, taxes, and shipping, minus discounts and gift cards.
   """
-  paymentDue: Money! @deprecated(reason: "Use `paymentDueV2` instead.")
+  paymentDue: MoneyV2!
 
   """
   The amount left to be paid. This is equal to the cost of the line items, duties, taxes, and shipping, minus discounts and gift cards.
   """
-  paymentDueV2: MoneyV2!
+  paymentDueV2: MoneyV2! @deprecated(reason: "Use `paymentDue` instead.")
 
   "Whether or not the Checkout is ready and can be completed. Checkouts may\nhave asynchronous operations that can take time to finish. If you want\nto complete a checkout or ensure all the fields are populated and up to\ndate, polling is required until the value is true.\n"
   ready: Boolean!
@@ -1062,11 +1129,11 @@ type Checkout implements Node {
   """
   shippingLine: ShippingRate
 
-  """Price of the checkout before shipping and taxes."""
-  subtotalPrice: Money! @deprecated(reason: "Use `subtotalPriceV2` instead.")
+  """The price at checkout before shipping and taxes."""
+  subtotalPrice: MoneyV2!
 
   """The price at checkout before duties, shipping, and taxes."""
-  subtotalPriceV2: MoneyV2!
+  subtotalPriceV2: MoneyV2! @deprecated(reason: "Use `subtotalPrice` instead.")
 
   """Whether the checkout is tax exempt."""
   taxExempt: Boolean!
@@ -1078,24 +1145,24 @@ type Checkout implements Node {
   totalDuties: MoneyV2
 
   """
-  The sum of all the prices of all the items in the checkout, taxes and discounts included.
+  The sum of all the prices of all the items in the checkout, including taxes and duties.
   """
-  totalPrice: Money! @deprecated(reason: "Use `totalPriceV2` instead.")
+  totalPrice: MoneyV2!
 
   """
-  The sum of all the prices of all the items in the checkout, including duties, taxes, and discounts.
+  The sum of all the prices of all the items in the checkout, including taxes and duties.
   """
-  totalPriceV2: MoneyV2!
-
-  """
-  The sum of all the taxes applied to the line items and shipping lines in the checkout.
-  """
-  totalTax: Money! @deprecated(reason: "Use `totalTaxV2` instead.")
+  totalPriceV2: MoneyV2! @deprecated(reason: "Use `totalPrice` instead.")
 
   """
   The sum of all the taxes applied to the line items and shipping lines in the checkout.
   """
-  totalTaxV2: MoneyV2!
+  totalTax: MoneyV2!
+
+  """
+  The sum of all the taxes applied to the line items and shipping lines in the checkout.
+  """
+  totalTaxV2: MoneyV2! @deprecated(reason: "Use `totalTax` instead.")
 
   """The date and time when the checkout was last updated."""
   updatedAt: DateTime!
@@ -1729,6 +1796,9 @@ enum CollectionSortKeys {
   """Sort by the `updated_at` value."""
   UPDATED_AT
 }
+
+"A string containing a hexadecimal representation of a color.\n\nFor example, \"#6A8D48\".\n"
+scalar Color
 
 """A comment on an article."""
 type Comment implements Node {
@@ -3163,6 +3233,11 @@ type Customer implements HasMetafields {
     identifiers: [HasMetafieldsIdentifier!]!
   ): [Metafield]!
 
+  """
+  The number of orders that the customer has made at the store in their lifetime.
+  """
+  numberOfOrders: UnsignedInt64!
+
   """The orders associated with the customer."""
   orders(
     """Returns the elements that come after the specified cursor."""
@@ -3531,6 +3606,17 @@ scalar DateTime
 
 "A signed decimal number, which supports arbitrary precision and is serialized as a string.\n\nExample values: `\"29.99\"`, `\"29.999\"`.\n"
 scalar Decimal
+
+"""A delivery address of the buyer that is interacting with the cart."""
+union DeliveryAddress = MailingAddress
+
+"The input fields for delivery address preferences.\n"
+input DeliveryAddressInput {
+  """
+  A delivery address preference of a buyer that is interacting with the cart.
+  """
+  deliveryAddress: MailingAddressInput
+}
 
 """List of different delivery method types."""
 enum DeliveryMethodType {
@@ -4871,6 +4957,23 @@ type Metafield implements Node {
   """
   reference: MetafieldReference
 
+  """
+  A list of reference objects if the metafield's type is a resource reference list.
+  """
+  references(
+    """Returns the elements that come after the specified cursor."""
+    after: String
+
+    """Returns the elements that come before the specified cursor."""
+    before: String
+
+    """Returns up to the first `n` elements from the list."""
+    first: Int
+
+    """Returns up to the last `n` elements from the list."""
+    last: Int
+  ): MetafieldReferenceConnection
+
   "The type name of the metafield.\nSee the list of [supported types](https://shopify.dev/apps/metafields/definitions/types).\n"
   type: String!
 
@@ -4897,7 +5000,28 @@ input MetafieldFilter {
 union MetafieldParentResource = Article | Blog | Collection | Customer | Order | Page | Product | ProductVariant | Shop
 
 "Returns the resource which is being referred to by a metafield.\n"
-union MetafieldReference = GenericFile | MediaImage | Page | Product | ProductVariant | Video
+union MetafieldReference = Collection | GenericFile | MediaImage | Page | Product | ProductVariant | Video
+
+"An auto-generated type for paginating through multiple MetafieldReferences.\n"
+type MetafieldReferenceConnection {
+  """A list of edges."""
+  edges: [MetafieldReferenceEdge!]!
+
+  """A list of the nodes contained in MetafieldReferenceEdge."""
+  nodes: [MetafieldReference!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"An auto-generated type which holds one MetafieldReference and a cursor during pagination.\n"
+type MetafieldReferenceEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of MetafieldReferenceEdge."""
+  node: MetafieldReference!
+}
 
 """Represents a Shopify hosted 3D model."""
 type Model3d implements Media & Node {
@@ -4931,11 +5055,6 @@ type Model3dSource {
   """The URL of the 3d model."""
   url: String!
 }
-
-"""
-A monetary value string without a currency symbol or code. Example value: `"100.57"`.
-"""
-scalar Money
 
 """Specifies the fields for a monetary value with currency."""
 input MoneyInput {
@@ -5029,6 +5148,15 @@ type Mutation {
     """The note on the cart."""
     note: String
   ): CartNoteUpdatePayload
+
+  """Update the selected delivery options for a delivery group."""
+  cartSelectedDeliveryOptionsUpdate(
+    """The ID of the cart."""
+    cartId: ID!
+
+    """The selected delivery options."""
+    selectedDeliveryOptions: [CartSelectedDeliveryOptionInput!]!
+  ): CartSelectedDeliveryOptionsUpdatePayload
 
   """
   Updates the attributes of a checkout if `allowPartialAddresses` is `true`.
@@ -5469,10 +5597,10 @@ type Order implements HasMetafields & Node {
   statusUrl: URL!
 
   """Price of the order before shipping and taxes."""
-  subtotalPrice: Money @deprecated(reason: "Use `subtotalPriceV2` instead.")
+  subtotalPrice: MoneyV2
 
   """Price of the order before duties, shipping and taxes."""
-  subtotalPriceV2: MoneyV2
+  subtotalPriceV2: MoneyV2 @deprecated(reason: "Use `subtotalPrice` instead.")
 
   """List of the order’s successful fulfillments."""
   successfulFulfillments(
@@ -5481,32 +5609,32 @@ type Order implements HasMetafields & Node {
   ): [Fulfillment!]
 
   """
-  The sum of all the prices of all the items in the order, taxes and discounts included (must be positive).
+  The sum of all the prices of all the items in the order, duties, taxes and discounts included (must be positive).
   """
-  totalPrice: Money! @deprecated(reason: "Use `totalPriceV2` instead.")
+  totalPrice: MoneyV2!
 
   """
   The sum of all the prices of all the items in the order, duties, taxes and discounts included (must be positive).
   """
-  totalPriceV2: MoneyV2!
+  totalPriceV2: MoneyV2! @deprecated(reason: "Use `totalPrice` instead.")
 
   """The total amount that has been refunded."""
-  totalRefunded: Money! @deprecated(reason: "Use `totalRefundedV2` instead.")
+  totalRefunded: MoneyV2!
 
   """The total amount that has been refunded."""
-  totalRefundedV2: MoneyV2!
+  totalRefundedV2: MoneyV2! @deprecated(reason: "Use `totalRefunded` instead.")
 
   """The total cost of shipping."""
-  totalShippingPrice: Money! @deprecated(reason: "Use `totalShippingPriceV2` instead.")
+  totalShippingPrice: MoneyV2!
 
   """The total cost of shipping."""
-  totalShippingPriceV2: MoneyV2!
+  totalShippingPriceV2: MoneyV2! @deprecated(reason: "Use `totalShippingPrice` instead.")
 
   """The total cost of taxes."""
-  totalTax: Money @deprecated(reason: "Use `totalTaxV2` instead.")
+  totalTax: MoneyV2
 
   """The total cost of taxes."""
-  totalTaxV2: MoneyV2
+  totalTaxV2: MoneyV2 @deprecated(reason: "Use `totalTax` instead.")
 }
 
 """Represents the reason for the order's cancellation."""
@@ -5537,6 +5665,9 @@ type OrderConnection {
 
   """Information to aid in pagination."""
   pageInfo: PageInfo!
+
+  """The total count of Orders."""
+  totalCount: UnsignedInt64!
 }
 
 "An auto-generated type which holds one Order and a cursor during pagination.\n"
@@ -5800,10 +5931,10 @@ enum PageSortKeys {
 """A payment applied to a checkout."""
 type Payment implements Node {
   """The amount of the payment."""
-  amount: Money! @deprecated(reason: "Use `amountV2` instead.")
+  amount: MoneyV2!
 
   """The amount of the payment."""
-  amountV2: MoneyV2!
+  amountV2: MoneyV2! @deprecated(reason: "Use `amount` instead.")
 
   """The billing address for the payment."""
   billingAddress: MailingAddress
@@ -5980,6 +6111,9 @@ type Product implements HasMetafields & Node & OnlineStorePublishable {
     """Sort the underlying list by the given key."""
     sortKey: ProductImageSortKeys = POSITION
   ): ImageConnection!
+
+  """Whether the product is a gift card."""
+  isGiftCard: Boolean!
 
   """The media associated with the product."""
   media(
@@ -6276,12 +6410,12 @@ type ProductVariant implements HasMetafields & Node {
   """
   The compare at price of the variant. This can be used to mark a variant as on sale, when `compareAtPrice` is higher than `price`.
   """
-  compareAtPrice: Money @deprecated(reason: "Use `compareAtPriceV2` instead.")
+  compareAtPrice: MoneyV2
 
   """
   The compare at price of the variant. This can be used to mark a variant as on sale, when `compareAtPriceV2` is higher than `priceV2`.
   """
-  compareAtPriceV2: MoneyV2
+  compareAtPriceV2: MoneyV2 @deprecated(reason: "Use `compareAtPrice` instead.")
 
   """
   Whether a product is out of stock but still available for purchase (used for backorders).
@@ -6310,10 +6444,10 @@ type ProductVariant implements HasMetafields & Node {
   ): [Metafield]!
 
   """The product variant’s price."""
-  price: Money! @deprecated(reason: "Use `priceV2` instead.")
+  price: MoneyV2!
 
   """The product variant’s price."""
-  priceV2: MoneyV2!
+  priceV2: MoneyV2! @deprecated(reason: "Use `price` instead.")
 
   """The product object that the product variant belongs to."""
   product: Product!
@@ -7046,10 +7180,10 @@ type ShippingRate {
   handle: String!
 
   """Price of this shipping rate."""
-  price: Money! @deprecated(reason: "Use `priceV2` instead.")
+  price: MoneyV2!
 
   """Price of this shipping rate."""
-  priceV2: MoneyV2!
+  priceV2: MoneyV2! @deprecated(reason: "Use `price` instead.")
 
   """Title of this shipping rate."""
   title: String!
@@ -7059,6 +7193,9 @@ type ShippingRate {
 Shop represents a collection of the general settings and information about the shop.
 """
 type Shop implements HasMetafields & Node {
+  """The shop's branding configuration."""
+  brand: Brand
+
   """A description of the shop."""
   description: String
 
@@ -7239,10 +7376,10 @@ input TokenizedPaymentInputV3 {
 """An object representing exchange of money for a product or service."""
 type Transaction {
   """The amount of money that the transaction was for."""
-  amount: Money! @deprecated(reason: "Use `amountV2` instead.")
+  amount: MoneyV2!
 
   """The amount of money that the transaction was for."""
-  amountV2: MoneyV2!
+  amountV2: MoneyV2! @deprecated(reason: "Use `amount` instead.")
 
   """The kind of the transaction."""
   kind: TransactionKind!
@@ -7372,6 +7509,9 @@ enum UnitSystem {
   """Metric system of weights and measures."""
   METRIC_SYSTEM
 }
+
+"An unsigned 64-bit integer. Represents whole numeric values between 0 and 2^64 - 1 encoded as a string of base-10 digits.\n\nExample value: `\"50\"`.\n"
+scalar UnsignedInt64
 
 """A redirect on the online store."""
 type UrlRedirect implements Node {

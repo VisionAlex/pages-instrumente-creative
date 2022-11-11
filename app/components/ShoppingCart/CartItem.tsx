@@ -66,7 +66,7 @@ export const CartItem: React.FC<Props> = ({ cartItem, setShowCart }) => {
               </button>
             </Form>
           </div>
-          <div>{parseInt(cartItem.priceV2.amount)} lei</div>
+          <div>{parseInt(cartItem.price.amount)} lei</div>
         </div>
       </div>
     </li>

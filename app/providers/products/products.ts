@@ -42,6 +42,11 @@ gql`
               amount
             }
           }
+          compareAtPriceRange {
+            minVariantPrice {
+              amount
+            }
+          }
           thumbnail: featuredImage {
             url(transform: { maxWidth: 200 })
             altText
@@ -75,7 +80,10 @@ gql`
                 sku
                 availableForSale
                 currentlyNotInStock
-                priceV2 {
+                price {
+                  amount
+                }
+                compareAtPrice {
                   amount
                 }
               }
@@ -117,7 +125,11 @@ gql`
             availableForSale
             currentlyNotInStock
             requiresShipping
-            priceV2 {
+            price {
+              amount
+              currencyCode
+            }
+            compareAtPrice {
               amount
               currencyCode
             }
