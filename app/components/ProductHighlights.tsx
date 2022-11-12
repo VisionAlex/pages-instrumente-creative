@@ -18,7 +18,7 @@ export const ProductsHighlights: React.FC<Props> = ({ products }) => {
       </h3>
       <div className="grid grid-cols-2 justify-items-center gap-3 md:grid-cols-3">
         {products.map(({ node: product }, index) => {
-          const amount = product.priceRange.minVariantPrice.amount;
+          const price = product.priceRange.minVariantPrice.amount;
           const compareAtPrice =
             product.compareAtPriceRange.minVariantPrice.amount;
 
@@ -41,7 +41,7 @@ export const ProductsHighlights: React.FC<Props> = ({ products }) => {
                   width={215}
                   height={143}
                 />
-                <SaleTag amount={amount} compareAtPrice={compareAtPrice} />
+                <SaleTag amount={price} compareAtPrice={compareAtPrice} />
               </Link>
               <div className="flex items-start justify-between  pt-2">
                 <Link
@@ -54,7 +54,7 @@ export const ProductsHighlights: React.FC<Props> = ({ products }) => {
                 <AddToCart product={product} />
               </div>
               <Price
-                amount={amount}
+                price={price}
                 compareAtPrice={compareAtPrice}
                 isGiftCard={product.productType === "Gift Cards"}
               />

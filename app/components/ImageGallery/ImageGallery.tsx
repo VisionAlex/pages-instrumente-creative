@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import type { HandleProductMediumImages } from "~/types";
 import { wrap } from "popmotion";
 import { AnimatePresence, motion } from "framer-motion";
+import { Dots } from "./Dots";
 
 const variants = {
   enter: (direction: number) => {
@@ -42,36 +43,39 @@ export const ImageGallery: React.FC<Props> = ({ images }) => {
   };
 
   return (
-    <div className="aspect-w-4 aspect-h-3 overflow-hidden rounded-md">
-      <AnimatePresence initial={false} custom={direction}>
-        <motion.img
-          key={imageIndex}
-          src={images[imageIndex].url}
-          alt={images[imageIndex].altText ?? ""}
-          custom={direction}
-          variants={variants}
-          className="cursor-pointer object-cover object-center"
-          initial="enter"
-          animate="center"
-          exit="exit"
-          drag="x"
-          dragElastic={1}
-          dragConstraints={{ left: 0, right: 0 }}
-          transition={{
-            x: { type: "spring", stiffness: 300, damping: 30 },
-            opacity: { duration: 0.2 },
-          }}
-          onDragEnd={(_, { offset, velocity }) => {
-            const swipe = swipePower(offset.x, velocity.x);
+    <>
+      <div className="aspect-w-4 aspect-h-3 overflow-hidden rounded-md">
+        <AnimatePresence initial={false} custom={direction}>
+          <motion.img
+            key={imageIndex}
+            src={images[imageIndex].url}
+            alt={images[imageIndex].altText ?? ""}
+            custom={direction}
+            variants={variants}
+            className="cursor-pointer object-cover object-center"
+            initial="enter"
+            animate="center"
+            exit="exit"
+            drag="x"
+            dragElastic={1}
+            dragConstraints={{ left: 0, right: 0 }}
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 },
+            }}
+            onDragEnd={(_, { offset, velocity }) => {
+              const swipe = swipePower(offset.x, velocity.x);
 
-            if (swipe < -swipeConfidenceThreshold) {
-              paginate(1);
-            } else if (swipe > swipeConfidenceThreshold) {
-              paginate(-1);
-            }
-          }}
-        />
-      </AnimatePresence>
-    </div>
+              if (swipe < -swipeConfidenceThreshold) {
+                paginate(1);
+              } else if (swipe > swipeConfidenceThreshold) {
+                paginate(-1);
+              }
+            }}
+          />
+        </AnimatePresence>
+      </div>
+      <Dots size={images.length} selected={imageIndex} />
+    </>
   );
 };

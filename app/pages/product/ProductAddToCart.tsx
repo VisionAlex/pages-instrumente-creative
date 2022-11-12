@@ -29,10 +29,10 @@ export const ProductAddToCart: React.FC<Props> = ({
       <button
         disabled={!product.availableForSale}
         className={classNames(
-          "h-12 w-full border border-primary bg-primary px-4 py-2 text-sm uppercase tracking-widest text-white transition-all ",
+          "h-12 w-full  bg-primary px-4 py-2 text-sm uppercase tracking-widest text-white transition-all ",
           !product.availableForSale
             ? "bg-subtitle"
-            : " hover:bg-white hover:text-primary"
+            : " border border-primary hover:bg-white hover:text-primary"
         )}
       >
         {product.availableForSale ? "Adaugă în coș" : "Stoc epuizat"}

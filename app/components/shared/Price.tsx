@@ -15,11 +15,11 @@ export const Price: React.FC<Props> = ({
     <p className=" mt-2">
       {isGiftCard ? "de la " : null}
       {Number(compareAtPrice) ? (
-        <span className="mr-2 text-subtitle line-through">
+        <span className="mr-2 text-lg text-subtitle line-through">
           {Number(compareAtPrice)} lei
         </span>
       ) : null}
-      <span className="text-primary">{Number(price)} lei</span>
+      <span className="text-lg text-primary">{Number(price)} lei</span>
     </p>
   );
 };

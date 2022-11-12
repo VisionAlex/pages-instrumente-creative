@@ -63,11 +63,11 @@ const SingleProduct: React.FC = () => {
 
   return (
     <div className="mx-auto px-5 lg:max-w-7xl lg:px-8">
-      <div className="lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-x-8 lg:gap-y-10 xl:gap-x-16">
-        <div className="rounded-md lg:col-span-4 lg:row-end-1">
+      <div className="mt-8 lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-8">
+        <div className="relative rounded-md lg:col-span-4">
           <ImageGallery images={images} />
         </div>
-        <div className="mx-auto mt-8 max-w-2xl lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-8 lg:max-w-none">
+        <div className="mt-8 lg:col-span-3 lg:mt-0">
           <div className="flex flex-col ">
             <Breadcrumb name={product.title} className="self-center" />
             <div className="w-full border-b border-secondaryBackground py-4">
@@ -89,7 +89,7 @@ const SingleProduct: React.FC = () => {
                 setSelectedVariant={setSelectedVariant}
               />
             )}
-            <div className="mt-4 flex w-full self-start">
+            <div className="mt-4 flex w-full max-w-3xl self-start">
               <Quantity quantity={quantity} setQuantity={setQuantity} />
               <ProductAddToCart
                 product={product}
@@ -99,7 +99,7 @@ const SingleProduct: React.FC = () => {
               <ProductAddToWishList product={product} />
             </div>
             {product.availableForSale && (
-              <div className="mt-4 w-full">
+              <div className="mt-4 w-full max-w-3xl">
                 <BuyNow
                   productId={variants[selectedVariant].id}
                   quantity={quantity}
