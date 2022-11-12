@@ -102,15 +102,37 @@ gql`
       handle
       availableForSale
       productType
-
       tags
       title
       description
       descriptionHtml
-      images(first: 20) {
+      imagesThumbnail: images(first: 20) {
         edges {
           node {
-            url(transform: { maxWidth: 880 })
+            id
+            url(transform: { maxWidth: 200 })
+            altText
+            width
+            height
+          }
+        }
+      }
+      imagesSmall: images(first: 20) {
+        edges {
+          node {
+            id
+            url(transform: { maxWidth: 436 })
+            altText
+            width
+            height
+          }
+        }
+      }
+      imagesMedium: images(first: 20) {
+        edges {
+          node {
+            id
+            url(transform: { maxWidth: 1336 })
             altText
             width
             height

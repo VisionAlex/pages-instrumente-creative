@@ -1,3 +1,4 @@
+import type { GetProductByHandleQuery } from "~/generated/graphql";
 import type { GetProductsQuery } from "./generated/graphql";
 
 export type ArrayElement<ArrayType extends readonly unknown[]> =
@@ -18,3 +19,12 @@ export type VariantInfo = Variant & {
   thumbnail: Product["thumbnail"];
   quantity: number;
 };
+
+type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
+
+type HandleProductQuery = WithRequired<GetProductByHandleQuery, "product">;
+
+export type HandleProduct = NonNullable<HandleProductQuery["product"]>;
+
+export type HandleProductMediumImages =
+  HandleProduct["imagesMedium"]["edges"][0]["node"][];

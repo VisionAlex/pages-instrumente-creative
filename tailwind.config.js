@@ -27,7 +27,10 @@ module.exports = {
       transitionDuration: {
         400: "400ms",
       },
+      gridTemplateRows: {
+        "[auto,auto,1fr]": "auto auto 1fr",
+      },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/aspect-ratio")],
 };

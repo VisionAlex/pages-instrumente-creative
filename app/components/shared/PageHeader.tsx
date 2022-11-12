@@ -1,7 +1,6 @@
 import { useLocation } from "@remix-run/react";
-import { Link } from "./Link";
 import { MENU_ITEMS } from "../Menu";
-import { Breadcrumb } from "./Breadcrumb";
+import { Breadcrumb } from "./Breadcrumb/Breadcrumb";
 
 export const PageHeader: React.FC = () => {
   const path = useLocation().pathname;

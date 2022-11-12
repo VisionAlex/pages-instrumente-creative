@@ -6859,7 +6859,7 @@ export type GetProductByHandleQueryVariables = Exact<{
 }>;
 
 
-export type GetProductByHandleQuery = { __typename?: 'QueryRoot', product?: { __typename?: 'Product', id: string, handle: string, availableForSale: boolean, productType: string, tags: Array<string>, title: string, description: string, descriptionHtml: any, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, requiresShipping: boolean, price: { __typename?: 'MoneyV2', amount: any, currencyCode: CurrencyCode }, compareAtPrice?: { __typename?: 'MoneyV2', amount: any, currencyCode: CurrencyCode } | null } }> } } | null };
+export type GetProductByHandleQuery = { __typename?: 'QueryRoot', product?: { __typename?: 'Product', id: string, handle: string, availableForSale: boolean, productType: string, tags: Array<string>, title: string, description: string, descriptionHtml: any, imagesThumbnail: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imagesSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imagesMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, requiresShipping: boolean, price: { __typename?: 'MoneyV2', amount: any, currencyCode: CurrencyCode }, compareAtPrice?: { __typename?: 'MoneyV2', amount: any, currencyCode: CurrencyCode } | null } }> } } | null };
 
 
 export const CreateCheckoutDocument = gql`
@@ -7075,10 +7075,33 @@ export const GetProductByHandleDocument = gql`
     title
     description
     descriptionHtml
-    images(first: 20) {
+    imagesThumbnail: images(first: 20) {
       edges {
         node {
-          url(transform: {maxWidth: 880})
+          id
+          url(transform: {maxWidth: 200})
+          altText
+          width
+          height
+        }
+      }
+    }
+    imagesSmall: images(first: 20) {
+      edges {
+        node {
+          id
+          url(transform: {maxWidth: 436})
+          altText
+          width
+          height
+        }
+      }
+    }
+    imagesMedium: images(first: 20) {
+      edges {
+        node {
+          id
+          url(transform: {maxWidth: 1336})
           altText
           width
           height
