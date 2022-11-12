@@ -1,13 +1,13 @@
 import React from "react";
 
 interface Props {
-  amount: string;
+  price: string;
   compareAtPrice?: string;
   isGiftCard?: boolean;
 }
 
 export const Price: React.FC<Props> = ({
-  amount,
+  price,
   compareAtPrice,
   isGiftCard,
 }) => {
@@ -19,7 +19,7 @@ export const Price: React.FC<Props> = ({
           {Number(compareAtPrice)} lei
         </span>
       ) : null}
-      <span className="text-primary">{Number(amount)} lei</span>
+      <span className="text-primary">{Number(price)} lei</span>
     </p>
   );
 };

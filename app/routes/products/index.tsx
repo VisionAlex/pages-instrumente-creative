@@ -68,11 +68,11 @@ const AllProducts: React.FC = () => {
                     {product.title}
                   </Link>
                   <Price
-                    amount={product.priceRange.minVariantPrice.amount}
+                    price={product.priceRange.minVariantPrice.amount}
                     compareAtPrice={
                       product.compareAtPriceRange.minVariantPrice.amount
                     }
-                    isGiftCard={product.productType === "GiftCards"}
+                    isGiftCard={product.productType === "Gift Cards"}
                   />
                   <div className="mt-5 flex items-center gap-1.5 text-primary">
                     <AddToCart product={product} />

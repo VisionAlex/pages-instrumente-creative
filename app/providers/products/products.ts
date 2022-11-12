@@ -143,6 +143,7 @@ gql`
         edges {
           node {
             id
+            title
             sku
             availableForSale
             currentlyNotInStock

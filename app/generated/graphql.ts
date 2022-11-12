@@ -6859,7 +6859,7 @@ export type GetProductByHandleQueryVariables = Exact<{
 }>;
 
 
-export type GetProductByHandleQuery = { __typename?: 'QueryRoot', product?: { __typename?: 'Product', id: string, handle: string, availableForSale: boolean, productType: string, tags: Array<string>, title: string, description: string, descriptionHtml: any, imagesThumbnail: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imagesSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imagesMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, requiresShipping: boolean, price: { __typename?: 'MoneyV2', amount: any, currencyCode: CurrencyCode }, compareAtPrice?: { __typename?: 'MoneyV2', amount: any, currencyCode: CurrencyCode } | null } }> } } | null };
+export type GetProductByHandleQuery = { __typename?: 'QueryRoot', product?: { __typename?: 'Product', id: string, handle: string, availableForSale: boolean, productType: string, tags: Array<string>, title: string, description: string, descriptionHtml: any, imagesThumbnail: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imagesSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imagesMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, title: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, requiresShipping: boolean, price: { __typename?: 'MoneyV2', amount: any, currencyCode: CurrencyCode }, compareAtPrice?: { __typename?: 'MoneyV2', amount: any, currencyCode: CurrencyCode } | null } }> } } | null };
 
 
 export const CreateCheckoutDocument = gql`
@@ -7112,6 +7112,7 @@ export const GetProductByHandleDocument = gql`
       edges {
         node {
           id
+          title
           sku
           availableForSale
           currentlyNotInStock
