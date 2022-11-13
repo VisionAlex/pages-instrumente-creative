@@ -927,10 +927,6 @@ input[type="number"] {
   margin-bottom: 4rem;
 }
 
-.mb-40 {
-  margin-bottom: 10rem;
-}
-
 .mt-8 {
   margin-top: 2rem;
 }
@@ -1149,6 +1145,10 @@ input[type="number"] {
 
 .max-w-md {
   max-width: 28rem;
+}
+
+.max-w-7xl {
+  max-width: 80rem;
 }
 
 .flex-1 {

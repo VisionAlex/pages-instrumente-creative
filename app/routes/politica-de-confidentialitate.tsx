@@ -22,7 +22,7 @@ export const links = () => {
   return [{ rel: "stylesheet", href: pageStyles }];
 };
 
-const CustomerService: React.FC = () => {
+const PrivacyPolicy: React.FC = () => {
   const { page } = useLoaderData<LoaderData>();
   return (
     <div>
@@ -35,4 +35,4 @@ const CustomerService: React.FC = () => {
   );
 };
 
-export default CustomerService;
+export default PrivacyPolicy;
