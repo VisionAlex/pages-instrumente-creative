@@ -1,7 +1,9 @@
 export const PAGE_HANDLE = {
   PRODUCTS: "produse",
-  BLOG: "blog",
   CONTACT: "contact",
+  REVIEWS: "recenzii",
+  BLOG_CHILD_DEVELOPMENT: "dezvoltare-armonioasa-copii",
+  BLOG_RESOURCES: "resurse-gratuite-copii",
   ABOUT: "despre-noi",
   PRIVACY_POLICY: "politica-de-confidențialitate",
   CUSTOMER_SERVICE: "intrebari-frecvente",
@@ -25,9 +27,19 @@ export const config: Config = {
       path: "/produse",
       type: "menu",
     },
-    blog: {
-      name: "Blog",
-      path: "/blog",
+    "dezvoltare-armonioasa-copii": {
+      name: "Dezvoltarea copilului",
+      path: "/produse/dezvoltare-armonioasa-copii",
+      type: "menu",
+    },
+    "resurse-gratuite-copii": {
+      name: "Resurse",
+      path: "/resurse-gratuite-copii",
+      type: "menu",
+    },
+    recenzii: {
+      name: "Recenzii",
+      path: "/recenzii",
       type: "menu",
     },
     contact: {

@@ -20,7 +20,7 @@ export const PageHeader: React.FC<Props> = ({ className }) => {
         className
       )}
     >
-      <h1 className="text-title capitalize tracking-tighter text-primary lg:text-3xl">
+      <h1 className="text-title capitalize tracking-tighter text-primary lg:text-4xl">
         {name}
       </h1>
       <Breadcrumb name={name} />

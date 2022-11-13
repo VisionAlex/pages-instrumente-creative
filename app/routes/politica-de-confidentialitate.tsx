@@ -28,7 +28,7 @@ const PrivacyPolicy: React.FC = () => {
     <div>
       <PageHeader />
       <div
-        className="page mx-5 lg:mx-8 xl:mx-20"
+        className="page mx-auto max-w-7xl px-5 lg:px-8 xl:px-20"
         dangerouslySetInnerHTML={{ __html: page.body }}
       />
     </div>

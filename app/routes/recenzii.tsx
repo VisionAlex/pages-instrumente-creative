@@ -12,7 +12,7 @@ type LoaderData = {
 };
 
 export const loader = async () => {
-  const page = await getPage({ handle: PAGE_HANDLE.CUSTOMER_SERVICE });
+  const page = await getPage({ handle: PAGE_HANDLE.REVIEWS });
   return json({
     page: page.page,
   });
@@ -22,7 +22,7 @@ export const links = () => {
   return [{ rel: "stylesheet", href: pageStyles }];
 };
 
-const CustomerService: React.FC = () => {
+const Reviews: React.FC = () => {
   const { page } = useLoaderData<LoaderData>();
   return (
     <div>
@@ -35,4 +35,4 @@ const CustomerService: React.FC = () => {
   );
 };
 
-export default CustomerService;
+export default Reviews;

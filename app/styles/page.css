@@ -16,3 +16,14 @@
   color: #707070;
   font-weight: 700;
 }
+
+.page table {
+  border: 1px solid #ebeeee;
+  margin-bottom: 1rem;
+}
+
+.page table td {
+  padding: 1rem;
+  border-radius: 4px;
+  color: #707070;
+}

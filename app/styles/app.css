@@ -1151,14 +1151,6 @@ input[type="number"] {
   max-width: 80rem;
 }
 
-.max-w-2xl {
-  max-width: 42rem;
-}
-
-.max-w-none {
-  max-width: none;
-}
-
 .max-w-screen-2xl {
   max-width: 1536px;
 }
@@ -1728,6 +1720,14 @@ input[type="number"] {
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-semibold {
+  font-weight: 600;
 }
 
 .uppercase {
@@ -2347,10 +2347,6 @@ input[type="number"] {
     grid-template-columns: repeat(7, minmax(0, 1fr));
   }
 
-  .lg\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .lg\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -2395,16 +2391,17 @@ input[type="number"] {
     font-size: 1.875rem;
     line-height: 2.25rem;
   }
+
+  .lg\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
 }
 
 @media (min-width: 1280px) {
   .xl\:mx-20 {
     margin-left: 5rem;
     margin-right: 5rem;
-  }
-
-  .xl\:grid-cols-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .xl\:grid-cols-4 {
@@ -2421,10 +2418,6 @@ input[type="number"] {
   .xs\:my-8 {
     margin-top: 2rem;
     margin-bottom: 2rem;
-  }
-
-  .xs\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .xs\:border-t-0 {
