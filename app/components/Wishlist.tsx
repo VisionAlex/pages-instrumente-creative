@@ -1,6 +1,7 @@
 import { XIcon } from "@heroicons/react/outline";
 import { Form, Link, useLocation, useNavigate } from "@remix-run/react";
 import { useMemo } from "react";
+import { config } from "~/config";
 import type { Products } from "~/types";
 import { Button } from "./shared/Button";
 import { Drawer } from "./shared/Drawer";
@@ -43,7 +44,7 @@ export const Wishlist: React.FC<Props> = ({
                   key={item.id}
                 >
                   <Link
-                    to={`/products/${item.handle}`}
+                    to={`${config.pages.produse.path}/${item.handle}`}
                     prefetch="intent"
                     onClick={() => setShowWishlist(false)}
                   >
@@ -58,7 +59,7 @@ export const Wishlist: React.FC<Props> = ({
                   <div className="pr-4">
                     <Link
                       prefetch="intent"
-                      to={`/products/${item.handle}`}
+                      to={`${config.pages.produse.path}/${item.handle}`}
                       onClick={() => setShowWishlist(true)}
                     >
                       <p className="mb-2">{item.title}</p>
@@ -72,7 +73,9 @@ export const Wishlist: React.FC<Props> = ({
                       className="h-[38px] text-sm"
                       onClick={() => {
                         if (!isAvailable) {
-                          navigate(`/products/${item.handle}`);
+                          navigate(
+                            `${config.pages.produse.path}/${item.handle}`
+                          );
                           setShowWishlist(false);
                         }
                       }}

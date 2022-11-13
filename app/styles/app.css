@@ -717,6 +717,14 @@ input[type="number"] {
   top: 1rem;
 }
 
+.top-2 {
+  top: 0.5rem;
+}
+
+.left-2 {
+  left: 0.5rem;
+}
+
 .right-\[-11px\] {
   right: -11px;
 }
@@ -731,14 +739,6 @@ input[type="number"] {
 
 .left-8 {
   left: 2rem;
-}
-
-.top-2 {
-  top: 0.5rem;
-}
-
-.left-2 {
-  left: 0.5rem;
 }
 
 .z-50 {
@@ -915,10 +915,6 @@ input[type="number"] {
   margin-left: 0.75rem;
 }
 
-.mb-40 {
-  margin-bottom: 10rem;
-}
-
 .mb-48 {
   margin-bottom: 12rem;
 }
@@ -929,6 +925,10 @@ input[type="number"] {
 
 .mb-16 {
   margin-bottom: 4rem;
+}
+
+.mb-40 {
+  margin-bottom: 10rem;
 }
 
 .mt-8 {
@@ -1007,6 +1007,10 @@ input[type="number"] {
   height: 2.5rem;
 }
 
+.h-\[5px\] {
+  height: 5px;
+}
+
 .h-\[60px\] {
   height: 60px;
 }
@@ -1037,22 +1041,6 @@ input[type="number"] {
 
 .h-14 {
   height: 3.5rem;
-}
-
-.h-3 {
-  height: 0.75rem;
-}
-
-.h-2 {
-  height: 0.5rem;
-}
-
-.h-1 {
-  height: 0.25rem;
-}
-
-.h-\[5px\] {
-  height: 5px;
 }
 
 .max-h-\[550px\] {
@@ -1109,6 +1097,10 @@ input[type="number"] {
   width: 95vw;
 }
 
+.w-\[5px\] {
+  width: 5px;
+}
+
 .w-\[87px\] {
   width: 87px;
 }
@@ -1123,22 +1115,6 @@ input[type="number"] {
 
 .w-1\/2 {
   width: 50%;
-}
-
-.w-3 {
-  width: 0.75rem;
-}
-
-.w-2 {
-  width: 0.5rem;
-}
-
-.w-1 {
-  width: 0.25rem;
-}
-
-.w-\[5px\] {
-  width: 5px;
 }
 
 .min-w-\[16px\] {
@@ -1173,10 +1149,6 @@ input[type="number"] {
 
 .max-w-md {
   max-width: 28rem;
-}
-
-.max-w-2xl {
-  max-width: 42rem;
 }
 
 .flex-1 {
@@ -1325,10 +1297,6 @@ input[type="number"] {
   gap: 0.25rem;
 }
 
-.gap-8 {
-  gap: 2rem;
-}
-
 .divide-y > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-y-reverse: 0;
   border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
@@ -1462,14 +1430,9 @@ input[type="number"] {
   background-color: rgb(235 238 238 / var(--tw-bg-opacity));
 }
 
-.bg-gray-700 {
+.bg-subtitle {
   --tw-bg-opacity: 1;
-  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
-}
-
-.bg-gray-300 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+  background-color: rgb(112 112 112 / var(--tw-bg-opacity));
 }
 
 .bg-lightGrey {
@@ -1487,24 +1450,9 @@ input[type="number"] {
   background-color: rgb(255 192 207 / var(--tw-bg-opacity));
 }
 
-.bg-subtitle {
-  --tw-bg-opacity: 1;
-  background-color: rgb(112 112 112 / var(--tw-bg-opacity));
-}
-
 .bg-tag {
   --tw-bg-opacity: 1;
   background-color: rgb(143 143 143 / var(--tw-bg-opacity));
-}
-
-.bg-gray-600 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(75 85 99 / var(--tw-bg-opacity));
-}
-
-.bg-gray-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 
 .bg-opacity-25 {
@@ -1765,10 +1713,6 @@ input[type="number"] {
   line-height: 2rem;
 }
 
-.font-bold {
-  font-weight: 700;
-}
-
 .uppercase {
   text-transform: uppercase;
 }
@@ -1955,14 +1899,6 @@ input[type="number"] {
 
 .ease-in {
   transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
-}
-
-@font-face {
-  font-family: "Jost";
-
-  src: url("/fonts/Jost-VariableFont_wght.ttf") format("truetype");
-
-  font-display: swap;
 }
 
 .description ul {
@@ -2278,24 +2214,8 @@ input[type="number"] {
     margin-top: 4rem;
   }
 
-  .md\:h-3 {
-    height: 0.75rem;
-  }
-
-  .md\:h-1 {
-    height: 0.25rem;
-  }
-
   .md\:h-2 {
     height: 0.5rem;
-  }
-
-  .md\:w-3 {
-    width: 0.75rem;
-  }
-
-  .md\:w-1 {
-    width: 0.25rem;
   }
 
   .md\:w-2 {
@@ -2365,18 +2285,6 @@ input[type="number"] {
     grid-column: span 3 / span 3;
   }
 
-  .lg\:row-span-2 {
-    grid-row: span 2 / span 2;
-  }
-
-  .lg\:row-end-1 {
-    grid-row-end: 1;
-  }
-
-  .lg\:row-end-2 {
-    grid-row-end: 2;
-  }
-
   .lg\:mx-8 {
     margin-left: 2rem;
     margin-right: 2rem;
@@ -2384,10 +2292,6 @@ input[type="number"] {
 
   .lg\:mb-44 {
     margin-bottom: 11rem;
-  }
-
-  .lg\:mt-8 {
-    margin-top: 2rem;
   }
 
   .lg\:mt-0 {
@@ -2414,16 +2318,8 @@ input[type="number"] {
     display: none;
   }
 
-  .lg\:w-full {
-    width: 100%;
-  }
-
   .lg\:max-w-7xl {
     max-width: 80rem;
-  }
-
-  .lg\:max-w-none {
-    max-width: none;
   }
 
   .lg\:grid-cols-7 {
@@ -2436,15 +2332,6 @@ input[type="number"] {
 
   .lg\:gap-8 {
     gap: 2rem;
-  }
-
-  .lg\:gap-x-8 {
-    -moz-column-gap: 2rem;
-         column-gap: 2rem;
-  }
-
-  .lg\:gap-y-10 {
-    row-gap: 2.5rem;
   }
 
   .lg\:bg-background {
@@ -2485,16 +2372,6 @@ input[type="number"] {
   .xl\:mx-20 {
     margin-left: 5rem;
     margin-right: 5rem;
-  }
-
-  .xl\:gap-x-16 {
-    -moz-column-gap: 4rem;
-         column-gap: 4rem;
-  }
-
-  .xl\:gap-x-12 {
-    -moz-column-gap: 3rem;
-         column-gap: 3rem;
   }
 
   .xl\:px-20 {

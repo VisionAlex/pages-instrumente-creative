@@ -6845,6 +6845,20 @@ export type GetUserQueryVariables = Exact<{
 
 export type GetUserQuery = { __typename?: 'QueryRoot', customer?: { __typename?: 'Customer', id: string, firstName?: string | null, lastName?: string | null, acceptsMarketing: boolean, email?: string | null } | null };
 
+export type GetBlogQueryVariables = Exact<{
+  handle?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetBlogQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', id: string, handle: string, title: string, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, articles: { __typename?: 'ArticleConnection', nodes: Array<{ __typename?: 'Article', handle: string, id: string, content: string, contentHtml: any, excerpt?: string | null, excerptHtml?: any | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: any } | null, authorV2?: { __typename?: 'ArticleAuthor', firstName: string, lastName: string } | null, comments: { __typename?: 'CommentConnection', nodes: Array<{ __typename?: 'Comment', author: { __typename?: 'CommentAuthor', email: string, name: string } }> }, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null }> } } | null };
+
+export type GetPageQueryVariables = Exact<{
+  handle?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetPageQuery = { __typename?: 'QueryRoot', page?: { __typename?: 'Page', id: string, body: any, bodySummary: string, handle: string, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null } | null };
+
 export type GetProductsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
   query?: InputMaybe<Scalars['String']>;
@@ -6994,6 +7008,66 @@ export const GetUserDocument = gql`
     lastName
     acceptsMarketing
     email
+  }
+}
+    `;
+export const GetBlogDocument = gql`
+    query getBlog($handle: String) {
+  blog(handle: $handle) {
+    id
+    handle
+    title
+    seo {
+      title
+      description
+    }
+    articles(first: 20) {
+      nodes {
+        handle
+        id
+        image {
+          altText
+          height
+          width
+          id
+          url
+        }
+        authorV2 {
+          firstName
+          lastName
+        }
+        comments(first: 20) {
+          nodes {
+            author {
+              email
+              name
+            }
+          }
+        }
+        content
+        contentHtml
+        excerpt
+        excerptHtml
+        seo {
+          title
+          description
+        }
+      }
+    }
+  }
+}
+    `;
+export const GetPageDocument = gql`
+    query getPage($handle: String) {
+  page(handle: $handle) {
+    id
+    body
+    bodySummary
+    handle
+    seo {
+      title
+      description
+    }
   }
 }
     `;
@@ -7157,6 +7231,12 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getUser(variables: GetUserQueryVariables, options?: C): Promise<GetUserQuery> {
       return requester<GetUserQuery, GetUserQueryVariables>(GetUserDocument, variables, options);
+    },
+    getBlog(variables?: GetBlogQueryVariables, options?: C): Promise<GetBlogQuery> {
+      return requester<GetBlogQuery, GetBlogQueryVariables>(GetBlogDocument, variables, options);
+    },
+    getPage(variables?: GetPageQueryVariables, options?: C): Promise<GetPageQuery> {
+      return requester<GetPageQuery, GetPageQueryVariables>(GetPageDocument, variables, options);
     },
     getProducts(variables?: GetProductsQueryVariables, options?: C): Promise<GetProductsQuery> {
       return requester<GetProductsQuery, GetProductsQueryVariables>(GetProductsDocument, variables, options);

@@ -42,6 +42,16 @@ export const links = () => {
   return [
     { rel: "stylesheet", href: styles },
     { rel: "preconnect", href: "//cdn.shopify.com/", crossOrigin: "true" },
+    { rel: "preconnect", href: "https://fonts.googleapis.com" },
+    {
+      rel: "preconnect",
+      href: "https://fonts.gstatic.com",
+      crossOrigin: "true",
+    },
+    {
+      rel: "stylesheet",
+      href: "https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap",
+    },
   ];
 };
 

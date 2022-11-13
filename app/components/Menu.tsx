@@ -1,32 +1,17 @@
 import { NavLink } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { IoCloseOutline } from "react-icons/io5";
-import useOnClickOutside from "~/shared/hooks/useOnClickOutside";
 import { Link } from "./shared/Link";
 import { MenuIcon } from "./shared/icons";
-
-export const MENU_ITEMS = [
-  {
-    name: "Produse",
-    link: "/products",
-  },
-  {
-    name: "Blog",
-    link: "/blog",
-  },
-  {
-    name: "Despre noi",
-    link: "/about",
-  },
-  {
-    name: "Contact",
-    link: "/contact",
-  },
-] as const;
+import { config } from "~/config";
 
 export const Menu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+
+  const menuPages = Object.values(config.pages).filter(
+    (page) => page.type === "menu"
+  );
 
   return (
     <nav className="z-50 order-1 text-primary lg:order-2">
@@ -48,8 +33,8 @@ export const Menu: React.FC = () => {
         </button>
       )}
       <div className="hidden flex-wrap items-stretch gap-[30px] lg:flex">
-        {MENU_ITEMS.map(({ name, link }) => (
-          <Link key={name} to={link}>
+        {menuPages.map(({ name, path }) => (
+          <Link key={name} to={path}>
             {name}
           </Link>
         ))}
@@ -63,10 +48,10 @@ export const Menu: React.FC = () => {
           ref={mobileMenuRef}
           className={`flex min-h-[calc(100vh_-_123px_-_50px)] flex-col bg-secondaryBackground p-[30px] capitalize`}
         >
-          {MENU_ITEMS.map(({ name, link }) => (
+          {menuPages.map(({ name, path }) => (
             <NavLink
               key={name}
-              to={link}
+              to={path}
               className="mb-[13px] border-b border-secondaryLine pb-[13px]"
               onClick={() => {
                 setIsOpen(false);

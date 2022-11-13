@@ -1,4 +1,5 @@
 import React from "react";
+import { config } from "~/config";
 import { LinkButton } from "./shared/LinkButton";
 
 export const Hero: React.FC = () => {
@@ -14,13 +15,12 @@ export const Hero: React.FC = () => {
           originale
         </p>
         <LinkButton
-          to="/products"
+          to={config.pages.produse.path}
           text="Vizualizează toate produsele"
           responsive
         />
       </div>
       <img
-        loading="lazy"
         className="absolute left-0 right-0 z-10 mx-auto max-h-[550px]"
         src="https://cdn.shopify.com/s/files/1/0598/9367/8278/files/Kit_slide_mobile_54330571-644e-43bb-a4b0-af2c0c503ff2.png?v=1651500342"
         alt="header"

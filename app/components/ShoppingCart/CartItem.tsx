@@ -1,5 +1,6 @@
 import { MinusSmIcon, PlusSmIcon } from "@heroicons/react/outline";
 import { Form, Link, useLocation } from "@remix-run/react";
+import { config } from "~/config";
 import type { VariantInfo } from "~/types";
 
 interface Props {
@@ -16,7 +17,7 @@ export const CartItem: React.FC<Props> = ({ cartItem, setShowCart }) => {
     >
       <Link
         prefetch="intent"
-        to={`/products/${cartItem.handle}`}
+        to={`${config.pages.produse.path}/${cartItem.handle}`}
         onClick={() => {
           setShowCart(false);
         }}
@@ -32,7 +33,7 @@ export const CartItem: React.FC<Props> = ({ cartItem, setShowCart }) => {
       <div className="flex flex-1 flex-col gap-5 ">
         <Link
           prefetch="intent"
-          to={`/products/${cartItem.handle}`}
+          to={`${config.pages.produse.path}/${cartItem.handle}`}
           onClick={() => setShowCart(false)}
           className="hover:opacity-70"
         >

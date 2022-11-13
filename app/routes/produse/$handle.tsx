@@ -71,7 +71,7 @@ const SingleProduct: React.FC = () => {
           <div className="flex flex-col ">
             <Breadcrumb name={product.title} className="self-center" />
             <div className="w-full border-b border-secondaryBackground py-4">
-              <h1 className="text-center text-2xl font-bold tracking-tight text-primary sm:text-3xl lg:text-start">
+              <h1 className="text-center text-2xl tracking-tight text-primary sm:text-3xl lg:text-start">
                 {product.title}
               </h1>
             </div>

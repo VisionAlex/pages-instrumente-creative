@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react";
 import React from "react";
+import { config } from "~/config";
 import type { Products } from "~/types";
 import { AddToCart } from "./AddToCart";
 import { Price } from "./shared/Price";
@@ -30,7 +31,7 @@ export const ProductsHighlights: React.FC<Props> = ({ products }) => {
             <div key={product.id} className={`${additionalClasses}`}>
               <Link
                 className="relative"
-                to={`/products/${product.handle}`}
+                to={`${config.pages.produse.path}/${product.handle}`}
                 prefetch="intent"
               >
                 <img

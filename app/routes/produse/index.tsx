@@ -7,6 +7,7 @@ import { AddToWishlist } from "~/components/AddToWishlist";
 import { PageHeader } from "~/components/shared/PageHeader";
 import { Price } from "~/components/shared/Price";
 import { SaleTag } from "~/components/shared/SaleTag";
+import { config } from "~/config";
 import type { Products } from "~/types";
 
 export const meta: MetaFunction = () => {
@@ -36,7 +37,7 @@ const AllProducts: React.FC = () => {
                 className="grid grid-cols-1 overflow-hidden border border-secondaryBackground xs:grid-cols-2"
               >
                 <Link
-                  to={`/products/${product.handle}`}
+                  to={`${config.pages.produse.path}/${product.handle}`}
                   className="relative flex cursor-pointer items-center"
                 >
                   <img
@@ -63,7 +64,7 @@ const AllProducts: React.FC = () => {
                 <div className=" z-10 border-t border-secondaryBackground py-8 px-8 text-subtitle xs:my-8 xs:border-t-0 xs:border-l xs:py-0">
                   <Link
                     className="hover:text-primary"
-                    to={`/products/${product.handle}`}
+                    to={`${config.pages.produse.path}/${product.handle}`}
                   >
                     {product.title}
                   </Link>
