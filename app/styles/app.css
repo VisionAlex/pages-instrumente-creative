@@ -1113,6 +1113,10 @@ input[type="number"] {
   width: 50%;
 }
 
+.w-\[44px\] {
+  width: 44px;
+}
+
 .min-w-\[16px\] {
   min-width: 16px;
 }
@@ -1135,6 +1139,10 @@ input[type="number"] {
   max-width: 36rem;
 }
 
+.max-w-7xl {
+  max-width: 80rem;
+}
+
 .max-w-\[490px\] {
   max-width: 490px;
 }
@@ -1145,10 +1153,6 @@ input[type="number"] {
 
 .max-w-md {
   max-width: 28rem;
-}
-
-.max-w-7xl {
-  max-width: 80rem;
 }
 
 .max-w-screen-2xl {
@@ -1506,6 +1510,10 @@ input[type="number"] {
   padding: 0.25rem;
 }
 
+.p-4 {
+  padding: 1rem;
+}
+
 .py-20 {
   padding-top: 5rem;
   padding-bottom: 5rem;
@@ -1663,6 +1671,10 @@ input[type="number"] {
   padding-bottom: 1.75rem;
 }
 
+.pt-4 {
+  padding-top: 1rem;
+}
+
 .text-center {
   text-align: center;
 }
@@ -1720,14 +1732,6 @@ input[type="number"] {
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
-}
-
-.font-bold {
-  font-weight: 700;
-}
-
-.font-semibold {
-  font-weight: 600;
 }
 
 .uppercase {
@@ -2306,11 +2310,6 @@ input[type="number"] {
     grid-column: span 3 / span 3;
   }
 
-  .lg\:mx-8 {
-    margin-left: 2rem;
-    margin-right: 2rem;
-  }
-
   .lg\:mb-44 {
     margin-bottom: 11rem;
   }
@@ -2387,11 +2386,6 @@ input[type="number"] {
     line-height: 1.75rem;
   }
 
-  .lg\:text-3xl {
-    font-size: 1.875rem;
-    line-height: 2.25rem;
-  }
-
   .lg\:text-4xl {
     font-size: 2.25rem;
     line-height: 2.5rem;
@@ -2399,11 +2393,6 @@ input[type="number"] {
 }
 
 @media (min-width: 1280px) {
-  .xl\:mx-20 {
-    margin-left: 5rem;
-    margin-right: 5rem;
-  }
-
   .xl\:grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }

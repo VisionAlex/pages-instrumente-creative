@@ -2,6 +2,7 @@ import { config } from "~/config";
 import { Logo } from "./Logo";
 import { TruckIcon } from "./shared/icons";
 import { Link } from "./shared/Link";
+import { SocialLinks } from "./shared/SocialLinks";
 
 export const Footer: React.FC = () => {
   return (
@@ -34,17 +35,20 @@ export const Footer: React.FC = () => {
           Abonează-te
         </button>
       </form>
+      <div className="flex items-center justify-center pt-4">
+        <SocialLinks />
+      </div>
       <div className="pt-6 text-center leading-7 text-subtitle">
         <span>
           © {new Date().getFullYear()} Instrumente Creative. Toate drepturile
           rezervate |
         </span>{" "}
         <a
-          href="mailto:gmail@instrumentecreative.com"
+          href={`mailto:${config.email}`}
           aria-describedby="email"
           className="hover:text-primary"
         >
-          instrumentecreative@gmail.com
+          {config.email}
         </a>
       </div>
     </footer>
