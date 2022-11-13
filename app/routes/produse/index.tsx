@@ -26,25 +26,27 @@ const AllProducts: React.FC = () => {
   if (!products) return null;
   return (
     <div>
-      <PageHeader />
+      <PageHeader className="max-w-screen-2xl" />
       <div>
-        <div className="mx-5 grid grid-cols-1 gap-6">
+        <div className="mx-auto grid max-w-screen-2xl grid-cols-1 gap-6 px-5 md:grid-cols-2 lg:grid-cols-3 lg:px-8 xl:grid-cols-4 xl:px-20">
           {products.map(({ node: product }) => {
             const isFavorite = wishlist.some((item) => item === product.id);
             return (
               <div
                 key={product.id}
-                className="grid grid-cols-1 overflow-hidden border border-secondaryBackground xs:grid-cols-2"
+                className="grid max-w-xl grid-cols-1 overflow-hidden border border-secondaryBackground "
               >
                 <Link
                   to={`${config.pages.produse.path}/${product.handle}`}
-                  className="relative flex cursor-pointer items-center"
+                  className=" relative cursor-pointer"
                 >
-                  <img
-                    loading="lazy"
-                    src={product.imageSmall.edges[0].node.url}
-                    alt={product.imageSmall.edges[0].node.altText || ""}
-                  />
+                  <div className="aspect-w-4 aspect-h-3 object-contain object-center">
+                    <img
+                      loading="lazy"
+                      src={product.imageMedium.edges[0].node.url}
+                      alt={product.imageMedium.edges[0].node.altText || ""}
+                    />
+                  </div>
                   {!product.availableForSale && (
                     <div className="absolute top-8 left-8 bg-tag py-0.5 px-1 text-sm text-white">
                       Stoc epuizat
