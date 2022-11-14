@@ -8,7 +8,6 @@ interface Props {
 }
 
 export const Variant: React.FC<Props> = ({ title, isSelected, onClick }) => {
-  console.log(isSelected);
   return (
     <li
       className={classNames(

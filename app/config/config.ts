@@ -30,12 +30,12 @@ export const config: Config = {
     },
     "dezvoltare-armonioasa-copii": {
       name: "Dezvoltarea copilului",
-      path: "/produse/dezvoltare-armonioasa-copii",
+      path: "/blog/dezvoltare-armonioasa-copii",
       type: "menu",
     },
     "resurse-gratuite-copii": {
       name: "Resurse Gratuite",
-      path: "/resurse-gratuite-copii",
+      path: "/blog/resurse-gratuite-copii",
       type: "menu",
     },
     recenzii: {

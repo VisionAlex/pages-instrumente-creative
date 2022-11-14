@@ -5,9 +5,10 @@ import { Breadcrumb } from "./Breadcrumb/Breadcrumb";
 
 interface Props {
   className?: string;
+  customTitle?: string;
 }
 
-export const PageHeader: React.FC<Props> = ({ className }) => {
+export const PageHeader: React.FC<Props> = ({ className, customTitle }) => {
   const path = useLocation().pathname;
   const name = Object.values(config.pages).find(
     (page) => page.path === path
@@ -20,8 +21,8 @@ export const PageHeader: React.FC<Props> = ({ className }) => {
         className
       )}
     >
-      <h1 className="text-title capitalize tracking-tighter text-primary lg:text-4xl">
-        {name}
+      <h1 className="text-center text-title capitalize tracking-tighter text-primary md:text-left md:text-4xl">
+        {customTitle ?? name}
       </h1>
       <Breadcrumb name={name} />
     </div>

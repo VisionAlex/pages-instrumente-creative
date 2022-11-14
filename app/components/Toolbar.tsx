@@ -1,5 +1,5 @@
 import React from "react";
-import { HeartIcon, SearchIcon } from "@heroicons/react/outline";
+import { HeartIcon } from "@heroicons/react/outline";
 import { BsBasket } from "react-icons/bs";
 import type { GetUserQuery } from "~/generated/graphql";
 import { AccountIcon } from "./AccountIcon";

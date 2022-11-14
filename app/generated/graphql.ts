@@ -6845,12 +6845,27 @@ export type GetUserQueryVariables = Exact<{
 
 export type GetUserQuery = { __typename?: 'QueryRoot', customer?: { __typename?: 'Customer', id: string, firstName?: string | null, lastName?: string | null, acceptsMarketing: boolean, email?: string | null } | null };
 
+export type GetArticlesQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetArticlesQuery = { __typename?: 'QueryRoot', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, handle: string, title: string, excerptHtml?: any | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: any } | null, blog: { __typename?: 'Blog', handle: string } } }> } };
+
+export type GetBlogArticleQueryVariables = Exact<{
+  handle: Scalars['String'];
+  articleHandle: Scalars['String'];
+}>;
+
+
+export type GetBlogArticleQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', articleByHandle?: { __typename?: 'Article', id: string, publishedAt: any, contentHtml: any, tags: Array<string>, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, authorV2?: { __typename?: 'ArticleAuthor', name: string } | null, image?: { __typename?: 'Image', url: any, height?: number | null, width?: number | null, altText?: string | null } | null } | null } | null };
+
 export type GetBlogQueryVariables = Exact<{
   handle?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetBlogQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', id: string, handle: string, title: string, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, articles: { __typename?: 'ArticleConnection', nodes: Array<{ __typename?: 'Article', handle: string, id: string, content: string, contentHtml: any, excerpt?: string | null, excerptHtml?: any | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: any } | null, authorV2?: { __typename?: 'ArticleAuthor', firstName: string, lastName: string } | null, comments: { __typename?: 'CommentConnection', nodes: Array<{ __typename?: 'Comment', author: { __typename?: 'CommentAuthor', email: string, name: string } }> }, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null }> } } | null };
+export type GetBlogQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', title: string, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, title: string, excerptHtml?: any | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: any } | null } }> } } | null };
 
 export type GetPageQueryVariables = Exact<{
   handle?: InputMaybe<Scalars['String']>;
@@ -7011,19 +7026,11 @@ export const GetUserDocument = gql`
   }
 }
     `;
-export const GetBlogDocument = gql`
-    query getBlog($handle: String) {
-  blog(handle: $handle) {
-    id
-    handle
-    title
-    seo {
-      title
-      description
-    }
-    articles(first: 20) {
-      nodes {
-        handle
+export const GetArticlesDocument = gql`
+    query getArticles($first: Int) {
+  articles(first: $first) {
+    edges {
+      node {
         id
         image {
           altText
@@ -7032,25 +7039,64 @@ export const GetBlogDocument = gql`
           id
           url
         }
-        authorV2 {
-          firstName
-          lastName
+        blog {
+          handle
         }
-        comments(first: 20) {
-          nodes {
-            author {
-              email
-              name
-            }
-          }
-        }
-        content
-        contentHtml
-        excerpt
+        handle
+        title
         excerptHtml
-        seo {
+      }
+    }
+  }
+}
+    `;
+export const GetBlogArticleDocument = gql`
+    query getBlogArticle($handle: String!, $articleHandle: String!) {
+  blog(handle: $handle) {
+    articleByHandle(handle: $articleHandle) {
+      id
+      publishedAt
+      seo {
+        title
+        description
+      }
+      authorV2 {
+        name
+      }
+      image {
+        url
+        height
+        width
+        altText
+      }
+      contentHtml
+      tags
+    }
+  }
+}
+    `;
+export const GetBlogDocument = gql`
+    query getBlog($handle: String) {
+  blog(handle: $handle) {
+    title
+    seo {
+      title
+      description
+    }
+    articles(first: 20) {
+      edges {
+        node {
+          handle
+          id
           title
-          description
+          image {
+            altText
+            height
+            width
+            id
+            url
+          }
+          excerptHtml
         }
       }
     }
@@ -7231,6 +7277,12 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getUser(variables: GetUserQueryVariables, options?: C): Promise<GetUserQuery> {
       return requester<GetUserQuery, GetUserQueryVariables>(GetUserDocument, variables, options);
+    },
+    getArticles(variables?: GetArticlesQueryVariables, options?: C): Promise<GetArticlesQuery> {
+      return requester<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, variables, options);
+    },
+    getBlogArticle(variables: GetBlogArticleQueryVariables, options?: C): Promise<GetBlogArticleQuery> {
+      return requester<GetBlogArticleQuery, GetBlogArticleQueryVariables>(GetBlogArticleDocument, variables, options);
     },
     getBlog(variables?: GetBlogQueryVariables, options?: C): Promise<GetBlogQuery> {
       return requester<GetBlogQuery, GetBlogQueryVariables>(GetBlogDocument, variables, options);
