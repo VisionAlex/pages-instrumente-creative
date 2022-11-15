@@ -34,7 +34,7 @@ const AllProducts: React.FC = () => {
             return (
               <div
                 key={product.id}
-                className="grid max-w-xl grid-cols-1 overflow-hidden border border-secondaryBackground "
+                className="max-2xl grid grid-cols-1 overflow-hidden border border-secondaryBackground "
               >
                 <Link
                   to={`${config.pages.produse.path}/${product.handle}`}

@@ -629,6 +629,26 @@ input[type="number"] {
   --tw-aspect-h: 3;
 }
 
+.aspect-w-1 {
+  position: relative;
+  padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
+  --tw-aspect-w: 1;
+}
+
+.aspect-w-1 > * {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.aspect-h-1 {
+  --tw-aspect-h: 1;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -647,6 +667,10 @@ input[type="number"] {
 
 .pointer-events-auto {
   pointer-events: auto;
+}
+
+.visible {
+  visibility: visible;
 }
 
 .static {
@@ -779,6 +803,10 @@ input[type="number"] {
 
 .col-span-2 {
   grid-column: span 2 / span 2;
+}
+
+.col-span-7 {
+  grid-column: span 7 / span 7;
 }
 
 .m-auto {
@@ -1233,6 +1261,10 @@ input[type="number"] {
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
+.grid-cols-7 {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
 .flex-col {
   flex-direction: column;
 }
@@ -1303,6 +1335,19 @@ input[type="number"] {
 
 .gap-1 {
   gap: 0.25rem;
+}
+
+.gap-8 {
+  gap: 2rem;
+}
+
+.gap-x-8 {
+  -moz-column-gap: 2rem;
+       column-gap: 2rem;
+}
+
+.gap-y-8 {
+  row-gap: 2rem;
 }
 
 .divide-y > :not([hidden]) ~ :not([hidden]) {
@@ -1615,6 +1660,11 @@ input[type="number"] {
   padding-bottom: 0px;
 }
 
+.py-12 {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
 .pt-\[123px\] {
   padding-top: 123px;
 }
@@ -1754,6 +1804,10 @@ input[type="number"] {
   line-height: 1.25;
 }
 
+.leading-6 {
+  line-height: 1.5rem;
+}
+
 .tracking-wider {
   letter-spacing: 0.05em;
 }
@@ -1810,6 +1864,26 @@ input[type="number"] {
   color: rgb(209 213 219 / var(--tw-text-opacity));
 }
 
+.text-\[\#4267B2\] {
+  --tw-text-opacity: 1;
+  color: rgb(66 103 178 / var(--tw-text-opacity));
+}
+
+.text-\[\#FF0000\] {
+  --tw-text-opacity: 1;
+  color: rgb(255 0 0 / var(--tw-text-opacity));
+}
+
+.text-black {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+}
+
+.text-\[\#E60023\] {
+  --tw-text-opacity: 1;
+  color: rgb(230 0 35 / var(--tw-text-opacity));
+}
+
 .line-through {
   -webkit-text-decoration-line: line-through;
           text-decoration-line: line-through;
@@ -1843,6 +1917,10 @@ input[type="number"] {
 .outline-none {
   outline: 2px solid transparent;
   outline-offset: 2px;
+}
+
+.outline-primary {
+  outline-color: #2c2c2c;
 }
 
 .ring-1 {
@@ -1933,6 +2011,14 @@ input[type="number"] {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.placeholder\:text-center::-moz-placeholder {
+  text-align: center;
+}
+
+.placeholder\:text-center::placeholder {
+  text-align: center;
+}
+
 .before\:absolute::before {
   content: var(--tw-content);
   position: absolute;
@@ -1946,14 +2032,34 @@ input[type="number"] {
   left: 0px;
 }
 
+.before\:left-full::before {
+  content: var(--tw-content);
+  left: 100%;
+}
+
+.before\:top-1\/2::before {
+  content: var(--tw-content);
+  top: 50%;
+}
+
 .before\:-z-10::before {
   content: var(--tw-content);
   z-index: -10;
 }
 
+.before\:h-px::before {
+  content: var(--tw-content);
+  height: 1px;
+}
+
 .before\:w-0::before {
   content: var(--tw-content);
   width: 0px;
+}
+
+.before\:w-screen::before {
+  content: var(--tw-content);
+  width: 100vw;
 }
 
 .before\:origin-\[0\%_50\%\]::before {
@@ -1970,6 +2076,12 @@ input[type="number"] {
   content: var(--tw-content);
   --tw-bg-opacity: 1;
   background-color: rgb(44 44 44 / var(--tw-bg-opacity));
+}
+
+.before\:bg-line::before {
+  content: var(--tw-content);
+  --tw-bg-opacity: 1;
+  background-color: rgb(210 210 210 / var(--tw-bg-opacity));
 }
 
 .before\:transition-all::before {
@@ -2014,6 +2126,11 @@ input[type="number"] {
   top: 50%;
 }
 
+.after\:right-full::after {
+  content: var(--tw-content);
+  right: 100%;
+}
+
 .after\:block::after {
   content: var(--tw-content);
   display: block;
@@ -2044,10 +2161,21 @@ input[type="number"] {
   width: 5px;
 }
 
+.after\:w-screen::after {
+  content: var(--tw-content);
+  width: 100vw;
+}
+
 .after\:bg-primary::after {
   content: var(--tw-content);
   --tw-bg-opacity: 1;
   background-color: rgb(44 44 44 / var(--tw-bg-opacity));
+}
+
+.after\:bg-line::after {
+  content: var(--tw-content);
+  --tw-bg-opacity: 1;
+  background-color: rgb(210 210 210 / var(--tw-bg-opacity));
 }
 
 .after\:transition-all::after {
@@ -2315,6 +2443,14 @@ input[type="number"] {
     grid-column: span 3 / span 3;
   }
 
+  .lg\:col-span-5 {
+    grid-column: span 5 / span 5;
+  }
+
+  .lg\:col-span-2 {
+    grid-column: span 2 / span 2;
+  }
+
   .lg\:mb-44 {
     margin-bottom: 11rem;
   }
@@ -2395,6 +2531,10 @@ input[type="number"] {
 @media (min-width: 1280px) {
   .xl\:grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .xl\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .xl\:px-20 {
