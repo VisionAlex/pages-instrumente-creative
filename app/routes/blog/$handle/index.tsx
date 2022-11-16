@@ -1,18 +1,33 @@
-import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
+import type {
+  HeadersFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { Link, useLoaderData } from "@remix-run/react";
 import React from "react";
 import { PageHeader } from "~/components/shared/PageHeader";
 import { NewsletterWidget } from "~/components/shared/widgets/NewsletterWidget";
 import { SocialLinksWidget } from "~/components/shared/widgets/SocialLinksWidget";
+import { TagsWidget } from "~/components/shared/widgets/TagsWidget";
 import { PAGE_HANDLE } from "~/config";
 import type { GetArticlesQuery, GetBlogQuery } from "~/generated/graphql";
 import { getArticles } from "~/providers/pages/articles";
 import { getBlog } from "~/providers/pages/blog";
 
+const resoursesPageTags = [
+  "CÂND ÎNVĂȚĂM CORPUL UMAN",
+  "COLOREAZA",
+  "CORPUL UMAN",
+  "CUM SĂ ÎNVĂȚ COPILUL DESPRE CORPUL UMAN",
+  "DE CE TREBUIE SĂ ÎNVEȚE COPILUL CORPUL UMAN",
+  "DESCARCA GRATUIT",
+];
+
 type LoaderData = {
   blog: NonNullable<GetBlogQuery["blog"]>;
   articles: GetArticlesQuery["articles"]["edges"];
+  tags: string[];
 };
 
 export const loader: LoaderFunction = async ({ params }) => {
@@ -30,7 +45,29 @@ export const loader: LoaderFunction = async ({ params }) => {
       return article.blog.handle === PAGE_HANDLE.BLOG_RESOURCES;
     });
   }
-  return json({ blog: blogQuery.blog, articles });
+  let tags: string[] | undefined;
+  if (params.handle === PAGE_HANDLE.BLOG_RESOURCES) {
+    tags = resoursesPageTags;
+  } else {
+    tags = articles?.reduce((acc, { node: article }) => {
+      if (article.tags) return [...acc, ...article.tags];
+      return acc;
+    }, [] as string[]);
+  }
+  return json(
+    { blog: blogQuery.blog, articles, tags },
+    {
+      headers: {
+        "Cache-Control": "public, max-age=3600",
+      },
+    }
+  );
+};
+
+export const headers: HeadersFunction = ({ loaderHeaders }) => {
+  return {
+    "Cache-Control": loaderHeaders.get("Cache-Control") ?? "no-cache",
+  };
 };
 
 export const meta: MetaFunction = ({ data }) => {
@@ -41,6 +78,7 @@ export const meta: MetaFunction = ({ data }) => {
 };
 const BlogIndex: React.FC = () => {
   const data = useLoaderData<LoaderData>();
+
   const articles = data.articles ? data.articles : data.blog.articles.edges;
   return (
     <div>
@@ -74,7 +112,8 @@ const BlogIndex: React.FC = () => {
           </main>
           <aside className="col-span-7 lg:col-span-2">
             <SocialLinksWidget className="mb-8" />
-            <NewsletterWidget />
+            <NewsletterWidget className="mb-8" />
+            <TagsWidget tags={data.tags} />
           </aside>
         </div>
       </div>

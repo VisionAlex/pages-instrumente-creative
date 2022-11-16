@@ -18,6 +18,7 @@ gql`
           node {
             handle
             id
+            tags
             title
             image {
               altText

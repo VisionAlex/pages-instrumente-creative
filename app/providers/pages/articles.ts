@@ -15,6 +15,7 @@ gql`
       edges {
         node {
           id
+          tags
           image {
             altText
             height
