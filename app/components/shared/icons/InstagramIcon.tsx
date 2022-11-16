@@ -18,8 +18,8 @@ export const InstagramIcon: React.FC<{ width?: number }> = ({ width }) => {
         fill="url(#paint1_radial_147648_827)"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M23.9501 11.616C17.1436 11.616 11.625 17.1345 11.625 23.941C11.625 30.7475 17.1436 36.2635 23.9501 36.2635C30.7567 36.2635 36.2738 30.7475 36.2738 23.941C36.2738 17.1345 30.7567 11.616 23.9501 11.616ZM24 31.875C28.3493 31.875 31.875 28.3493 31.875 24C31.875 19.6508 28.3493 16.125 24 16.125C19.6508 16.125 16.125 19.6508 16.125 24C16.125 28.3493 19.6508 31.875 24 31.875Z"
         fill="url(#paint2_radial_147648_827)"
       />
@@ -33,7 +33,7 @@ export const InstagramIcon: React.FC<{ width?: number }> = ({ width }) => {
       />
       <path
         fill-rule="evenodd"
-        clip-rule="evenodd"
+        clipRule="evenodd"
         d="M23.9501 11.616C17.1436 11.616 11.625 17.1345 11.625 23.941C11.625 30.7475 17.1436 36.2635 23.9501 36.2635C30.7567 36.2635 36.2738 30.7475 36.2738 23.941C36.2738 17.1345 30.7567 11.616 23.9501 11.616ZM24 31.875C28.3493 31.875 31.875 28.3493 31.875 24C31.875 19.6508 28.3493 16.125 24 16.125C19.6508 16.125 16.125 19.6508 16.125 24C16.125 28.3493 19.6508 31.875 24 31.875Z"
         fill="url(#paint5_radial_147648_827)"
       />
@@ -46,10 +46,10 @@ export const InstagramIcon: React.FC<{ width?: number }> = ({ width }) => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(12.7501 51.697) rotate(-90) scale(47.5715 44.2453)"
         >
-          <stop stop-color="#FFDD55" />
-          <stop offset="0.1" stop-color="#FFDD55" />
-          <stop offset="0.5" stop-color="#FF543E" />
-          <stop offset="1" stop-color="#C837AB" />
+          <stop stopColor="#FFDD55" />
+          <stop offset="0.1" stopColor="#FFDD55" />
+          <stop offset="0.5" stopColor="#FF543E" />
+          <stop offset="1" stopColor="#C837AB" />
         </radialGradient>
         <radialGradient
           id="paint1_radial_147648_827"
@@ -59,10 +59,10 @@ export const InstagramIcon: React.FC<{ width?: number }> = ({ width }) => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(12.7501 51.697) rotate(-90) scale(47.5715 44.2453)"
         >
-          <stop stop-color="#FFDD55" />
-          <stop offset="0.1" stop-color="#FFDD55" />
-          <stop offset="0.5" stop-color="#FF543E" />
-          <stop offset="1" stop-color="#C837AB" />
+          <stop stopColor="#FFDD55" />
+          <stop offset="0.1" stopColor="#FFDD55" />
+          <stop offset="0.5" stopColor="#FF543E" />
+          <stop offset="1" stopColor="#C837AB" />
         </radialGradient>
         <radialGradient
           id="paint2_radial_147648_827"
@@ -72,10 +72,10 @@ export const InstagramIcon: React.FC<{ width?: number }> = ({ width }) => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(12.7501 51.697) rotate(-90) scale(47.5715 44.2453)"
         >
-          <stop stop-color="#FFDD55" />
-          <stop offset="0.1" stop-color="#FFDD55" />
-          <stop offset="0.5" stop-color="#FF543E" />
-          <stop offset="1" stop-color="#C837AB" />
+          <stop stopColor="#FFDD55" />
+          <stop offset="0.1" stopColor="#FFDD55" />
+          <stop offset="0.5" stopColor="#FF543E" />
+          <stop offset="1" stopColor="#C837AB" />
         </radialGradient>
         <radialGradient
           id="paint3_radial_147648_827"
@@ -85,9 +85,9 @@ export const InstagramIcon: React.FC<{ width?: number }> = ({ width }) => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(-8.04025 3.45784) rotate(78.6806) scale(21.2647 87.6539)"
         >
-          <stop stop-color="#3771C8" />
-          <stop offset="0.128" stop-color="#3771C8" />
-          <stop offset="1" stop-color="#6600FF" stop-opacity="0" />
+          <stop stopColor="#3771C8" />
+          <stop offset="0.128" stopColor="#3771C8" />
+          <stop offset="1" stopColor="#6600FF" stopOpacity="0" />
         </radialGradient>
         <radialGradient
           id="paint4_radial_147648_827"
@@ -97,9 +97,9 @@ export const InstagramIcon: React.FC<{ width?: number }> = ({ width }) => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(-8.04025 3.45784) rotate(78.6806) scale(21.2647 87.6539)"
         >
-          <stop stop-color="#3771C8" />
-          <stop offset="0.128" stop-color="#3771C8" />
-          <stop offset="1" stop-color="#6600FF" stop-opacity="0" />
+          <stop stopColor="#3771C8" />
+          <stop offset="0.128" stopColor="#3771C8" />
+          <stop offset="1" stopColor="#6600FF" stopOpacity="0" />
         </radialGradient>
         <radialGradient
           id="paint5_radial_147648_827"
@@ -109,9 +109,9 @@ export const InstagramIcon: React.FC<{ width?: number }> = ({ width }) => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(-8.04025 3.45784) rotate(78.6806) scale(21.2647 87.6539)"
         >
-          <stop stop-color="#3771C8" />
-          <stop offset="0.128" stop-color="#3771C8" />
-          <stop offset="1" stop-color="#6600FF" stop-opacity="0" />
+          <stop stopColor="#3771C8" />
+          <stop offset="0.128" stopColor="#3771C8" />
+          <stop offset="1" stopColor="#6600FF" stopOpacity="0" />
         </radialGradient>
       </defs>
     </svg>

@@ -13,11 +13,12 @@ gql`
         title
         description
       }
-      articles(first: 20) {
+      articles(first: 20, sortKey: PUBLISHED_AT, reverse: true) {
         edges {
           node {
             handle
             id
+            publishedAt
             tags
             title
             image {

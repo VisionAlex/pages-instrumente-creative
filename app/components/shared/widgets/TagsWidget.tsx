@@ -17,7 +17,7 @@ export const TagsWidget: React.FC<Props> = ({ tags, className }) => {
             <Link
               to={`/blog/tags/${tag}`}
               key={tag}
-              className="rounded-xl border border-line px-2 py-1 text-xs tracking-[0.01em] transition-colors duration-400 hover:border-primary "
+              className="rounded-xl border border-line px-2 py-1 text-xs uppercase tracking-[0.01em] transition-colors duration-400 hover:border-primary "
             >
               {tag}
             </Link>

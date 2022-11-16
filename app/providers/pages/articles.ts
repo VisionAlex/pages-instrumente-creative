@@ -10,11 +10,16 @@ export const getBlogArticle = (handle: string, articleHandle: string) => {
 };
 
 gql`
-  query getArticles($first: Int) {
-    articles(first: $first) {
+  query getArticles(
+    $first: Int
+    $reverse: Boolean = true
+    $sortKey: ArticleSortKeys = PUBLISHED_AT
+  ) {
+    articles(first: $first, reverse: $reverse, sortKey: $sortKey) {
       edges {
         node {
           id
+          publishedAt
           tags
           image {
             altText

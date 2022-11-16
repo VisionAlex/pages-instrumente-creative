@@ -6847,10 +6847,12 @@ export type GetUserQuery = { __typename?: 'QueryRoot', customer?: { __typename?:
 
 export type GetArticlesQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
+  reverse?: InputMaybe<Scalars['Boolean']>;
+  sortKey?: InputMaybe<ArticleSortKeys>;
 }>;
 
 
-export type GetArticlesQuery = { __typename?: 'QueryRoot', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, tags: Array<string>, handle: string, title: string, excerptHtml?: any | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: any } | null, blog: { __typename?: 'Blog', handle: string } } }> } };
+export type GetArticlesQuery = { __typename?: 'QueryRoot', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, publishedAt: any, tags: Array<string>, handle: string, title: string, excerptHtml?: any | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: any } | null, blog: { __typename?: 'Blog', handle: string } } }> } };
 
 export type GetBlogArticleQueryVariables = Exact<{
   handle: Scalars['String'];
@@ -6865,7 +6867,7 @@ export type GetBlogQueryVariables = Exact<{
 }>;
 
 
-export type GetBlogQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', title: string, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, tags: Array<string>, title: string, excerptHtml?: any | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: any } | null } }> } } | null };
+export type GetBlogQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', title: string, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, publishedAt: any, tags: Array<string>, title: string, excerptHtml?: any | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: any } | null } }> } } | null };
 
 export type GetPageQueryVariables = Exact<{
   handle?: InputMaybe<Scalars['String']>;
@@ -7027,11 +7029,12 @@ export const GetUserDocument = gql`
 }
     `;
 export const GetArticlesDocument = gql`
-    query getArticles($first: Int) {
-  articles(first: $first) {
+    query getArticles($first: Int, $reverse: Boolean = true, $sortKey: ArticleSortKeys = PUBLISHED_AT) {
+  articles(first: $first, reverse: $reverse, sortKey: $sortKey) {
     edges {
       node {
         id
+        publishedAt
         tags
         image {
           altText
@@ -7084,11 +7087,12 @@ export const GetBlogDocument = gql`
       title
       description
     }
-    articles(first: 20) {
+    articles(first: 20, sortKey: PUBLISHED_AT, reverse: true) {
       edges {
         node {
           handle
           id
+          publishedAt
           tags
           title
           image {

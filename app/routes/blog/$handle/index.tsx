@@ -14,16 +14,8 @@ import { PAGE_HANDLE } from "~/config";
 import type { GetArticlesQuery, GetBlogQuery } from "~/generated/graphql";
 import { getArticles } from "~/providers/pages/articles";
 import { getBlog } from "~/providers/pages/blog";
-
-const resoursesPageTags = [
-  "CÂND ÎNVĂȚĂM CORPUL UMAN",
-  "COLOREAZA",
-  "CORPUL UMAN",
-  "CUM SĂ ÎNVĂȚ COPILUL DESPRE CORPUL UMAN",
-  "DE CE TREBUIE SĂ ÎNVEȚE COPILUL CORPUL UMAN",
-  "DESCARCA GRATUIT",
-];
-
+import { classNames } from "~/shared/utils/classNames";
+import { getImageAspectRatio } from "~/shared/utils/getImageAspectRatio";
 type LoaderData = {
   blog: NonNullable<GetBlogQuery["blog"]>;
   articles: GetArticlesQuery["articles"]["edges"];
@@ -44,18 +36,25 @@ export const loader: LoaderFunction = async ({ params }) => {
     articles = articlesQuery.articles.edges.filter(({ node: article }) => {
       return article.blog.handle === PAGE_HANDLE.BLOG_RESOURCES;
     });
-  }
-  let tags: string[] | undefined;
-  if (params.handle === PAGE_HANDLE.BLOG_RESOURCES) {
-    tags = resoursesPageTags;
   } else {
-    tags = articles?.reduce((acc, { node: article }) => {
-      if (article.tags) return [...acc, ...article.tags];
-      return acc;
-    }, [] as string[]);
+    articles = blogQuery.blog.articles.edges;
   }
+  let tagScores: Record<string, number> = {};
+  articles?.forEach(({ node: article }) => {
+    article.tags.forEach((tag: string) => {
+      if (!tagScores[tag]) {
+        tagScores[tag] = 1;
+      } else {
+        tagScores[tag] += 1;
+      }
+    });
+  });
+  const tags = Object.keys(tagScores).sort((a, b) => {
+    return tagScores[b] - tagScores[a];
+  });
+
   return json(
-    { blog: blogQuery.blog, articles, tags },
+    { blog: blogQuery.blog, articles, tags: tags.slice(0, 8) },
     {
       headers: {
         "Cache-Control": "public, max-age=3600",
@@ -86,7 +85,7 @@ const BlogIndex: React.FC = () => {
       <div className="page mx-auto  px-5 lg:px-8 xl:px-20">
         <div className="grid grid-cols-7 gap-x-8 gap-y-8">
           <main className="col-span-7 lg:col-span-5 ">
-            <ol className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+            <ol className="grid grid-cols-1 gap-8 md:grid-cols-2 2xl:grid-cols-3">
               {articles.map(({ node: article }) => {
                 return (
                   <li
@@ -98,11 +97,34 @@ const BlogIndex: React.FC = () => {
                       prefetch="intent"
                       key={article.id}
                     >
-                      <div className="aspect-w-1 aspect-h-1 object-contain object-center">
+                      <div
+                        className={classNames(
+                          getImageAspectRatio(article.image),
+                          "object-contain object-center"
+                        )}
+                      >
                         <img
                           src={article.image?.url}
                           alt={article.image?.altText ?? ""}
                         />
+                      </div>
+                      <div className="mt-4 p-5">
+                        <h2 className="mb-4 text-xl">{article.title}</h2>
+                        <div
+                          className="text-subtitle"
+                          dangerouslySetInnerHTML={{
+                            __html: article.excerptHtml,
+                          }}
+                        />
+                        <div>
+                          <Link
+                            className="relative before:mb-[3px] before:h-px before:w-0 before:bg-subtitle before:transition-all before:duration-300 hover:before:mr-[5px] hover:before:w-[30px]"
+                            to={`/blog/${article.handle}`}
+                            prefetch="intent"
+                          >
+                            Citește mai mult
+                          </Link>
+                        </div>
                       </div>
                     </Link>
                   </li>
