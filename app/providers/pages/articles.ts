@@ -5,7 +5,11 @@ export const getArticles = (first: number) => {
   return sdk.getArticles({ first });
 };
 
-export const getBlogArticle = (handle: string, articleHandle: string) => {
+export const getBlogArticle = (
+  handle: string | undefined,
+  articleHandle: string | undefined
+) => {
+  if (!handle || !articleHandle) return undefined;
   return sdk.getBlogArticle({ handle, articleHandle });
 };
 
@@ -46,6 +50,7 @@ gql`
       articleByHandle(handle: $articleHandle) {
         id
         publishedAt
+        title
         seo {
           title
           description

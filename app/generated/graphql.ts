@@ -6860,7 +6860,7 @@ export type GetBlogArticleQueryVariables = Exact<{
 }>;
 
 
-export type GetBlogArticleQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', articleByHandle?: { __typename?: 'Article', id: string, publishedAt: any, contentHtml: any, tags: Array<string>, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, authorV2?: { __typename?: 'ArticleAuthor', name: string } | null, image?: { __typename?: 'Image', url: any, height?: number | null, width?: number | null, altText?: string | null } | null } | null } | null };
+export type GetBlogArticleQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', articleByHandle?: { __typename?: 'Article', id: string, publishedAt: any, title: string, contentHtml: any, tags: Array<string>, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, authorV2?: { __typename?: 'ArticleAuthor', name: string } | null, image?: { __typename?: 'Image', url: any, height?: number | null, width?: number | null, altText?: string | null } | null } | null } | null };
 
 export type GetBlogQueryVariables = Exact<{
   handle?: InputMaybe<Scalars['String']>;
@@ -7060,6 +7060,7 @@ export const GetBlogArticleDocument = gql`
     articleByHandle(handle: $articleHandle) {
       id
       publishedAt
+      title
       seo {
         title
         description

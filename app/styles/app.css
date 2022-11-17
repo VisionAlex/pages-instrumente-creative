@@ -875,6 +875,11 @@ input[type="number"] {
   margin-bottom: -1.5rem;
 }
 
+.my-8 {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 .mt-20 {
   margin-top: 5rem;
 }
@@ -989,10 +994,6 @@ input[type="number"] {
 
 .mt-8 {
   margin-top: 2rem;
-}
-
-.mt-auto {
-  margin-top: auto;
 }
 
 .block {
@@ -1605,10 +1606,6 @@ input[type="number"] {
   padding: 0.25rem;
 }
 
-.p-4 {
-  padding: 1rem;
-}
-
 .py-20 {
   padding-top: 5rem;
   padding-bottom: 5rem;
@@ -1947,6 +1944,11 @@ input[type="number"] {
   color: rgb(230 0 35 / var(--tw-text-opacity));
 }
 
+.text-gray-400 {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity));
+}
+
 .line-through {
   -webkit-text-decoration-line: line-through;
           text-decoration-line: line-through;
@@ -2110,11 +2112,6 @@ input[type="number"] {
   z-index: -10;
 }
 
-.before\:mb-\[3px\]::before {
-  content: var(--tw-content);
-  margin-bottom: 3px;
-}
-
 .before\:h-px::before {
   content: var(--tw-content);
   height: 1px;
@@ -2152,12 +2149,6 @@ input[type="number"] {
   background-color: rgb(210 210 210 / var(--tw-bg-opacity));
 }
 
-.before\:bg-subtitle::before {
-  content: var(--tw-content);
-  --tw-bg-opacity: 1;
-  background-color: rgb(112 112 112 / var(--tw-bg-opacity));
-}
-
 .before\:transition-all::before {
   content: var(--tw-content);
   transition-property: all;
@@ -2168,11 +2159,6 @@ input[type="number"] {
 .before\:duration-400::before {
   content: var(--tw-content);
   transition-duration: 400ms;
-}
-
-.before\:duration-300::before {
-  content: var(--tw-content);
-  transition-duration: 300ms;
 }
 
 .after\:absolute::after {
@@ -2317,11 +2303,6 @@ input[type="number"] {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
-.hover\:underline:hover {
-  -webkit-text-decoration-line: underline;
-          text-decoration-line: underline;
-}
-
 .hover\:placeholder-opacity-70:hover::-moz-placeholder {
   --tw-placeholder-opacity: 0.7;
 }
@@ -2334,19 +2315,9 @@ input[type="number"] {
   opacity: 0.7;
 }
 
-.hover\:before\:mr-\[5px\]:hover::before {
-  content: var(--tw-content);
-  margin-right: 5px;
-}
-
 .hover\:before\:w-full:hover::before {
   content: var(--tw-content);
   width: 100%;
-}
-
-.hover\:before\:w-\[30px\]:hover::before {
-  content: var(--tw-content);
-  width: 30px;
 }
 
 .hover\:before\:bg-white:hover::before {
