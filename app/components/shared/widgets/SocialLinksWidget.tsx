@@ -5,7 +5,7 @@ import { links } from "~/config";
 import { InstagramIcon } from "../icons/InstagramIcon";
 import { WidgetTitle } from "./WidgetTitle";
 
-const size = 32;
+const size = 24;
 
 interface Props {
   className?: string;
@@ -20,7 +20,7 @@ export const SocialLinksWidget: React.FC<Props> = ({ className }) => {
           <FaFacebook size={size} className="text-[#4267B2]" />
         </SocialLink>
         <SocialLink href={links.instagram}>
-          <InstagramIcon />
+          <InstagramIcon width={size} />
         </SocialLink>
         <SocialLink href={links.youtube}>
           <FaYoutube size={size} className="text-[#FF0000]" />

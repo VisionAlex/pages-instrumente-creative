@@ -25,6 +25,9 @@ gql`
           id
           publishedAt
           tags
+          thumbnail: image {
+            url(transform: { maxWidth: 210 })
+          }
           image {
             altText
             height

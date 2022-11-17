@@ -1104,6 +1104,14 @@ input[type="number"] {
   height: 3.5rem;
 }
 
+.h-\[70px\] {
+  height: 70px;
+}
+
+.h-\[35px\] {
+  height: 35px;
+}
+
 .max-h-\[550px\] {
   max-height: 550px;
 }
@@ -1186,6 +1194,14 @@ input[type="number"] {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
+}
+
+.w-\[70px\] {
+  width: 70px;
+}
+
+.w-\[35px\] {
+  width: 35px;
 }
 
 .min-w-\[16px\] {
@@ -1944,9 +1960,9 @@ input[type="number"] {
   color: rgb(230 0 35 / var(--tw-text-opacity));
 }
 
-.text-gray-400 {
+.text-\[\#bcbcbc\] {
   --tw-text-opacity: 1;
-  color: rgb(156 163 175 / var(--tw-text-opacity));
+  color: rgb(188 188 188 / var(--tw-text-opacity));
 }
 
 .line-through {
@@ -2149,6 +2165,12 @@ input[type="number"] {
   background-color: rgb(210 210 210 / var(--tw-bg-opacity));
 }
 
+.before\:bg-secondaryBackground::before {
+  content: var(--tw-content);
+  --tw-bg-opacity: 1;
+  background-color: rgb(235 238 238 / var(--tw-bg-opacity));
+}
+
 .before\:transition-all::before {
   content: var(--tw-content);
   transition-property: all;
@@ -2241,6 +2263,12 @@ input[type="number"] {
   content: var(--tw-content);
   --tw-bg-opacity: 1;
   background-color: rgb(210 210 210 / var(--tw-bg-opacity));
+}
+
+.after\:bg-secondaryBackground::after {
+  content: var(--tw-content);
+  --tw-bg-opacity: 1;
+  background-color: rgb(235 238 238 / var(--tw-bg-opacity));
 }
 
 .after\:transition-all::after {

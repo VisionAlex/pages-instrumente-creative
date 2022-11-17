@@ -6852,7 +6852,7 @@ export type GetArticlesQueryVariables = Exact<{
 }>;
 
 
-export type GetArticlesQuery = { __typename?: 'QueryRoot', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, publishedAt: any, tags: Array<string>, handle: string, title: string, excerptHtml?: any | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: any } | null, blog: { __typename?: 'Blog', handle: string } } }> } };
+export type GetArticlesQuery = { __typename?: 'QueryRoot', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, publishedAt: any, tags: Array<string>, handle: string, title: string, excerptHtml?: any | null, thumbnail?: { __typename?: 'Image', url: any } | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: any } | null, blog: { __typename?: 'Blog', handle: string } } }> } };
 
 export type GetBlogArticleQueryVariables = Exact<{
   handle: Scalars['String'];
@@ -6864,10 +6864,19 @@ export type GetBlogArticleQuery = { __typename?: 'QueryRoot', blog?: { __typenam
 
 export type GetBlogQueryVariables = Exact<{
   handle?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type GetBlogQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', title: string, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, publishedAt: any, tags: Array<string>, title: string, excerptHtml?: any | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: any } | null } }> } } | null };
+export type GetBlogQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', title: string, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, publishedAt: any, tags: Array<string>, title: string, excerptHtml?: any | null, thumbnail?: { __typename?: 'Image', url: any } | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: any } | null } }> } } | null };
+
+export type GetRecentArticlesQueryVariables = Exact<{
+  handle?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetRecentArticlesQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, publishedAt: any, title: string, thumbnail?: { __typename?: 'Image', url: any, width?: number | null, height?: number | null, altText?: string | null } | null } }> } } | null };
 
 export type GetPageQueryVariables = Exact<{
   handle?: InputMaybe<Scalars['String']>;
@@ -7036,6 +7045,9 @@ export const GetArticlesDocument = gql`
         id
         publishedAt
         tags
+        thumbnail: image {
+          url(transform: {maxWidth: 210})
+        }
         image {
           altText
           height
@@ -7081,14 +7093,14 @@ export const GetBlogArticleDocument = gql`
 }
     `;
 export const GetBlogDocument = gql`
-    query getBlog($handle: String) {
+    query getBlog($handle: String, $first: Int = 20) {
   blog(handle: $handle) {
     title
     seo {
       title
       description
     }
-    articles(first: 20, sortKey: PUBLISHED_AT, reverse: true) {
+    articles(first: $first, sortKey: PUBLISHED_AT, reverse: true) {
       edges {
         node {
           handle
@@ -7096,6 +7108,9 @@ export const GetBlogDocument = gql`
           publishedAt
           tags
           title
+          thumbnail: image {
+            url(transform: {maxWidth: 210})
+          }
           image {
             altText
             height
@@ -7104,6 +7119,28 @@ export const GetBlogDocument = gql`
             url
           }
           excerptHtml
+        }
+      }
+    }
+  }
+}
+    `;
+export const GetRecentArticlesDocument = gql`
+    query getRecentArticles($handle: String, $first: Int = 20) {
+  blog(handle: $handle) {
+    articles(first: $first, sortKey: PUBLISHED_AT, reverse: true) {
+      edges {
+        node {
+          handle
+          id
+          publishedAt
+          title
+          thumbnail: image {
+            url(transform: {maxWidth: 210})
+            width
+            height
+            altText
+          }
         }
       }
     }
@@ -7293,6 +7330,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getBlog(variables?: GetBlogQueryVariables, options?: C): Promise<GetBlogQuery> {
       return requester<GetBlogQuery, GetBlogQueryVariables>(GetBlogDocument, variables, options);
+    },
+    getRecentArticles(variables?: GetRecentArticlesQueryVariables, options?: C): Promise<GetRecentArticlesQuery> {
+      return requester<GetRecentArticlesQuery, GetRecentArticlesQueryVariables>(GetRecentArticlesDocument, variables, options);
     },
     getPage(variables?: GetPageQueryVariables, options?: C): Promise<GetPageQuery> {
       return requester<GetPageQuery, GetPageQueryVariables>(GetPageDocument, variables, options);

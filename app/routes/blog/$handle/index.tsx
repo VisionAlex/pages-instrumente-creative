@@ -17,6 +17,7 @@ import { getArticles } from "~/providers/pages/articles";
 import { getBlog } from "~/providers/pages/blog";
 import { classNames } from "~/shared/utils/classNames";
 import { getImageAspectRatio } from "~/shared/utils/getImageAspectRatio";
+
 type LoaderData = {
   blog: NonNullable<GetBlogQuery["blog"]>;
   articles: GetArticlesQuery["articles"]["edges"];
@@ -31,7 +32,7 @@ export const loader: LoaderFunction = async ({ params }) => {
   if (!blogQuery.blog) {
     throw new Response("Not found", { status: 404 });
   }
-  let articles = null;
+  let articles;
   if (params.handle === PAGE_HANDLE.BLOG_RESOURCES) {
     const articlesQuery = await getArticles(30);
     articles = articlesQuery.articles.edges.filter(({ node: article }) => {
@@ -40,6 +41,7 @@ export const loader: LoaderFunction = async ({ params }) => {
   } else {
     articles = blogQuery.blog.articles.edges;
   }
+
   let tagScores: Record<string, number> = {};
   articles?.forEach(({ node: article }) => {
     article.tags.forEach((tag: string) => {
