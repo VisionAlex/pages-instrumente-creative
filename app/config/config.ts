@@ -46,7 +46,7 @@ export const config: Config = {
     contact: {
       name: "Contact",
       path: "/contact",
-      type: "menu",
+      type: "other",
     },
     "despre-noi": {
       name: "Despre noi",
