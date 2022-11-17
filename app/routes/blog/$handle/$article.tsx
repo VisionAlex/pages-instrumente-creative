@@ -39,7 +39,7 @@ const Article: React.FC = () => {
   return (
     <div className="page mx-auto  px-5 lg:px-8 xl:px-20">
       <div className="mt-8 grid grid-cols-7 gap-x-8">
-        <main className="col-span-7 lg:col-span-5">
+        <section className="col-span-7 lg:col-span-5">
           <p className="mb-4 flex items-center gap-2">
             <CalendarIcon className="h-4 w-4 text-primary" aria-hidden="true" />
             <time dateTime={article.publishedAt}>
@@ -63,7 +63,7 @@ const Article: React.FC = () => {
               dangerouslySetInnerHTML={{ __html: article.contentHtml }}
             />
           </div>
-        </main>
+        </section>
         <aside className="col-span-7 lg:col-span-2">
           <Outlet context={{ tags: article.tags, id: article.id }} />
         </aside>

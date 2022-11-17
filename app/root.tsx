@@ -3,11 +3,13 @@ import {
   Links,
   LiveReload,
   Meta,
-  Outlet,
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useLocation,
+  useOutlet,
 } from "@remix-run/react";
+import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import AccountModal from "./components/AccountModal";
 import { Footer } from "./components/Footer";
@@ -54,7 +56,6 @@ export const links = () => {
     },
   ];
 };
-
 type LoaderData = {
   user: GetUserQuery | null;
   wishlist: string[];
@@ -83,6 +84,7 @@ export default function App() {
   const [showWishlist, setShowWishlist] = useState(false);
   const [showAccountModal, setShowAccountModal] = useState(false);
   const cartSize = useMemo(() => getCartSize(cart), [cart]);
+  const outlet = useOutlet({ wishlist, products });
   return (
     <html lang="ro">
       <head>
@@ -120,9 +122,14 @@ export default function App() {
         </Navbar>
         <ScrollToTop />
         <div className={`pt-[123px] pb-[50px] lg:pb-0`}>
-          <main>
-            <Outlet context={{ wishlist, products }} />
-          </main>
+          <motion.main
+            key={useLocation().key}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            {outlet}
+          </motion.main>
           <Footer />
         </div>
         <FooterMenu

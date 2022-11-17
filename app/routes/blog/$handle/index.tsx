@@ -87,7 +87,7 @@ const BlogIndex: React.FC = () => {
       <PageHeader customTitle={data.blog.title} />
       <div className="page mx-auto  px-5 lg:px-8 xl:px-20">
         <div className="grid grid-cols-7 gap-x-8 gap-y-8">
-          <main className="col-span-7 lg:col-span-5 ">
+          <section className="col-span-7 lg:col-span-5 ">
             <ol className="grid grid-cols-1 gap-8 md:grid-cols-2 2xl:grid-cols-3">
               {articles.map(({ node: article }) => {
                 return (
@@ -136,7 +136,7 @@ const BlogIndex: React.FC = () => {
                 );
               })}
             </ol>
-          </main>
+          </section>
           <aside className="col-span-7 lg:col-span-2">
             <SocialLinksWidget className="mb-8" />
             <NewsletterWidget className="mb-8" />
