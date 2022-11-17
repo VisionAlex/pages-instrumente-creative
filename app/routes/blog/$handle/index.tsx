@@ -5,6 +5,7 @@ import type {
 } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { Link, useLoaderData } from "@remix-run/react";
+import { Link as CustomLink } from "~/components/shared/Link";
 import React from "react";
 import { PageHeader } from "~/components/shared/PageHeader";
 import { NewsletterWidget } from "~/components/shared/widgets/NewsletterWidget";
@@ -90,7 +91,7 @@ const BlogIndex: React.FC = () => {
                 return (
                   <li
                     key={article.id}
-                    className="border border-secondaryBackground"
+                    className="flex flex-col border border-secondaryBackground"
                   >
                     <Link
                       to={article.handle}
@@ -108,25 +109,27 @@ const BlogIndex: React.FC = () => {
                           alt={article.image?.altText ?? ""}
                         />
                       </div>
-                      <div className="mt-4 p-5">
-                        <h2 className="mb-4 text-xl">{article.title}</h2>
-                        <div
-                          className="text-subtitle"
-                          dangerouslySetInnerHTML={{
-                            __html: article.excerptHtml,
-                          }}
-                        />
-                        <div>
-                          <Link
-                            className="relative before:mb-[3px] before:h-px before:w-0 before:bg-subtitle before:transition-all before:duration-300 hover:before:mr-[5px] hover:before:w-[30px]"
-                            to={`/blog/${article.handle}`}
-                            prefetch="intent"
-                          >
-                            Citește mai mult
-                          </Link>
-                        </div>
-                      </div>
                     </Link>
+                    <div className="mt-4 flex flex-grow flex-col p-5">
+                      <Link className="mb-4" to={`/blog/${article.handle}`}>
+                        <h2 className=" text-xl">{article.title}</h2>
+                      </Link>
+                      <div
+                        className="mb-4 text-subtitle"
+                        dangerouslySetInnerHTML={{
+                          __html: article.excerptHtml,
+                        }}
+                      />
+                      <div className="flex-grow"></div>
+                      <div>
+                        <CustomLink
+                          className="w-fit"
+                          to={`/blog/${article.handle}`}
+                        >
+                          Citește mai mult
+                        </CustomLink>
+                      </div>
+                    </div>
                   </li>
                 );
               })}

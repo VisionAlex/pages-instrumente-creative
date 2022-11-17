@@ -991,6 +991,10 @@ input[type="number"] {
   margin-top: 2rem;
 }
 
+.mt-auto {
+  margin-top: auto;
+}
+
 .block {
   display: block;
 }
@@ -1177,6 +1181,12 @@ input[type="number"] {
   width: 44px;
 }
 
+.w-fit {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
 .min-w-\[16px\] {
   min-width: 16px;
 }
@@ -1221,6 +1231,10 @@ input[type="number"] {
 
 .flex-1 {
   flex: 1 1 0%;
+}
+
+.flex-grow {
+  flex-grow: 1;
 }
 
 .grow {
@@ -1589,6 +1603,10 @@ input[type="number"] {
 
 .p-1 {
   padding: 0.25rem;
+}
+
+.p-4 {
+  padding: 1rem;
 }
 
 .py-20 {
@@ -2299,6 +2317,11 @@ input[type="number"] {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.hover\:underline:hover {
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
+}
+
 .hover\:placeholder-opacity-70:hover::-moz-placeholder {
   --tw-placeholder-opacity: 0.7;
 }
@@ -2311,11 +2334,6 @@ input[type="number"] {
   opacity: 0.7;
 }
 
-.before\:hover\:mr-\[5px\]:hover::before {
-  content: var(--tw-content);
-  margin-right: 5px;
-}
-
 .hover\:before\:mr-\[5px\]:hover::before {
   content: var(--tw-content);
   margin-right: 5px;
@@ -2324,11 +2342,6 @@ input[type="number"] {
 .hover\:before\:w-full:hover::before {
   content: var(--tw-content);
   width: 100%;
-}
-
-.before\:hover\:w-\[30px\]:hover::before {
-  content: var(--tw-content);
-  width: 30px;
 }
 
 .hover\:before\:w-\[30px\]:hover::before {
