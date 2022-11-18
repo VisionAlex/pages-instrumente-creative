@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-import { sdk } from "graphqlWrapper";
+import { sdk } from "~/graphqlWrapper";
 
 export const getBlog = async (handle: string) => {
   return await sdk.getBlog({ handle });

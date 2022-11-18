@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-import { sdk } from "graphqlWrapper";
+import { sdk } from "~/graphqlWrapper";
 import { storage } from "~/session.server";
 
 export const getAddresses = async (request: Request) => {

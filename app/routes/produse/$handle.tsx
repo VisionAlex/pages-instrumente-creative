@@ -1,7 +1,7 @@
 import type { LoaderArgs, LoaderFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
-import { sdk } from "graphqlWrapper";
+import { sdk } from "~/graphqlWrapper";
 import { useState } from "react";
 import { ImageGallery } from "~/components/ImageGallery";
 import { Breadcrumb } from "~/components/shared/Breadcrumb/Breadcrumb";

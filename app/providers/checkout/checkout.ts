@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-import { sdk } from "graphqlWrapper";
+import { sdk } from "~/graphqlWrapper";
 import type { CheckoutLineItemInput } from "~/generated/graphql";
 import { CountryCode } from "~/generated/graphql";
 import { storage } from "~/session.server";

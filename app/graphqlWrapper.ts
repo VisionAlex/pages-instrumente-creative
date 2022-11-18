@@ -53,4 +53,4 @@ function requester<R, V>(
   });
 }
 
-export const sdk = getSdk<QueryOptions>(requester);
+export const sdk = getSdk<QueryOptions, unknown>(requester);
