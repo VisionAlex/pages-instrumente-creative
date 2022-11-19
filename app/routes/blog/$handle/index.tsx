@@ -4,7 +4,7 @@ import type {
   MetaFunction,
 } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useCatch, useLoaderData } from "@remix-run/react";
 import { Link as CustomLink } from "~/components/shared/Link";
 import React from "react";
 import { PageHeader } from "~/components/shared/PageHeader";
@@ -66,6 +66,29 @@ export const loader: LoaderFunction = async ({ params }) => {
   );
 };
 
+export function CatchBoundary() {
+  const caught = useCatch();
+  if (caught.status === 404) {
+    return (
+      <div className="mt-8 flex w-full flex-col items-center justify-center gap-4">
+        <h1>Oops!</h1>
+        <p>Pagina nu exista pe Instrumente Creative</p>
+      </div>
+    );
+  }
+  throw new Error(`Unhandled error", ${caught.status}`);
+}
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  return (
+    <div className="mx-auto mt-8 flex w-fit max-w-2xl flex-col items-center justify-center p-4">
+      <h1 className="text-center text-lg text-red-700">Eroare!</h1>
+      <p className="text-subtitle">Ne pare rău. Serverul e zăpăcit.</p>
+      <p className="mt-4">{error.message}</p>
+    </div>
+  );
+}
+
 export const headers: HeadersFunction = ({ loaderHeaders }) => {
   return {
     "Cache-Control": loaderHeaders.get("Cache-Control") ?? "no-cache",
@@ -73,6 +96,7 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
 };
 
 export const meta: MetaFunction = ({ data }) => {
+  if (!data?.blog) return { title: "Instrumente Creative - Pagina nu exista" };
   return {
     title: data.blog.seo.title,
     description: data.blog.seo.description,

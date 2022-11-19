@@ -6,7 +6,9 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useCatch,
   useLoaderData,
+  useLocation,
 } from "@remix-run/react";
 import { useMemo, useState } from "react";
 import AccountModal from "./components/AccountModal";
@@ -76,6 +78,49 @@ export const loader: LoaderFunction = async ({ request }) => {
   };
   return loaderData;
 };
+
+export function CatchBoundary() {
+  const caught = useCatch();
+  console.error("CatchBoundary", caught);
+  if (caught.status === 404) {
+    return (
+      <html lang="ro">
+        <head>
+          <title>Oh nu...</title>
+          <Links />
+        </head>
+        <body className="flex h-screen w-screen flex-col items-center justify-center gap-4">
+          <Logo />
+          <h1>Oops!</h1>
+          <p>Pagina nu exista pe Instrumente Creative</p>
+          <Scripts />
+        </body>
+      </html>
+    );
+  }
+  throw new Error("Unhandled error");
+}
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  return (
+    <html lang="ro">
+      <head>
+        <Meta />
+        <title>Uh-Oh!</title>
+        <Links />
+      </head>
+
+      <body className="flex h-screen w-screen flex-col items-center justify-center gap-4 rounded-md">
+        <div className=" bg-red-100 p-4">
+          <h1 className="mb-4 text-center text-xl text-red-700">
+            Eroare de aplicatie!
+          </h1>
+          <pre>{error.message}</pre>
+        </div>
+      </body>
+    </html>
+  );
+}
 
 export default function App() {
   const { user, wishlist, products, cart } = useLoaderData<LoaderData>();

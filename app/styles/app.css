@@ -1112,6 +1112,10 @@ input[type="number"] {
   height: 3.5rem;
 }
 
+.h-screen {
+  height: 100vh;
+}
+
 .max-h-\[550px\] {
   max-height: 550px;
 }
@@ -1236,6 +1240,10 @@ input[type="number"] {
 
 .max-w-screen-2xl {
   max-width: 1536px;
+}
+
+.max-w-2xl {
+  max-width: 42rem;
 }
 
 .flex-1 {
@@ -1567,6 +1575,16 @@ input[type="number"] {
   background-color: rgb(143 143 143 / var(--tw-bg-opacity));
 }
 
+.bg-red-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 226 226 / var(--tw-bg-opacity));
+}
+
+.bg-gray-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+}
+
 .bg-opacity-25 {
   --tw-bg-opacity: 0.25;
 }
@@ -1612,6 +1630,10 @@ input[type="number"] {
 
 .p-1 {
   padding: 0.25rem;
+}
+
+.p-4 {
+  padding: 1rem;
 }
 
 .py-20 {
@@ -1844,6 +1866,10 @@ input[type="number"] {
   line-height: 1rem;
 }
 
+.font-semibold {
+  font-weight: 600;
+}
+
 .uppercase {
   text-transform: uppercase;
 }
@@ -1959,6 +1985,11 @@ input[type="number"] {
 .text-\[\#E60023\] {
   --tw-text-opacity: 1;
   color: rgb(230 0 35 / var(--tw-text-opacity));
+}
+
+.text-red-700 {
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity));
 }
 
 .line-through {

@@ -1,6 +1,6 @@
 import type { LoaderFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { Outlet, useCatch, useLoaderData } from "@remix-run/react";
 import React from "react";
 import type { GetBlogArticleQuery } from "~/generated/graphql";
 import { getBlogArticle } from "~/providers/pages/articles";
@@ -32,6 +32,29 @@ export const loader: LoaderFunction = async ({ params }) => {
 export const links = () => {
   return [{ rel: "stylesheet", href: blogStyles }];
 };
+
+export function CatchBoundary() {
+  const caught = useCatch();
+  if (caught.status === 404) {
+    return (
+      <div className="mt-8 flex w-full flex-col items-center justify-center gap-4">
+        <h1>Oops!</h1>
+        <p>Acest articol nu exista pe Instrumente Creative</p>
+      </div>
+    );
+  }
+  throw new Error(`Unhandled error", ${caught.status}`);
+}
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  return (
+    <div className="mx-auto mt-8 flex w-fit max-w-2xl flex-col items-center justify-center p-4">
+      <h1 className="text-center text-lg text-red-700">Eroare!</h1>
+      <p className="text-subtitle">Ne pare rău. Serverul e zăpăcit.</p>
+      <p className="mt-4">{error.message}</p>
+    </div>
+  );
+}
 
 const Article: React.FC = () => {
   const { article } = useLoaderData<LoaderData>();
