@@ -2,16 +2,17 @@ import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { Link, useLoaderData, useOutletContext } from "@remix-run/react";
 import { motion } from "framer-motion";
-import React from "react";
 import { BsSearch } from "react-icons/bs";
 import { AddToCart } from "~/components/AddToCart";
 import { AddToWishlist } from "~/components/AddToWishlist";
+import { ProductModal } from "~/components/ProductModal";
 import { PageHeader } from "~/components/shared/PageHeader";
 import { Price } from "~/components/shared/Price";
 import { SaleTag } from "~/components/shared/SaleTag";
 import { config } from "~/config";
+import { useProductModal } from "~/pages/products/useProductModal";
 import { getWishlist } from "~/providers/products/products";
-import type { Product, RootContext } from "~/types";
+import type { RootContext } from "~/types";
 
 export const meta: MetaFunction = () => {
   return {
@@ -31,6 +32,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 const AllProducts: React.FC = () => {
   const { wishlist } = useLoaderData<LoaderData>();
   const { products } = useOutletContext<RootContext>();
+  const { isOpen, product, openModal, closeModal } = useProductModal(products);
+
   if (!products) return null;
   return (
     <motion.div
@@ -39,6 +42,12 @@ const AllProducts: React.FC = () => {
       transition={{ duration: 0.3 }}
     >
       <PageHeader className="max-w-screen-2xl" />
+      <ProductModal
+        open={isOpen}
+        onClose={closeModal}
+        product={product}
+        wishlist={wishlist}
+      />
       <div>
         <div className="mx-auto grid max-w-screen-2xl grid-cols-1 gap-6 px-5 md:grid-cols-2 lg:grid-cols-3 lg:px-8 xl:grid-cols-4 xl:px-20">
           {products.map((product) => {
@@ -91,9 +100,12 @@ const AllProducts: React.FC = () => {
                   />
                   <div className="mt-5 flex items-center gap-1.5 text-primary">
                     <AddToCart product={product} />
-                    <div className="flex h-[36px] w-[36px] cursor-pointer items-center justify-center border border-primary">
+                    <button
+                      onClick={() => openModal(product)}
+                      className="flex h-[36px] w-[36px] cursor-pointer items-center justify-center border border-primary"
+                    >
                       <BsSearch />
-                    </div>
+                    </button>
                     <AddToWishlist
                       productID={product.id}
                       isFavorite={isFavorite}

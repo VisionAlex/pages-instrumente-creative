@@ -36,6 +36,7 @@ gql`
           productType
           title
           handle
+          description
           availableForSale
           priceRange {
             minVariantPrice {
@@ -77,6 +78,7 @@ gql`
             edges {
               node {
                 id
+                title
                 sku
                 availableForSale
                 currentlyNotInStock

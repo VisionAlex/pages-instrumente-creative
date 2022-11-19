@@ -75,7 +75,9 @@ export const ImageGallery: React.FC<Props> = ({ images }) => {
           />
         </AnimatePresence>
       </div>
-      <Dots size={images.length} selected={imageIndex} />
+      {images.length > 1 ? (
+        <Dots size={images.length} selected={imageIndex} />
+      ) : null}
     </>
   );
 };

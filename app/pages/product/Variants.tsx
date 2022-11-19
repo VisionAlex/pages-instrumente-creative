@@ -1,9 +1,11 @@
 import React from "react";
-import type { DetailedProduct } from "~/types";
+import type { DetailedProduct, Product } from "~/types";
 import { Variant } from "./Variant";
 
 interface Props {
-  variants: DetailedProduct["variants"]["edges"][number]["node"][];
+  variants:
+    | DetailedProduct["variants"]["edges"][number]["node"][]
+    | Product["variants"]["edges"][number]["node"][];
   selectedVariant: number;
   setSelectedVariant: React.Dispatch<React.SetStateAction<number>>;
 }

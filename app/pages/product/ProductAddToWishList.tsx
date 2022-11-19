@@ -2,11 +2,11 @@ import { HeartIcon } from "@heroicons/react/outline";
 import { Form, useLocation } from "@remix-run/react";
 import React from "react";
 import { classNames } from "~/shared/utils/classNames";
-import type { DetailedProduct } from "~/types";
+import type { DetailedProduct, Product } from "~/types";
 
 interface Props {
   wishlist: string[];
-  product: DetailedProduct;
+  product: DetailedProduct | Product;
 }
 export const ProductAddToWishList: React.FC<Props> = ({
   product,

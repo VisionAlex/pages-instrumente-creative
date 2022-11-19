@@ -9,7 +9,8 @@ const Dot: React.FC<DotProps> = ({ isSelected }) => {
   return (
     <span
       className={classNames(
-        "mx-1 h-[5px] w-[5px] rounded-full transition-all duration-500  md:h-2 md:w-2",
+        "mx-1 h-[5px] w-[5px] rounded-full transition-all duration-500",
+
         isSelected ? "bg-subtitle" : "bg-secondaryBackground"
       )}
     />
