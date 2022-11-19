@@ -10,7 +10,7 @@ import { PageHeader } from "~/components/shared/PageHeader";
 import { Price } from "~/components/shared/Price";
 import { SaleTag } from "~/components/shared/SaleTag";
 import { config } from "~/config";
-import { useProductModal } from "~/pages/products/useProductModal";
+import { useProductModal } from "~/components/ProductModal/useProductModal";
 import { getWishlist } from "~/providers/products/products";
 import type { RootContext } from "~/types";
 

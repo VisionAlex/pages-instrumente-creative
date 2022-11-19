@@ -37,8 +37,8 @@ const productModalReducer = (
 
 export const useProductModal = (products: Product[]) => {
   const [{ isOpen, product }, dispatch] = useReducer(productModalReducer, {
-    isOpen: true,
-    product: products[5],
+    isOpen: false,
+    product: products[0],
   });
   return {
     isOpen,

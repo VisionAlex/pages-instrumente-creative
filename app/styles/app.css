@@ -2424,14 +2424,6 @@ input[type="number"] {
     margin-top: 4rem;
   }
 
-  .md\:h-2 {
-    height: 0.5rem;
-  }
-
-  .md\:w-2 {
-    width: 0.5rem;
-  }
-
   .md\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
