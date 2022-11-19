@@ -140,7 +140,6 @@ export const getCartInfo = (cart: Cart, products: Product[]) => {
       for (const variant of variants) {
         variantsWithInfo.push({
           productID: product.id,
-          title: product.title,
           handle: product.handle,
           thumbnail: product.thumbnail,
           quantity:

@@ -119,7 +119,7 @@ const BlogIndex: React.FC = () => {
                       <div
                         className="mb-4 text-subtitle"
                         dangerouslySetInnerHTML={{
-                          __html: article.excerptHtml,
+                          __html: article.excerptHtml!,
                         }}
                       />
                       <div className="flex-grow"></div>
