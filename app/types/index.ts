@@ -1,7 +1,7 @@
 import type {
   GetProductByHandleQuery,
   GetProductsQuery,
-} from "./generated/graphql";
+} from "../generated/graphql";
 
 export type Product = GetProductsQuery["products"]["edges"][number]["node"];
 
