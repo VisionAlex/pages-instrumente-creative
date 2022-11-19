@@ -16,6 +16,7 @@ const config: CodegenConfig = {
         headers: {
           "X-Shopify-Storefront-Access-Token":
             process.env.SHOPIFY_STOREFRONT_TOKEN,
+          "content-type": "application/json",
         },
       },
     },
@@ -28,6 +29,17 @@ const config: CodegenConfig = {
         "typescript-operations",
         "typescript-generic-sdk",
       ],
+      config: {
+        scalars: {
+          DateTime: "string",
+          Decimal: "string",
+          HTML: "string",
+          URL: "string",
+          Color: "string",
+          JSON: "string",
+          UnsignedInt64: "string",
+        },
+      },
     },
     "app/generated/schema.graphql": {
       plugins: ["schema-ast"],

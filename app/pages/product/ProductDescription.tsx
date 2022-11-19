@@ -1,8 +1,8 @@
 import React from "react";
-import type { HandleProduct } from "~/types";
+import type { DetailedProduct } from "~/types";
 
 interface Props {
-  product: HandleProduct;
+  product: DetailedProduct;
 }
 
 export const ProductDescription: React.FC<Props> = ({ product }) => {

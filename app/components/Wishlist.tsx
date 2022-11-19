@@ -2,13 +2,13 @@ import { XIcon } from "@heroicons/react/outline";
 import { Form, Link, useLocation, useNavigate } from "@remix-run/react";
 import { useMemo } from "react";
 import { config } from "~/config";
-import type { Products } from "~/types";
+import type { Product } from "~/types";
 import { Button } from "./shared/Button";
 import { Drawer } from "./shared/Drawer";
 
 interface Props {
   wishlist: string[];
-  products: Products;
+  products: Product[];
   showWishlist: boolean;
   setShowWishlist: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -21,7 +21,7 @@ export const Wishlist: React.FC<Props> = ({
   const location = useLocation();
   const navigate = useNavigate();
   const wishlistInfo = useMemo(() => {
-    return products.filter((product) => wishlist.includes(product.node.id));
+    return products.filter((product) => wishlist.includes(product.id));
   }, [products, wishlist]);
 
   return (
@@ -35,9 +35,9 @@ export const Wishlist: React.FC<Props> = ({
           <div className="text-subtitle">Gol</div>
         ) : (
           <ul>
-            {wishlistInfo.map(({ node: item }) => {
+            {wishlistInfo.map((item) => {
               const hasVariants = item.variants.edges.length > 1;
-              const isAvailable = item.variants.edges[0].node.availableForSale;
+              const isAvailable = item.availableForSale;
               return (
                 <li
                   className="relative flex gap-4 border-t border-t-secondaryBackground py-5 first:border-none"
@@ -65,7 +65,7 @@ export const Wishlist: React.FC<Props> = ({
                       <p className="mb-2">{item.title}</p>
                     </Link>
                     <p className="mb-2">
-                      {item.variants.edges[0].node.price.amount} lei
+                      {item.priceRange.minVariantPrice.amount} lei
                     </p>
                     <Button
                       slim

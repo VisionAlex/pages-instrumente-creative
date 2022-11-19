@@ -1,10 +1,10 @@
 import { Form, useLocation } from "@remix-run/react";
 import React from "react";
 import { classNames } from "~/shared/utils/classNames";
-import type { HandleProduct } from "~/types";
+import type { DetailedProduct } from "~/types";
 
 interface Props {
-  product: HandleProduct;
+  product: DetailedProduct;
   variant: number;
   quantity: number;
 }

@@ -1,14 +1,17 @@
 import { HeartIcon } from "@heroicons/react/outline";
-import { Form, useLocation, useOutletContext } from "@remix-run/react";
+import { Form, useLocation } from "@remix-run/react";
 import React from "react";
 import { classNames } from "~/shared/utils/classNames";
-import type { HandleProduct } from "~/types";
+import type { DetailedProduct } from "~/types";
 
 interface Props {
-  product: HandleProduct;
+  wishlist: string[];
+  product: DetailedProduct;
 }
-export const ProductAddToWishList: React.FC<Props> = ({ product }) => {
-  const { wishlist } = useOutletContext<{ wishlist: string[] }>();
+export const ProductAddToWishList: React.FC<Props> = ({
+  product,
+  wishlist,
+}) => {
   const isFavorite = wishlist.some((item) => item === product?.id);
   const location = useLocation();
 

@@ -16,16 +16,15 @@ import { Quantity } from "~/pages/product/Quantity";
 import { Variants } from "~/pages/product/Variants";
 import { useSSRLayoutEffect } from "~/shared/hooks/useSSRLayoutEffect";
 import { preloadImage } from "~/shared/utils/preloadImage";
-import type { HandleProduct } from "~/types";
+import type { DetailedProduct } from "~/types";
+import { getWishlist } from "~/providers/products/products";
 
 type ProductLoaderData = {
-  product: HandleProduct;
+  product: DetailedProduct;
+  wishlist: string[];
 };
 
-export const loader: LoaderFunction = async ({
-  params,
-  request,
-}: LoaderArgs) => {
+export const loader: LoaderFunction = async ({ params, request }) => {
   const productData = await sdk.getProductByHandle(
     { handle: params.handle! },
     { request }
@@ -36,14 +35,17 @@ export const loader: LoaderFunction = async ({
       status: 404,
     });
   }
+  const wishlist = await getWishlist(request);
+
   const loaderData: ProductLoaderData = {
     product: productData.product,
+    wishlist,
   };
   return json(loaderData);
 };
 
 const SingleProduct: React.FC = () => {
-  const { product } = useLoaderData<ProductLoaderData>();
+  const { product, wishlist } = useLoaderData<ProductLoaderData>();
   const [selectedVariant, setSelectedVariant] = useState(0);
   const [quantity, setQuantity] = useState<number>(1);
   const variants = product.variants.edges.map(({ node: variant }) => variant);
@@ -96,7 +98,7 @@ const SingleProduct: React.FC = () => {
                 quantity={quantity}
                 variant={selectedVariant}
               />
-              <ProductAddToWishList product={product} />
+              <ProductAddToWishList product={product} wishlist={wishlist} />
             </div>
             {product.availableForSale && (
               <div className="mt-4 w-full max-w-3xl">

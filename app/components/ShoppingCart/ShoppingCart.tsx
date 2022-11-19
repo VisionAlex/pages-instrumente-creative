@@ -1,18 +1,18 @@
 import { LinkButton } from "../shared/LinkButton";
 import { Drawer } from "../shared/Drawer";
 import type { Cart } from "~/providers/cart/cart";
-import type { Products, VariantInfo, Variants } from "~/types";
 import { useMemo } from "react";
 import { getCartSize } from "./utils";
 import { CartItem } from "./CartItem";
 import { Form, useLocation, useTransition } from "@remix-run/react";
 import { Spinner } from "../shared/Spinner";
+import type { Product, Variant, VariantInfo } from "~/types";
 
 const TRANSPORT = 10;
 const MINIMUM_ORDER_FOR_FREE_TRANSPORT = 193;
 interface Props {
   cart: Cart;
-  products: Products;
+  products: Product[];
   showCart: boolean;
   setShowCart: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -120,36 +120,38 @@ export const ShoppingCart: React.FC<Props> = ({
   );
 };
 
-export const getCartInfo = (cart: Cart, products: Products) => {
+export const getCartInfo = (cart: Cart, products: Product[]) => {
   const cartSize = getCartSize(cart);
-  const cartItems = products.reduce((result: VariantInfo[], product) => {
-    const productInCart = product.node.variants.edges.some((variant) => {
+  const cartItems = products.reduce((result, product) => {
+    const productInCart = product.variants.edges.some((variant) => {
       return cart.some((item) => item.variantId === variant.node.id);
     });
 
     if (productInCart) {
-      const variants: Variants = product.node.variants.edges.filter(
-        (variant) => {
-          return cart.some((item) => item.variantId === variant.node.id);
-        }
-      );
+      const variants: Variant[] = product.variants.edges
+        .filter(({ node: variant }) => {
+          return cart.some((item) => item.variantId === variant.id);
+        })
+        .map((variant) => {
+          return variant.node;
+        });
+
       let variantsWithInfo = [];
       for (const variant of variants) {
         variantsWithInfo.push({
-          productID: product.node.id,
-          title: product.node.title,
-          handle: product.node.handle,
-          thumbnail: product.node.thumbnail,
+          productID: product.id,
+          title: product.title,
+          handle: product.handle,
+          thumbnail: product.thumbnail,
           quantity:
-            cart.find((item) => item.variantId === variant.node.id)?.quantity ||
-            0,
-          ...variant.node,
+            cart.find((item) => item.variantId === variant.id)?.quantity || 0,
+          ...variant,
         });
       }
       return [...result, ...variantsWithInfo];
     }
     return result;
-  }, []);
+  }, [] as VariantInfo[]);
 
   const cartTotal = cartItems.reduce((total, item) => {
     return total + parseInt(item.price.amount) * item.quantity;

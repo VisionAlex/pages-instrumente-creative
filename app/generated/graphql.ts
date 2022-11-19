@@ -12,13 +12,13 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  Color: any;
-  DateTime: any;
-  Decimal: any;
-  HTML: any;
-  JSON: any;
-  URL: any;
-  UnsignedInt64: any;
+  Color: string;
+  DateTime: string;
+  Decimal: string;
+  HTML: string;
+  JSON: string;
+  URL: string;
+  UnsignedInt64: string;
 };
 
 /**
@@ -6792,7 +6792,7 @@ export type CreateCheckoutMutationVariables = Exact<{
 }>;
 
 
-export type CreateCheckoutMutation = { __typename?: 'Mutation', checkoutCreate?: { __typename?: 'CheckoutCreatePayload', checkout?: { __typename?: 'Checkout', id: string, webUrl: any } | null, checkoutUserErrors: Array<{ __typename?: 'CheckoutUserError', code?: CheckoutErrorCode | null, field?: Array<string> | null, message: string }> } | null };
+export type CreateCheckoutMutation = { __typename?: 'Mutation', checkoutCreate?: { __typename?: 'CheckoutCreatePayload', checkout?: { __typename?: 'Checkout', id: string, webUrl: string } | null, checkoutUserErrors: Array<{ __typename?: 'CheckoutUserError', code?: CheckoutErrorCode | null, field?: Array<string> | null, message: string }> } | null };
 
 export type CheckoutShippingAddressUpdateV2MutationVariables = Exact<{
   shippingAddress: MailingAddressInput;
@@ -6800,7 +6800,7 @@ export type CheckoutShippingAddressUpdateV2MutationVariables = Exact<{
 }>;
 
 
-export type CheckoutShippingAddressUpdateV2Mutation = { __typename?: 'Mutation', checkoutShippingAddressUpdateV2?: { __typename?: 'CheckoutShippingAddressUpdateV2Payload', checkoutUserErrors: Array<{ __typename?: 'CheckoutUserError', code?: CheckoutErrorCode | null, field?: Array<string> | null, message: string }>, checkout?: { __typename?: 'Checkout', id: string, webUrl: any } | null } | null };
+export type CheckoutShippingAddressUpdateV2Mutation = { __typename?: 'Mutation', checkoutShippingAddressUpdateV2?: { __typename?: 'CheckoutShippingAddressUpdateV2Payload', checkoutUserErrors: Array<{ __typename?: 'CheckoutUserError', code?: CheckoutErrorCode | null, field?: Array<string> | null, message: string }>, checkout?: { __typename?: 'Checkout', id: string, webUrl: string } | null } | null };
 
 export type AssociateCustomerWithCheckoutMutationVariables = Exact<{
   checkoutId: Scalars['ID'];
@@ -6808,7 +6808,7 @@ export type AssociateCustomerWithCheckoutMutationVariables = Exact<{
 }>;
 
 
-export type AssociateCustomerWithCheckoutMutation = { __typename?: 'Mutation', checkoutCustomerAssociateV2?: { __typename?: 'CheckoutCustomerAssociateV2Payload', checkout?: { __typename?: 'Checkout', id: string, webUrl: any } | null, checkoutUserErrors: Array<{ __typename?: 'CheckoutUserError', code?: CheckoutErrorCode | null, field?: Array<string> | null, message: string }>, customer?: { __typename?: 'Customer', id: string } | null } | null };
+export type AssociateCustomerWithCheckoutMutation = { __typename?: 'Mutation', checkoutCustomerAssociateV2?: { __typename?: 'CheckoutCustomerAssociateV2Payload', checkout?: { __typename?: 'Checkout', id: string, webUrl: string } | null, checkoutUserErrors: Array<{ __typename?: 'CheckoutUserError', code?: CheckoutErrorCode | null, field?: Array<string> | null, message: string }>, customer?: { __typename?: 'Customer', id: string } | null } | null };
 
 export type GetAddressesQueryVariables = Exact<{
   customerAccessToken: Scalars['String'];
@@ -6836,7 +6836,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', customerAccessTokenCreate?: { __typename?: 'CustomerAccessTokenCreatePayload', customerAccessToken?: { __typename?: 'CustomerAccessToken', accessToken: string, expiresAt: any } | null, customerUserErrors: Array<{ __typename?: 'CustomerUserError', code?: CustomerErrorCode | null, field?: Array<string> | null, message: string }> } | null };
+export type LoginMutation = { __typename?: 'Mutation', customerAccessTokenCreate?: { __typename?: 'CustomerAccessTokenCreatePayload', customerAccessToken?: { __typename?: 'CustomerAccessToken', accessToken: string, expiresAt: string } | null, customerUserErrors: Array<{ __typename?: 'CustomerUserError', code?: CustomerErrorCode | null, field?: Array<string> | null, message: string }> } | null };
 
 export type GetUserQueryVariables = Exact<{
   accessToken: Scalars['String'];
@@ -6852,7 +6852,7 @@ export type GetArticlesQueryVariables = Exact<{
 }>;
 
 
-export type GetArticlesQuery = { __typename?: 'QueryRoot', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, publishedAt: any, tags: Array<string>, handle: string, title: string, excerptHtml?: any | null, thumbnail?: { __typename?: 'Image', url: any } | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: any } | null, blog: { __typename?: 'Blog', handle: string } } }> } };
+export type GetArticlesQuery = { __typename?: 'QueryRoot', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, publishedAt: string, tags: Array<string>, handle: string, title: string, excerptHtml?: string | null, thumbnail?: { __typename?: 'Image', url: string } | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: string } | null, blog: { __typename?: 'Blog', handle: string } } }> } };
 
 export type GetBlogArticleQueryVariables = Exact<{
   handle: Scalars['String'];
@@ -6860,7 +6860,7 @@ export type GetBlogArticleQueryVariables = Exact<{
 }>;
 
 
-export type GetBlogArticleQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', articleByHandle?: { __typename?: 'Article', id: string, publishedAt: any, title: string, contentHtml: any, tags: Array<string>, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, authorV2?: { __typename?: 'ArticleAuthor', name: string } | null, image?: { __typename?: 'Image', url: any, height?: number | null, width?: number | null, altText?: string | null } | null } | null } | null };
+export type GetBlogArticleQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', articleByHandle?: { __typename?: 'Article', id: string, publishedAt: string, title: string, contentHtml: string, tags: Array<string>, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, authorV2?: { __typename?: 'ArticleAuthor', name: string } | null, image?: { __typename?: 'Image', url: string, height?: number | null, width?: number | null, altText?: string | null } | null } | null } | null };
 
 export type GetBlogQueryVariables = Exact<{
   handle?: InputMaybe<Scalars['String']>;
@@ -6868,7 +6868,7 @@ export type GetBlogQueryVariables = Exact<{
 }>;
 
 
-export type GetBlogQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', title: string, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, publishedAt: any, tags: Array<string>, title: string, excerptHtml?: any | null, thumbnail?: { __typename?: 'Image', url: any } | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: any } | null } }> } } | null };
+export type GetBlogQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', title: string, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, publishedAt: string, tags: Array<string>, title: string, excerptHtml?: string | null, thumbnail?: { __typename?: 'Image', url: string } | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: string } | null } }> } } | null };
 
 export type GetRecentArticlesQueryVariables = Exact<{
   handle?: InputMaybe<Scalars['String']>;
@@ -6876,14 +6876,14 @@ export type GetRecentArticlesQueryVariables = Exact<{
 }>;
 
 
-export type GetRecentArticlesQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, publishedAt: any, title: string, thumbnail?: { __typename?: 'Image', url: any, width?: number | null, height?: number | null, altText?: string | null } | null } }> } } | null };
+export type GetRecentArticlesQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, publishedAt: string, title: string, thumbnail?: { __typename?: 'Image', url: string, width?: number | null, height?: number | null, altText?: string | null } | null } }> } } | null };
 
 export type GetPageQueryVariables = Exact<{
   handle?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetPageQuery = { __typename?: 'QueryRoot', page?: { __typename?: 'Page', id: string, body: any, bodySummary: string, handle: string, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null } | null };
+export type GetPageQuery = { __typename?: 'QueryRoot', page?: { __typename?: 'Page', id: string, body: string, bodySummary: string, handle: string, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null } | null };
 
 export type GetProductsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
@@ -6892,14 +6892,14 @@ export type GetProductsQueryVariables = Exact<{
 }>;
 
 
-export type GetProductsQuery = { __typename?: 'QueryRoot', products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, productType: string, title: string, handle: string, availableForSale: boolean, priceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, compareAtPriceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, thumbnail?: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } | null, imageSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imageMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, price: { __typename?: 'MoneyV2', amount: any }, compareAtPrice?: { __typename?: 'MoneyV2', amount: any } | null } }> } } }> } };
+export type GetProductsQuery = { __typename?: 'QueryRoot', products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, productType: string, title: string, handle: string, availableForSale: boolean, priceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: string } }, compareAtPriceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: string } }, thumbnail?: { __typename?: 'Image', url: string, altText?: string | null, width?: number | null, height?: number | null } | null, imageSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: string, altText?: string | null, width?: number | null, height?: number | null } }> }, imageMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: string, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, price: { __typename?: 'MoneyV2', amount: string }, compareAtPrice?: { __typename?: 'MoneyV2', amount: string } | null } }> } } }> } };
 
 export type GetProductByHandleQueryVariables = Exact<{
   handle: Scalars['String'];
 }>;
 
 
-export type GetProductByHandleQuery = { __typename?: 'QueryRoot', product?: { __typename?: 'Product', id: string, handle: string, availableForSale: boolean, productType: string, tags: Array<string>, title: string, description: string, descriptionHtml: any, imagesThumbnail: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imagesSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, imagesMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, title: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, requiresShipping: boolean, price: { __typename?: 'MoneyV2', amount: any, currencyCode: CurrencyCode }, compareAtPrice?: { __typename?: 'MoneyV2', amount: any, currencyCode: CurrencyCode } | null } }> } } | null };
+export type GetProductByHandleQuery = { __typename?: 'QueryRoot', product?: { __typename?: 'Product', id: string, handle: string, availableForSale: boolean, productType: string, tags: Array<string>, title: string, description: string, descriptionHtml: string, imagesThumbnail: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: string, altText?: string | null, width?: number | null, height?: number | null } }> }, imagesSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: string, altText?: string | null, width?: number | null, height?: number | null } }> }, imagesMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: string, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, title: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, requiresShipping: boolean, price: { __typename?: 'MoneyV2', amount: string, currencyCode: CurrencyCode }, compareAtPrice?: { __typename?: 'MoneyV2', amount: string, currencyCode: CurrencyCode } | null } }> } } | null };
 
 
 export const CreateCheckoutDocument = gql`

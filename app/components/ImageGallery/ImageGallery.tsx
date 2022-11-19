@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import type { HandleProductMediumImages } from "~/types";
 import { wrap } from "popmotion";
 import { AnimatePresence, motion } from "framer-motion";
 import { Dots } from "./Dots";
+import type { DetailedProduct } from "~/types";
 
 const variants = {
   enter: (direction: number) => {
@@ -31,7 +31,7 @@ const swipePower = (offset: number, velocity: number) => {
 };
 
 interface Props {
-  images: HandleProductMediumImages;
+  images: DetailedProduct["imagesMedium"]["edges"][number]["node"][];
 }
 
 export const ImageGallery: React.FC<Props> = ({ images }) => {

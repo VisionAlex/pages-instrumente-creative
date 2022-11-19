@@ -1,5 +1,7 @@
-import type { MetaFunction } from "@remix-run/cloudflare";
-import { Link, useOutletContext } from "@remix-run/react";
+import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import { Link, useLoaderData, useOutletContext } from "@remix-run/react";
+import { motion } from "framer-motion";
 import React from "react";
 import { BsSearch } from "react-icons/bs";
 import { AddToCart } from "~/components/AddToCart";
@@ -8,7 +10,8 @@ import { PageHeader } from "~/components/shared/PageHeader";
 import { Price } from "~/components/shared/Price";
 import { SaleTag } from "~/components/shared/SaleTag";
 import { config } from "~/config";
-import type { Products } from "~/types";
+import { getWishlist } from "~/providers/products/products";
+import type { Product, RootContext } from "~/types";
 
 export const meta: MetaFunction = () => {
   return {
@@ -16,20 +19,29 @@ export const meta: MetaFunction = () => {
   };
 };
 
-type OutletContextType = {
+type LoaderData = {
   wishlist: string[];
-  products: Products;
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const wishlist = await getWishlist(request);
+  return json({ wishlist });
 };
 
 const AllProducts: React.FC = () => {
-  const { wishlist, products } = useOutletContext<OutletContextType>();
+  const { wishlist } = useLoaderData<LoaderData>();
+  const { products } = useOutletContext<RootContext>();
   if (!products) return null;
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
       <PageHeader className="max-w-screen-2xl" />
       <div>
         <div className="mx-auto grid max-w-screen-2xl grid-cols-1 gap-6 px-5 md:grid-cols-2 lg:grid-cols-3 lg:px-8 xl:grid-cols-4 xl:px-20">
-          {products.map(({ node: product }) => {
+          {products.map((product) => {
             const isFavorite = wishlist.some((item) => item === product.id);
             return (
               <div
@@ -93,7 +105,7 @@ const AllProducts: React.FC = () => {
           })}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

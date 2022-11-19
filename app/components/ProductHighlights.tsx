@@ -1,13 +1,13 @@
 import { Link } from "@remix-run/react";
 import React from "react";
 import { config } from "~/config";
-import type { Products } from "~/types";
+import type { Product } from "~/types";
 import { AddToCart } from "./AddToCart";
 import { Price } from "./shared/Price";
 import { SaleTag } from "./shared/SaleTag";
 
 interface Props {
-  products: Products;
+  products: Product[];
 }
 
 export const ProductsHighlights: React.FC<Props> = ({ products }) => {
@@ -18,7 +18,7 @@ export const ProductsHighlights: React.FC<Props> = ({ products }) => {
         Dezvoltă competențele copilului tău
       </h3>
       <div className="grid grid-cols-2 justify-items-center gap-3 md:grid-cols-3">
-        {products.map(({ node: product }, index) => {
+        {products.map((product, index) => {
           const price = product.priceRange.minVariantPrice.amount;
           const compareAtPrice =
             product.compareAtPriceRange.minVariantPrice.amount;

@@ -3,13 +3,11 @@ import {
   Links,
   LiveReload,
   Meta,
+  Outlet,
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useLocation,
-  useOutlet,
 } from "@remix-run/react";
-import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import AccountModal from "./components/AccountModal";
 import { Footer } from "./components/Footer";
@@ -29,7 +27,7 @@ import { getUser } from "./providers/customers/customers";
 import { getProducts } from "./providers/products/products";
 import { getWishlist } from "./providers/products/products";
 import styles from "./styles/app.css";
-import type { Products } from "./types";
+import type { Product } from "./types";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -56,23 +54,25 @@ export const links = () => {
     },
   ];
 };
+
 type LoaderData = {
   user: GetUserQuery | null;
   wishlist: string[];
   cart: Cart;
-  products: Products;
+  products: Product[];
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUser(request);
-  const products = await getProducts(20);
+  const productsQuery = await getProducts(20);
+  const products = productsQuery.products.edges.map((edge) => edge.node);
   const wishlist = await getWishlist(request);
   const cart = await getCart(request);
   const loaderData: LoaderData = {
     user,
     cart,
     wishlist: wishlist,
-    products: products.products.edges,
+    products: products,
   };
   return loaderData;
 };
@@ -84,7 +84,6 @@ export default function App() {
   const [showWishlist, setShowWishlist] = useState(false);
   const [showAccountModal, setShowAccountModal] = useState(false);
   const cartSize = useMemo(() => getCartSize(cart), [cart]);
-  const outlet = useOutlet({ wishlist, products });
   return (
     <html lang="ro">
       <head>
@@ -94,12 +93,12 @@ export default function App() {
       <body className="text-primary">
         <ShoppingCart
           cart={cart}
-          products={products as Products}
+          products={products}
           showCart={showCart}
           setShowCart={setShowCart}
         />
         <Wishlist
-          products={products as Products}
+          products={products}
           wishlist={wishlist}
           showWishlist={showWishlist}
           setShowWishlist={setShowWishlist}
@@ -122,14 +121,9 @@ export default function App() {
         </Navbar>
         <ScrollToTop />
         <div className={`pt-[123px] pb-[50px] lg:pb-0`}>
-          <motion.main
-            key={useLocation().key}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            {outlet}
-          </motion.main>
+          <main>
+            <Outlet context={{ products }} />
+          </main>
           <Footer />
         </div>
         <FooterMenu
