@@ -5,9 +5,10 @@ import type { Product } from "~/types";
 
 interface Props {
   product: Product;
+  openModal: (product: Product) => void;
 }
 
-export const AddToCart: React.FC<Props> = ({ product }) => {
+export const AddToCart: React.FC<Props> = ({ product, openModal }) => {
   const location = useLocation();
   const isProductAvailable = product.availableForSale;
   const hasOnlyOneVariant = product.variants.edges.length === 1;
@@ -36,7 +37,12 @@ export const AddToCart: React.FC<Props> = ({ product }) => {
       </Form>
     );
   return (
-    <button className="flex h-[36px] w-[36px] cursor-pointer items-center justify-center border border-primary">
+    <button
+      onClick={() => {
+        openModal(product);
+      }}
+      className="flex h-[36px] w-[36px] cursor-pointer items-center justify-center border border-primary"
+    >
       <BsBasket />
     </button>
   );

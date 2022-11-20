@@ -3,7 +3,7 @@ import type { Product } from "~/types";
 
 type ProductModalState = {
   isOpen: boolean;
-  product: Product;
+  product: Product | null;
 };
 
 type ProductModalAction =
@@ -38,7 +38,7 @@ const productModalReducer = (
 export const useProductModal = (products: Product[]) => {
   const [{ isOpen, product }, dispatch] = useReducer(productModalReducer, {
     isOpen: false,
-    product: products[0],
+    product: products ? products[0] : null,
   });
   return {
     isOpen,

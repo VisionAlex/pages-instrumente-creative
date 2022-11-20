@@ -13,7 +13,7 @@ import { Price } from "../shared/Price";
 interface Props {
   open: boolean;
   onClose: () => void;
-  product: Product;
+  product: Product | null;
   wishlist: string[];
 }
 
@@ -23,9 +23,11 @@ export const ProductModal: React.FC<Props> = ({
   product,
   wishlist,
 }) => {
-  const images = product.imageMedium.edges.map((edge) => edge.node);
   const [selectedVariant, setSelectedVariant] = useState(0);
   const [quantity, setQuantity] = useState<number>(1);
+  if (!product) return null;
+
+  const images = product.imageMedium.edges.map((edge) => edge.node);
   const variants = product.variants.edges.map(({ node: variant }) => variant);
 
   const price = variants[selectedVariant].price.amount;
@@ -34,7 +36,6 @@ export const ProductModal: React.FC<Props> = ({
 
   const hasMultipleVariants = variants.length > 1;
 
-  if (!product) return null;
   // TODO: Add product description
   return (
     <Transition show={open} as={Fragment}>

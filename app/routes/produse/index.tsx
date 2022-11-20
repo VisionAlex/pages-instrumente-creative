@@ -99,7 +99,7 @@ const AllProducts: React.FC = () => {
                     isGiftCard={product.productType === "Gift Cards"}
                   />
                   <div className="mt-5 flex items-center gap-1.5 text-primary">
-                    <AddToCart product={product} />
+                    <AddToCart product={product} openModal={openModal} />
                     <button
                       onClick={() => openModal(product)}
                       className="flex h-[36px] w-[36px] cursor-pointer items-center justify-center border border-primary"
