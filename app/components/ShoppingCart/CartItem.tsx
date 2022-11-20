@@ -37,10 +37,10 @@ export const CartItem: React.FC<Props> = ({ cartItem, setShowCart }) => {
           onClick={() => setShowCart(false)}
           className="hover:opacity-70"
         >
-          {cartItem.title}
+          {cartItem.productTitle}
         </Link>
         <div className="flex items-center justify-between">
-          <div className="cartItems-center flex max-w-fit gap-2 border border-secondaryBackground px-2">
+          <div className="flex max-w-fit items-center gap-2 border border-secondaryBackground px-2">
             <Form method="post" action="/cart">
               <input type="hidden" name="variantID" value={cartItem.id} />
               <input type="hidden" name="_action" value="remove" />
@@ -49,7 +49,7 @@ export const CartItem: React.FC<Props> = ({ cartItem, setShowCart }) => {
                 name="redirectTo"
                 value={location.pathname}
               />
-              <button>
+              <button className="flex items-center justify-center">
                 <MinusSmIcon strokeWidth={1.5} className="h-5 w-5" />
               </button>
             </Form>
@@ -62,7 +62,7 @@ export const CartItem: React.FC<Props> = ({ cartItem, setShowCart }) => {
                 name="redirectTo"
                 value={location.pathname}
               />
-              <button>
+              <button className="flex items-center justify-center">
                 <PlusSmIcon strokeWidth={1.5} className="h-5 w-5" />
               </button>
             </Form>

@@ -9,6 +9,7 @@ export type Variant = Product["variants"]["edges"][number]["node"];
 
 export type VariantInfo = Variant & {
   productID: string;
+  productTitle: string;
   handle: string;
   thumbnail: Product["thumbnail"];
   quantity: number;

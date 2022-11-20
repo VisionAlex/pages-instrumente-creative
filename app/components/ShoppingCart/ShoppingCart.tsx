@@ -139,12 +139,13 @@ export const getCartInfo = (cart: Cart, products: Product[]) => {
       let variantsWithInfo = [];
       for (const variant of variants) {
         variantsWithInfo.push({
+          ...variant,
           productID: product.id,
+          productTitle: product.title,
           handle: product.handle,
           thumbnail: product.thumbnail,
           quantity:
             cart.find((item) => item.variantId === variant.id)?.quantity || 0,
-          ...variant,
         });
       }
       return [...result, ...variantsWithInfo];
