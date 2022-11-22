@@ -165,9 +165,9 @@ export default function App() {
         <ScrollToTop />
         <div className={`pt-[123px] pb-[50px] lg:pb-0`}>
           <main>
-            <Outlet context={{ products }} />
+            <Outlet context={{ products, user }} />
           </main>
-          <Footer />
+          <Footer user={user} />
         </div>
         <FooterMenu
           cartSize={cartSize}

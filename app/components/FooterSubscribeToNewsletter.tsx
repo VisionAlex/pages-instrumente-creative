@@ -1,10 +1,17 @@
 import { CheckCircleIcon } from "@heroicons/react/outline";
 import { useFetcher } from "@remix-run/react";
 import { AnimatePresence, motion } from "framer-motion";
-import React from "react";
-export const FooterSubscribeToNewsletter: React.FC = () => {
+import type { GetUserQuery } from "~/generated/graphql";
+
+interface Props {
+  user: GetUserQuery | null;
+}
+
+export const FooterSubscribeToNewsletter: React.FC<Props> = ({ user }) => {
   const fetcher = useFetcher();
   const state = fetcher.submission || fetcher.data ? "success" : "idle";
+
+  if (user?.customer?.acceptsMarketing) return null;
   return (
     <div className="h-8">
       <AnimatePresence exitBeforeEnter>
@@ -21,7 +28,7 @@ export const FooterSubscribeToNewsletter: React.FC = () => {
             success! Mulțumim!
           </motion.div>
         )}
-        {state !== "success" ? (
+        {state === "idle" ? (
           <fetcher.Form method="post" action="/api/email">
             <motion.fieldset
               key="fieldset"

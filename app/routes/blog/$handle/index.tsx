@@ -4,9 +4,14 @@ import type {
   MetaFunction,
 } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import { Link, useCatch, useLoaderData } from "@remix-run/react";
-import { Link as CustomLink } from "~/components/shared/Link";
+import {
+  Link,
+  useCatch,
+  useLoaderData,
+  useOutletContext,
+} from "@remix-run/react";
 import React from "react";
+import { Link as CustomLink } from "~/components/shared/Link";
 import { PageHeader } from "~/components/shared/PageHeader";
 import { NewsletterWidget } from "~/components/shared/widgets/NewsletterWidget";
 import { SocialLinksWidget } from "~/components/shared/widgets/SocialLinksWidget";
@@ -17,6 +22,7 @@ import { getArticles } from "~/providers/pages/articles";
 import { getBlog } from "~/providers/pages/blog";
 import { classNames } from "~/shared/utils/classNames";
 import { getImageAspectRatio } from "~/shared/utils/getImageAspectRatio";
+import type { RootContext } from "~/types";
 
 type LoaderData = {
   blog: NonNullable<GetBlogQuery["blog"]>;
@@ -104,6 +110,7 @@ export const meta: MetaFunction = ({ data }) => {
 };
 const BlogIndex: React.FC = () => {
   const data = useLoaderData<LoaderData>();
+  const { user } = useOutletContext<RootContext>();
 
   const articles = data.articles ? data.articles : data.blog.articles.edges;
   return (
@@ -163,7 +170,7 @@ const BlogIndex: React.FC = () => {
           </section>
           <aside className="col-span-7 lg:col-span-2">
             <SocialLinksWidget className="mb-8" />
-            <NewsletterWidget className="mb-8" />
+            <NewsletterWidget className="mb-8" user={user} />
             <TagsWidget tags={data.tags} />
           </aside>
         </div>

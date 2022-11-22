@@ -1,14 +1,20 @@
+import { CalendarIcon } from "@heroicons/react/outline";
 import type { LoaderFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import { Outlet, useCatch, useLoaderData } from "@remix-run/react";
+import {
+  Outlet,
+  useCatch,
+  useLoaderData,
+  useOutletContext,
+} from "@remix-run/react";
 import React from "react";
 import type { GetBlogArticleQuery } from "~/generated/graphql";
 import { getBlogArticle } from "~/providers/pages/articles";
-import { CalendarIcon } from "@heroicons/react/outline";
-import { getImageAspectRatio } from "~/shared/utils/getImageAspectRatio";
 import { classNames } from "~/shared/utils/classNames";
-import blogStyles from "~/styles/blog.css";
 import { formatDate } from "~/shared/utils/formatDate";
+import { getImageAspectRatio } from "~/shared/utils/getImageAspectRatio";
+import blogStyles from "~/styles/blog.css";
+import type { RootContext } from "~/types";
 
 export type BlogArticle = NonNullable<
   NonNullable<GetBlogArticleQuery["blog"]>["articleByHandle"]
@@ -58,6 +64,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
 
 const Article: React.FC = () => {
   const { article } = useLoaderData<LoaderData>();
+  const { user } = useOutletContext<RootContext>();
 
   return (
     <div className="page mx-auto  px-5 lg:px-8 xl:px-20">
@@ -88,7 +95,7 @@ const Article: React.FC = () => {
           </div>
         </section>
         <aside className="col-span-7 lg:col-span-2">
-          <Outlet context={{ tags: article.tags, id: article.id }} />
+          <Outlet context={{ tags: article.tags, id: article.id, user }} />
         </aside>
       </div>
     </div>

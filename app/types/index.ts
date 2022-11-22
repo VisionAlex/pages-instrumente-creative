@@ -1,6 +1,7 @@
 import type {
   GetProductByHandleQuery,
   GetProductsQuery,
+  GetUserQuery,
 } from "../generated/graphql";
 
 export type Product = GetProductsQuery["products"]["edges"][number]["node"];
@@ -19,4 +20,5 @@ export type DetailedProduct = NonNullable<GetProductByHandleQuery["product"]>;
 
 export type RootContext = {
   products: Product[];
+  user: GetUserQuery | null;
 };
