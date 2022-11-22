@@ -64,5 +64,5 @@ export const config: Config = {
       type: "other",
     },
   },
-  email: "instrumentecreative@gmail.com",
+  email: "support@instrumente-creative.com",
 };

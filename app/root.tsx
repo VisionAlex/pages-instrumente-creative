@@ -8,7 +8,6 @@ import {
   ScrollRestoration,
   useCatch,
   useLoaderData,
-  useLocation,
 } from "@remix-run/react";
 import { useMemo, useState } from "react";
 import AccountModal from "./components/AccountModal";
@@ -26,8 +25,7 @@ import type { GetUserQuery } from "./generated/graphql";
 import type { Cart } from "./providers/cart/cart";
 import { getCart } from "./providers/cart/cart";
 import { getUser } from "./providers/customers/customers";
-import { getProducts } from "./providers/products/products";
-import { getWishlist } from "./providers/products/products";
+import { getProducts, getWishlist } from "./providers/products/products";
 import styles from "./styles/app.css";
 import type { Product } from "./types";
 
