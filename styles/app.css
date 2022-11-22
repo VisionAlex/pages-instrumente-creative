@@ -29,17 +29,3 @@
 .link-parent:hover .link-child {
   @apply bg-primary text-white;
 }
-
-.newsletter > * {
-  transition: all 0.3s 0.3s cubic-bezier(0.5, 0, 0.5, 1);
-  transition-property: opacity, transform;
-  display: block;
-}
-
-.newsletter > *[aria-hidden="true"] {
-  display: initial;
-  pointer-events: none;
-  transition-delay: 0s;
-  opacity: 0;
-  transform: scale(0.8);
-}
