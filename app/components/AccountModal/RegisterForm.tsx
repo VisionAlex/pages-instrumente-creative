@@ -1,3 +1,4 @@
+import { Form } from "@remix-run/react";
 import React from "react";
 import { Button } from "../shared/Button";
 import { Input } from "../shared/Input";
@@ -9,7 +10,7 @@ interface Props {
 
 export const RegisterForm: React.FC<Props> = ({ setForm }) => {
   return (
-    <form className="mt-10" method="post" action="/auth/register">
+    <Form className="mt-10" method="post" action="/auth/register">
       <Input name="firstName" type="text" placeholder="Prenume" />
       <Input name="lastName" type="text" placeholder="Nume de familie" />
       <Input name="email" type="email" placeholder="Email*" />
@@ -30,6 +31,6 @@ export const RegisterForm: React.FC<Props> = ({ setForm }) => {
           Autentificare
         </Button>
       </div>
-    </form>
+    </Form>
   );
 };
