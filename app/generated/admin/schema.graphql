@@ -1427,7 +1427,7 @@ enum BulkMutationErrorCode {
   INVALID_STAGED_UPLOAD_FILE
 
   """
-  The JSONL file could not be found. Try [uploading the file](https://shopify.dev/api/usage/bulk-operations/imports#generate-the-uploaded-url-and-parameters) again, and check that you've entered the URL correctly for the `bulkOperationRunMutationUploadPath` mutation argument.
+  The JSONL file could not be found. Try [uploading the file](https://shopify.dev/api/usage/bulk-operations/imports#generate-the-uploaded-url-and-parameters) again, and check that you've entered the URL correctly for the `stagedUploadPath` mutation argument.
   """
   NO_SUCH_FILE
 
@@ -8325,13 +8325,13 @@ input DeliveryProfileInput {
   """The list of condition IDs to delete."""
   conditionsToDelete: [ID!]
 
-  """The list of location groups to be created in the delivery profile."""
+  "The list of location groups to be created in the delivery profile.\n\n**Note:** due to the potential complexity of the nested data, it is recommended to send no more than 5 location groups per each request.\n"
   locationGroupsToCreate: [DeliveryProfileLocationGroupInput!]
 
   """The list of location groups to be deleted from the delivery profile."""
   locationGroupsToDelete: [ID!]
 
-  """The list of location groups to be updated in the delivery profile."""
+  "The list of location groups to be updated in the delivery profile.\n\n**Note:** due to the potential complexity of the nested data, it is recommended to send no more than 5 location groups per each request.\n"
   locationGroupsToUpdate: [DeliveryProfileLocationGroupInput!]
 
   """The list of method definition IDs to delete."""
@@ -8456,10 +8456,10 @@ input DeliveryProfileLocationGroupInput {
   """The list of location IDs to be moved to this location group."""
   locations: [ID!]
 
-  """The list of location group zones to create."""
+  "The list of location group zones to create.\n\n**Note:** due to the potential complexity of the nested data, it is recommended to send no more than 5 zones per each request.\n"
   zonesToCreate: [DeliveryLocationGroupZoneInput!]
 
-  """The list of location group zones to update."""
+  "The list of location group zones to update.\n\n**Note:** due to the potential complexity of the nested data, it is recommended to send no more than 5 zones per each request.\n"
   zonesToUpdate: [DeliveryLocationGroupZoneInput!]
 }
 
@@ -12988,7 +12988,7 @@ type FulfillmentLineItemEdge {
 
 "Represents a fulfillment order. In Shopify, a fulfillment order represents a group of one or more items\nin an order that are to be fulfilled from the same location. There can be more than one fulfillment order\nfor an order at a given location. Fulfillment orders are created automatically when an order is created.\nTo learn how to build a fulfillment app, refer to [Fulfillment apps](https://shopify.dev/apps/fulfillment).\n"
 type FulfillmentOrder implements Node {
-  "The fulfillment order's assigned location. This is the location where the fulfillment is expected to happen.\n"
+  "The fulfillment order's assigned location. This is the location where the fulfillment is expected to happen.\n\nThe fulfillment order's assigned location might change in the following cases:\n\n- The fulfillment order has been entirely moved to a new location. For example, the [fulfillmentOrderMove](\n  https://shopify.dev/api/admin-graphql/latest/mutations/fulfillmentOrderMove\n  ) mutation has been called, and you see the original fulfillment order in the [movedFulfillmentOrder](\n  https://shopify.dev/api/admin-graphql/latest/mutations/fulfillmentOrderMove#field-fulfillmentordermovepayload-movedfulfillmentorder\n  ) field within the mutation's response.\n- Work on the fulfillment order has not yet begun, which means that the fulfillment order has the\n    [OPEN](https://shopify.dev/api/admin-graphql/latest/enums/FulfillmentOrderStatus#value-open),\n    [SCHEDULED](https://shopify.dev/api/admin-graphql/latest/enums/FulfillmentOrderStatus#value-scheduled), or\n    [ON_HOLD](https://shopify.dev/api/admin-graphql/latest/enums/FulfillmentOrderStatus#value-onhold)\n    status, and the shop's location properties might be undergoing edits (for example, in the Shopify admin).\n"
   assignedLocation: FulfillmentOrderAssignedLocation!
 
   """Delivery method of this fulfillment order."""
@@ -13174,7 +13174,7 @@ enum FulfillmentOrderAction {
   REQUEST_FULFILLMENT
 }
 
-"The fulfillment order's assigned location. This is the location where the fulfillment is expected to happen.\n"
+"The fulfillment order's assigned location. This is the location where the fulfillment is expected to happen.\n\n The fulfillment order's assigned location might change in the following cases:\n\n  - The fulfillment order has been entirely moved to a new location. For example, the [fulfillmentOrderMove](\n    https://shopify.dev/api/admin-graphql/latest/mutations/fulfillmentOrderMove\n    ) mutation has been called, and you see the original fulfillment order in the [movedFulfillmentOrder](\n    https://shopify.dev/api/admin-graphql/latest/mutations/fulfillmentOrderMove#field-fulfillmentordermovepayload-movedfulfillmentorder\n    ) field within the mutation's response.\n\n  - Work on the fulfillment order has not yet begun, which means that the fulfillment order has the\n      [OPEN](https://shopify.dev/api/admin-graphql/latest/enums/FulfillmentOrderStatus#value-open),\n      [SCHEDULED](https://shopify.dev/api/admin-graphql/latest/enums/FulfillmentOrderStatus#value-scheduled), or\n      [ON_HOLD](https://shopify.dev/api/admin-graphql/latest/enums/FulfillmentOrderStatus#value-onhold)\n      status, and the shop's location properties might be undergoing edits (for example, in the Shopify admin).\n\nIf the [fulfillmentOrderMove](\nhttps://shopify.dev/api/admin-graphql/latest/mutations/fulfillmentOrderMove\n) mutation has moved the fulfillment order's line items to a new location,\nbut hasn't moved the fulfillment order instance itself, then the original fulfillment order's assigned location\ndoesn't change.\nThis happens if the fulfillment order is being split during the move, or if all line items can be moved\nto an existing fulfillment order at a new location.\n\nOnce the fulfillment order has been taken into work or canceled,\nwhich means that the fulfillment order has the\n[IN_PROGRESS](https://shopify.dev/api/admin-graphql/latest/enums/FulfillmentOrderStatus#value-inprogress),\n[CLOSED](https://shopify.dev/api/admin-graphql/latest/enums/FulfillmentOrderStatus#value-closed),\n[CANCELLED](https://shopify.dev/api/admin-graphql/latest/enums/FulfillmentOrderStatus#value-cancelled), or\n[INCOMPLETE](https://shopify.dev/api/admin-graphql/latest/enums/FulfillmentOrderStatus#value-incomplete)\nstatus, `FulfillmentOrderAssignedLocation` acts as a snapshot of the shop's location content.\nUp-to-date shop's location data may be queried through [location](\n  https://shopify.dev/api/admin-graphql/latest/objects/FulfillmentOrderAssignedLocation#field-fulfillmentorderassignedlocation-location\n) connection.\n"
 type FulfillmentOrderAssignedLocation {
   """The first line of the address for the location."""
   address1: String
@@ -13188,7 +13188,7 @@ type FulfillmentOrderAssignedLocation {
   """The two-letter country code of the location."""
   countryCode: CountryCode!
 
-  "The location where the fulfillment is expected to happen. This value might be different from\n`FulfillmentOrderAssignedLocation` if the location's attributes were updated\nafter the fulfillment order was closed.\n"
+  "The location where the fulfillment is expected to happen. This value might be different from\n`FulfillmentOrderAssignedLocation` if the location's attributes were updated\nafter the fulfillment order was taken into work of canceled.\n"
   location: Location
 
   """The name of the location."""
@@ -13353,13 +13353,13 @@ type FulfillmentOrderInternationalDuties {
   incoterm: String!
 }
 
-"A line item that belongs to a fulfillment order.\n"
+"Associates an order line item with quantities requiring fulfillment from the respective fulfillment order.\n"
 type FulfillmentOrderLineItem implements Node {
   """A globally-unique identifier."""
   id: ID!
 
   """The associated order line item."""
-  lineItem: LineItem!
+  lineItem: LineItem! @deprecated(reason: "          As of API version 2023-01, this field has been deprecated. The order line item associated with a `FulfillmentOrderLineItem`\n          shouldn't be used to determine what to fulfill. Use the `FulfillmentOrderLineItem` and `FulfillmentOrder` objects\n          instead. An order `LineItem` represents a single line item on an order, but it doesn't represent what should be fulfilled.\n")
 
   """The number of units remaining to be fulfilled."""
   remainingQuantity: Int!
@@ -13508,12 +13508,12 @@ enum FulfillmentOrderMerchantRequestKind {
 """Return type for `fulfillmentOrderMove` mutation."""
 type FulfillmentOrderMovePayload {
   """
-  A new fulfillment order representing of the all line items that were moved to the new location.
+  The original or new fulfillment order that represents all of the line items that were moved to the new location.
   """
   movedFulfillmentOrder: FulfillmentOrder
 
   """
-  The fulfillment order that was moved. On success, this fulfillment order will be closed.
+  The fulfillment order that was moved. If the fulfillment order has been partially fulfilled manually, and the unfulfilled item is successfully moved to a third-party fulfillment service, then fulfillment order will be closed. In all other use cases this fulfillment order will stay open and the location will be updated.
   """
   originalFulfillmentOrder: FulfillmentOrder
 
@@ -13815,9 +13815,9 @@ input FulfillmentOriginAddressInput {
   zip: String
 }
 
-"Represents a fulfillment service. A fulfillment service is a third-party service that prepares and ships orders on behalf of the store owner.\n"
+"A **Fulfillment Service** is a third party warehouse that prepares and ships orders\non behalf of the store owner. Fulfillment services charge a fee to package and ship items\nand update product inventory levels. Some well known fulfillment services with Shopify integrations\ninclude: Amazon, Shipwire, and Rakuten. When an app registers a new `FulfillmentService` on a store,\nShopify automatically creates a `Location` that's associated to the fulfillment service.\nTo learn more about fulfillment services, refer to\n[Manage fulfillments as a fulfillment service app](https://shopify.dev/apps/fulfillment/fulfillment-service-apps)\nguide.\n\n## Mutations\n\nYou can work with the `FulfillmentService` object with the\n[fulfillmentServiceCreate](https://shopify.dev/api/admin-graphql/latest/mutations/fulfillmentServiceCreate),\n[fulfillmentServiceUpdate](https://shopify.dev/api/admin-graphql/latest/mutations/fulfillmentServiceUpdate),\nand [fulfillmentServiceDelete](https://shopify.dev/api/admin-graphql/latest/mutations/fulfillmentServiceDelete)\nmutations.\n\n## Hosted endpoints\n\nFulfillment service providers integrate with Shopify by providing Shopify with a set of hosted endpoints that\nShopify can query on certain conditions.\nThese endpoints must have a common prefix, and this prefix should be supplied in the `callbackUrl` parameter\nin the\n[fulfillmentServiceCreate](https://shopify.dev/api/admin-graphql/latest/mutations/fulfillmentServiceCreate)\nmutation.\n\n- Shopify sends POST requests to the `<callbackUrl>/fulfillment_order_notification` endpoint\n  to notify the fulfillment service about fulfillment requests and fulfillment cancellation requests,\n  if `fulfillment_orders_opt_in` is set to `true`.\n\n  [As of the 2022-07 API version](https://shopify.dev/changelog/legacy-fulfillment-api-deprecation),\n  it's mandatory for a fulfillment service to follow a fulfillment order based workflow by\n  having `fulfillment_orders_opt_in` set to `true`,\n  hosting the `<callbackUrl>/fulfillment_order_notification` endpoint, and acting on fulfillment requests and cancellations.\n\n  For more information, refer to\n  [Receive fulfillment requests and cancellations](https://shopify.dev/apps/fulfillment/fulfillment-service-apps/manage-fulfillments#step-2-receive-fulfillment-requests-and-cancellations).\n- Shopify sends GET requests to the `<callbackUrl>/fetch_tracking_numbers` endpoint to retrieve tracking numbers for orders,\n  if `inventoryManagement` is set to `true`.\n\n  For more information, refer to\n  [Enable tracking support](https://shopify.dev/apps/fulfillment/fulfillment-service-apps/manage-fulfillments#step-8-enable-tracking-support-optional).\n\n  Fulfillment services can also update tracking information with the\n  [fulfillmentTrackingInfoUpdateV2](https://shopify.dev/api/admin-graphql/latest/mutations/fulfillmentTrackingInfoUpdateV2) mutation,\n  rather than waiting for Shopify to ask for tracking numbers.\n- Shopify sends GET requests to the `<callbackUrl>/fetch_stock` endpoint to retrieve inventory levels,\n  if `trackingSupport` is set to `true`.\n\n  For more information, refer to\n  [Sharing inventory levels with Shopify](https://shopify.dev/apps/fulfillment/fulfillment-service-apps/manage-fulfillments#step-9-share-inventory-levels-with-shopify-optional).\n\nTo make sure you have everything set up correctly, you can test the `callbackUrl`-prefixed endpoints\nin your development store.\n\n## Resources and webhooks\n\nThere are a variety of objects and webhooks that enable a fulfillment service to work.\nTo exchange fulfillment information with Shopify, fulfillment services use the\n[FulfillmentOrder](https://shopify.dev/api/admin-graphql/latest/objects/FulfillmentOrder),\n[Fulfillment](https://shopify.dev/api/admin-graphql/latest/objects/Fulfillment) and\n[Order](https://shopify.dev/api/admin-graphql/latest/objects/Order) objects and related mutations.\nTo act on fulfillment process events that happen on the Shopify side,\nbesides awaiting calls to `callbackUrl`-prefixed endpoints,\nfulfillment services can subscribe to the\n[fulfillment order](https://shopify.dev/apps/fulfillment/fulfillment-service-apps/manage-fulfillments#webhooks)\nand [order](https://shopify.dev/api/admin-rest/latest/resources/webhook)\nwebhooks.\n"
 type FulfillmentService {
-  "The callback URL that the fulfillment service has registered for requests. The following considerations apply:\n\n- Shopify queries the <code>callback_url/fetch_tracking_numbers</code> endpoint to retrieve tracking numbers\n    for orders, if `inventoryManagement` is set to `true`.\n- Shopify queries the <code>callback_url/fetch_stock</code> endpoint to retrieve inventory levels,\n    if `trackingSupport` is set to `true`.\n- Shopify uses the <code>callback_url/fulfillment_order_notification</code> endpoint to send\n    [fulfillment and cancellation requests](https://shopify.dev/apps/fulfillment/fulfillment-service-apps/manage-fulfillments#step-2-receive-fulfillment-requests-and-cancellations),\n    if the fulfillment service has opted in to the fulfillment order based workflow for managing fulfillments\n    (`fulfillmentOrdersOptIn` is set to `true`).\n"
+  "The callback URL that the fulfillment service has registered for requests. The following considerations apply:\n\n- Shopify queries the `<callbackUrl>/fetch_tracking_numbers` endpoint to retrieve tracking numbers\n    for orders, if `inventoryManagement` is set to `true`.\n- Shopify queries the `<callbackUrl>/fetch_stock` endpoint to retrieve inventory levels,\n    if `trackingSupport` is set to `true`.\n- Shopify uses the `<callbackUrl>/fulfillment_order_notification` endpoint to send\n    [fulfillment and cancellation requests](https://shopify.dev/apps/fulfillment/fulfillment-service-apps/manage-fulfillments#step-2-receive-fulfillment-requests-and-cancellations),\n    if the fulfillment service has opted in to the fulfillment order based workflow for managing fulfillments\n    (`fulfillmentOrdersOptIn` is set to `true`).\n"
   callbackUrl: URL
 
   "Whether the fulfillment service uses the [fulfillment order based workflow](https://shopify.dev/apps/fulfillment/fulfillment-service-apps/manage-fulfillments) for managing fulfillments.\n"
@@ -13848,8 +13848,10 @@ type FulfillmentService {
   """The name of the fulfillment service as seen by merchants."""
   serviceName: String!
 
-  """Shipping methods associated with the fulfillment service provider."""
-  shippingMethods: [ShippingMethod!]!
+  """
+  Shipping methods associated with the fulfillment service provider. Applies only to Fulfill By Amazon fulfillment service.
+  """
+  shippingMethods: [ShippingMethod!]! @deprecated(reason: "The Fulfillment by Amazon feature will no longer be supported from March 30, 2023. To continue using Amazon fulfillment, merchants need to set up a Multi-Channel Fulfillment solution recommended by Amazon: https://help.shopify.com/manual/shipping/fulfillment-services/amazon#activate-fulfillment-by-amazon")
 
   """Type associated with the fulfillment service."""
   type: FulfillmentServiceType!
@@ -15026,7 +15028,9 @@ type LimitedPendingOrderCount {
   count: Int!
 }
 
-"""Represents a single line item on an order."""
+"""
+Represents individual products and quantities purchased in the associated order.
+"""
 type LineItem implements Node {
   """Whether the line item can be restocked."""
   canRestock: Boolean! @deprecated(reason: "Use `restockable` instead.")
@@ -21967,7 +21971,7 @@ interface OnlineStorePreviewable {
   onlineStorePreviewUrl: URL
 }
 
-"An order is a customer's request to purchase one or more products from a shop. You can retrieve and update orders using the `Order` object.\nLearn more about\n[editing an existing order with the GraphQL Admin API](https://shopify.dev/apps/fulfillment/order-management-apps/order-editing).\n\nOnly the last 60 days' worth of orders from a store are accessible from the `Order` object by default. If you want to access older orders,\nthen you need to [request access to all orders](https://shopify.dev/apps/auth/oauth#orders-permissions). If your app is granted\naccess, then you can add the `read_all_orders` scope to your app along with `read_orders` or `write_orders`.\n[Private apps](https://shopify.dev/apps/auth/basic-http) are not affected by this change and are automatically granted the scope.\n\n**Caution:** Only use this data if it's required for your app's functionality. Shopify will restrict [access to scopes](https://shopify.dev/api/usage/access-scopes) for apps that don't have a legitimate use for the associated data.\n"
+"An order is a customer's request to purchase one or more products from a shop. You can retrieve and update orders using the `Order` object.\nLearn more about\n[editing an existing order with the GraphQL Admin API](https://shopify.dev/apps/fulfillment/order-management-apps/order-editing).\n\nOnly the last 60 days' worth of orders from a store are accessible from the `Order` object by default. If you want to access older orders,\nthen you need to [request access to all orders](https://shopify.dev/api/usage/access-scopes#orders-permissions). If your app is granted\naccess, then you can add the `read_all_orders` scope to your app along with `read_orders` or `write_orders`.\n[Private apps](https://shopify.dev/apps/auth/basic-http) are not affected by this change and are automatically granted the scope.\n\n**Caution:** Only use this data if it's required for your app's functionality. Shopify will restrict [access to scopes](https://shopify.dev/api/usage/access-scopes) for apps that don't have a legitimate use for the associated data.\n"
 type Order implements CommentEventSubject & HasEvents & HasLocalizationExtensions & HasMetafieldDefinitions & HasMetafields & LegacyInteroperability & Node {
   """A list of sales agreements associated with the order."""
   agreements(
@@ -29245,13 +29249,13 @@ type QueryRoot {
     countryCode: CountryCode!
   ): Market
 
-  """A market localizable resource."""
+  """A resource that can have localized values for different markets."""
   marketLocalizableResource(
     """Find a market localizable resource by ID."""
     resourceId: ID!
   ): MarketLocalizableResource
 
-  """A Market localizable resource."""
+  """Resources that can have localized values for different markets."""
   marketLocalizableResources(
     """Returns the elements that come after the specified cursor."""
     after: String
@@ -29272,7 +29276,7 @@ type QueryRoot {
     reverse: Boolean = false
   ): MarketLocalizableResourceConnection!
 
-  """A list of market localizable resources by IDs."""
+  """Resources that can have localized values for different markets."""
   marketLocalizableResourcesByIds(
     """Returns the elements that come after the specified cursor."""
     after: String
@@ -30085,13 +30089,13 @@ type QueryRoot {
     reverse: Boolean = false
   ): TenderTransactionConnection!
 
-  """A translatable resource."""
+  """A resource that can have localized values for different languages."""
   translatableResource(
     """Find a translatable resource by ID."""
     resourceId: ID!
   ): TranslatableResource
 
-  """A List of translatable resources."""
+  """Resources that can have localized values for different languages."""
   translatableResources(
     """Returns the elements that come after the specified cursor."""
     after: String
@@ -30112,7 +30116,7 @@ type QueryRoot {
     reverse: Boolean = false
   ): TranslatableResourceConnection!
 
-  """A list of translatable resources by IDs."""
+  """Resources that can have localized values for different languages."""
   translatableResourcesByIds(
     """Returns the elements that come after the specified cursor."""
     after: String

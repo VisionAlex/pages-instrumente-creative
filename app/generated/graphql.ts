@@ -6845,6 +6845,15 @@ export type GetUserQueryVariables = Exact<{
 
 export type GetUserQuery = { __typename?: 'QueryRoot', customer?: { __typename?: 'Customer', id: string, firstName?: string | null, lastName?: string | null, acceptsMarketing: boolean, email?: string | null } | null };
 
+export type GetOrdersQueryVariables = Exact<{
+  customerAccessToken: Scalars['String'];
+  first?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetOrdersQuery = { __typename?: 'QueryRoot', customer?: { __typename?: 'Customer', orders: { __typename?: 'OrderConnection', pageInfo: { __typename?: 'PageInfo', startCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'OrderEdge', node: { __typename?: 'Order', id: string, orderNumber: number, processedAt: string, fulfillmentStatus: OrderFulfillmentStatus, financialStatus?: OrderFinancialStatus | null, statusUrl: string, totalPrice: { __typename?: 'MoneyV2', amount: string } } }> } } | null };
+
 export type GetArticlesQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
   reverse?: InputMaybe<Scalars['Boolean']>;
@@ -7034,6 +7043,33 @@ export const GetUserDocument = gql`
     lastName
     acceptsMarketing
     email
+  }
+}
+    `;
+export const GetOrdersDocument = gql`
+    query getOrders($customerAccessToken: String!, $first: Int = 10, $after: String) {
+  customer(customerAccessToken: $customerAccessToken) {
+    orders(first: $first, after: $after, sortKey: PROCESSED_AT, reverse: true) {
+      pageInfo {
+        startCursor
+        hasNextPage
+        hasPreviousPage
+        endCursor
+      }
+      edges {
+        node {
+          id
+          orderNumber
+          processedAt
+          totalPrice {
+            amount
+          }
+          fulfillmentStatus
+          financialStatus
+          statusUrl
+        }
+      }
+    }
   }
 }
     `;
@@ -7323,6 +7359,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getUser(variables: GetUserQueryVariables, options?: C): Promise<GetUserQuery> {
       return requester<GetUserQuery, GetUserQueryVariables>(GetUserDocument, variables, options);
+    },
+    getOrders(variables: GetOrdersQueryVariables, options?: C): Promise<GetOrdersQuery> {
+      return requester<GetOrdersQuery, GetOrdersQueryVariables>(GetOrdersDocument, variables, options);
     },
     getArticles(variables?: GetArticlesQueryVariables, options?: C): Promise<GetArticlesQuery> {
       return requester<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, variables, options);

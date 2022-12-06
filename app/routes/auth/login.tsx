@@ -1,6 +1,5 @@
 import type { ActionFunction } from "@remix-run/cloudflare";
-import { redirect } from "@remix-run/cloudflare";
-import { json } from "@remix-run/cloudflare";
+import { json, redirect } from "@remix-run/cloudflare";
 import { useActionData } from "@remix-run/react";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -43,7 +42,7 @@ export const action: ActionFunction = async ({ request }) => {
       "accessToken",
       data.customerAccessTokenCreate.customerAccessToken.accessToken
     );
-    return redirect("/", {
+    return redirect("/account", {
       headers: {
         "Set-Cookie": await storage.commitSession(session),
       },
