@@ -29,7 +29,7 @@ export const FooterSubscribeToNewsletter: React.FC<Props> = ({ user }) => {
           </motion.div>
         )}
         {state === "idle" ? (
-          <fetcher.Form method="post" action="/api/email">
+          <fetcher.Form method="post" action="/api/email?index">
             <motion.fieldset
               key="fieldset"
               initial={{ opacity: 0 }}

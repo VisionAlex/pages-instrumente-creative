@@ -1,5 +1,6 @@
-import { Form } from "@remix-run/react";
-import React from "react";
+import { useFetcher } from "@remix-run/react";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
 import { FaFacebook, FaPinterest, FaTiktok, FaYoutube } from "react-icons/fa";
 import { Button } from "~/components/shared/Button";
 import { InstagramIcon } from "~/components/shared/icons/InstagramIcon";
@@ -11,6 +12,17 @@ import { config, links } from "~/config";
 const size = 28;
 
 const Contact: React.FC = () => {
+  const [emailSent, setEmailSent] = useState(false);
+  const fetcher = useFetcher();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (fetcher.data) {
+      setEmailSent(true);
+      formRef.current?.reset();
+    }
+  }, [fetcher.data]);
+
   return (
     <div>
       <PageHeader className="max-w-screen-2xl" />
@@ -24,7 +36,12 @@ const Contact: React.FC = () => {
             </a>
             sau folosiți formularul de contact.
           </div>
-          <Form method="post" className="max-w-lg">
+          <fetcher.Form
+            ref={formRef}
+            method="post"
+            action="/api/email/send"
+            className="max-w-lg"
+          >
             <Input name="email" required type="email" placeholder="Email*" />
             <Input
               name="lastName"
@@ -50,9 +67,30 @@ const Contact: React.FC = () => {
                 required
                 className="mb-5 block w-full border border-secondaryBackground py-3 px-4 shadow-sm outline-none  focus:border-primary focus:ring-primary"
               />
-              <Button full>Trimite</Button>
+              <Button
+                full
+                disabled={fetcher.state === "loading"}
+                onClick={() => setEmailSent(false)}
+              >
+                {fetcher.state === "idle" ? "Trimite mesajul" : "Se trimite..."}
+              </Button>
             </div>
-          </Form>
+            <div className="mt-5 flex h-6 items-center justify-center text-green-700">
+              <AnimatePresence>
+                {emailSent && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="text-center"
+                  >
+                    Mesajul a fost trimis cu succes! Iți vom răspunde în cel mai
+                    scurt timp.
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </fetcher.Form>
         </div>
         <div>
           <div>
@@ -97,3 +135,14 @@ const Contact: React.FC = () => {
   );
 };
 export default Contact;
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  console.log("contact error", error);
+  return (
+    <div className="mx-auto mt-8 flex w-fit max-w-2xl flex-col items-center justify-center p-4">
+      <h1 className="text-center text-lg text-red-700">Eroare!</h1>
+      <p className="text-subtitle">Ne pare rău. Serverul e zăpăcit.</p>
+      <p className="mt-4">{error.message}</p>
+    </div>
+  );
+}

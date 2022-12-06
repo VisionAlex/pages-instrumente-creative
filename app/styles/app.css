@@ -1116,6 +1116,10 @@ input[type="number"] {
   height: 3.5rem;
 }
 
+.h-16 {
+  height: 4rem;
+}
+
 .max-h-\[550px\] {
   max-height: 550px;
 }
@@ -1190,14 +1194,14 @@ input[type="number"] {
   width: 50%;
 }
 
-.w-\[44px\] {
-  width: 44px;
-}
-
 .w-fit {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
+}
+
+.w-\[44px\] {
+  width: 44px;
 }
 
 .min-w-\[16px\] {
@@ -2003,6 +2007,11 @@ input[type="number"] {
 .text-\[\#bcbcbc\] {
   --tw-text-opacity: 1;
   color: rgb(188 188 188 / var(--tw-text-opacity));
+}
+
+.text-green-700 {
+  --tw-text-opacity: 1;
+  color: rgb(21 128 61 / var(--tw-text-opacity));
 }
 
 .line-through {

@@ -1,3 +1,5 @@
+import { config } from "~/config";
+
 const URL = "https://api.sendgrid.com";
 const SENDGRID_API_KEY =
   "***REMOVED***";
@@ -54,4 +56,49 @@ const addEmail = async (email: string) => {
   };
 };
 
-export default { addEmail };
+type MessageData = {
+  email: string;
+  message: string;
+  firstName?: string;
+  lastName?: string;
+};
+
+const sendEmail = async (messageData: MessageData) => {
+  const body = JSON.stringify({
+    from: {
+      email: config.email,
+      name: "Instrumente Creative",
+    },
+    personalizations: [
+      {
+        to: [
+          {
+            email: config.email,
+          },
+        ],
+      },
+    ],
+    subject: "Mesaj nou de pe site",
+    content: [
+      {
+        type: "text/plain",
+        value: `Nume: ${messageData.firstName} ${messageData.lastName}
+                Email: ${messageData.email}
+                Mesaj: ${messageData.message}`,
+      },
+    ],
+  });
+
+  const response = await fetch(`${URL}/v3/mail/send`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${SENDGRID_API_KEY}`,
+    },
+    body,
+  });
+
+  return response;
+};
+
+export default { addEmail, sendEmail };

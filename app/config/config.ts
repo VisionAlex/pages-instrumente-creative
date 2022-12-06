@@ -64,5 +64,5 @@ export const config: Config = {
       type: "other",
     },
   },
-  email: "support@instrumente-creative.com",
+  email: "contact@instrumente-creative.ro",
 };
