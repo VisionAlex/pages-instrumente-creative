@@ -2,6 +2,7 @@
 
 <img src="https://imagedelivery.net/_Qvu0ID0pPyVjDxZnl16ng/e1e83cec-f941-4f10-6eaa-192b7e88c700/small"/>
 
+You can preview the web app at: https://instrumente-creative.pages.dev
 ## Development
 
 In order to run the development you need to have the required env variables in a file .dev.vars.
