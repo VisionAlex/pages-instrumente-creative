@@ -1,13 +1,20 @@
-# Welcome to Remix!
+# Welcome to Instrumente Creative Frontend Repo!
 
-- [Remix Docs](https://remix.run/docs)
+<img src="https://imagedelivery.net/_Qvu0ID0pPyVjDxZnl16ng/e1e83cec-f941-4f10-6eaa-192b7e88c700/small"/>
 
 ## Development
 
-You will be utilizing Wrangler for local development to emulate the Cloudflare runtime. This is already wired up in your package.json as the `dev` script:
+In order to run the development you need to have the required env variables in a file .dev.vars.
+
+Before starting the project you need to generate the sdk and types from the graphql schema
 
 ```sh
-# start the remix dev server and wrangler
+# Generate sdk and types
+npm run codegen
+```
+Then you can run the development server.
+
+```sh
 npm run dev
 ```
 
@@ -15,8 +22,5 @@ Open up [http://127.0.0.1:8788](http://127.0.0.1:8788) and you should be ready t
 
 ## Deployment
 
-Cloudflare Pages are currently only deployable through their Git provider integrations.
-
-If you don't already have an account, then [create a Cloudflare account here](https://dash.cloudflare.com/sign-up/pages) and after verifying your email address with Cloudflare, go to your dashboard and follow the [Cloudflare Pages deployment guide](https://developers.cloudflare.com/pages/framework-guides/deploy-anything).
-
-Configure the "Build command" should be set to `npm run build`, and the "Build output directory" should be set to `public`.
+Pushing to main branch would trigger a deploy to cloudflare pages.
+Pushing to develop would trigger a deploy to a preview page.
