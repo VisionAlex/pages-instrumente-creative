@@ -2,10 +2,13 @@ import type { DocumentNode } from "graphql";
 import { print } from "graphql";
 import { getSdk } from "~/generated/admin/graphql";
 
-const API_URL =
-  "***REMOVED***";
-const SHOPIFY_ACCESS_TOKEN = "***REMOVED***";
+let API_URL = "";
+let SHOPIFY_ACCESS_TOKEN = "";
 
+export const setAdminEnvs = (url: string, token: string) => {
+  API_URL = url;
+  SHOPIFY_ACCESS_TOKEN = token;
+};
 export interface GraphqlResponse<Response> {
   errors: any[];
   data: Response;

@@ -1,8 +1,11 @@
 import { config } from "~/config";
 
 const URL = "https://api.sendgrid.com";
-const SENDGRID_API_KEY =
-  "***REMOVED***";
+let SENDGRID_API_KEY = "";
+
+export const setSendGridApiKey = (apiKey: string) => {
+  SENDGRID_API_KEY = apiKey;
+};
 
 type Error_400 = {
   message: string;

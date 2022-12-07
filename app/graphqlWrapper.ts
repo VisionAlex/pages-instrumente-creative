@@ -2,9 +2,14 @@ import type { DocumentNode } from "graphql";
 import { print } from "graphql";
 import { getSdk } from "~/generated/graphql";
 
-const API_URL =
-  "***REMOVED***";
-const SHOPIFY_ACCESS_TOKEN = "***REMOVED***";
+// Necessary to get env variables from loader context in root
+let API_URL = "";
+let SHOPIFY_ACCESS_TOKEN = "";
+
+export const setEnvs = (token: string, apiURL: string) => {
+  SHOPIFY_ACCESS_TOKEN = token;
+  API_URL = apiURL;
+};
 
 export interface GraphqlResponse<Response> {
   errors: any[];
@@ -14,7 +19,6 @@ export interface GraphqlResponse<Response> {
 export interface QueryOptions {
   request: Request;
 }
-
 async function sendQuery<Response, Variables = {}>(options: {
   query: string;
   variables?: Variables;

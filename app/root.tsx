@@ -22,10 +22,12 @@ import { getCartSize } from "./components/ShoppingCart/utils";
 import { Toolbar } from "./components/Toolbar";
 import { Wishlist } from "./components/Wishlist";
 import type { GetUserQuery } from "./generated/graphql";
+import { setEnvs } from "./graphqlWrapper";
 import type { Cart } from "./providers/cart/cart";
 import { getCart } from "./providers/cart/cart";
 import { getUser } from "./providers/customers/customers";
 import { getProducts, getWishlist } from "./providers/products/products";
+import { setSendGridApiKey } from "./providers/sendgrid";
 import styles from "./styles/app.css";
 import type { Product } from "./types";
 
@@ -62,7 +64,18 @@ type LoaderData = {
   products: Product[];
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction = async ({ request, context }) => {
+  if (
+    typeof context.SHOPIFY_STOREFRONT_TOKEN === "string" &&
+    typeof context.SHOPIFY_STOREFRONT_URL === "string"
+  ) {
+    setEnvs(context.SHOPIFY_STOREFRONT_TOKEN, context.SHOPIFY_STOREFRONT_URL);
+  }
+
+  if (typeof context.SENDGRID_API_KEY === "string") {
+    setSendGridApiKey(context.SENDGRID_API_KEY);
+  }
+
   const user = await getUser(request);
   const productsQuery = await getProducts(20);
   const products = productsQuery.products.edges.map((edge) => edge.node);

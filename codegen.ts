@@ -1,7 +1,10 @@
-import dotenv from "dotenv";
 import type { CodegenConfig } from "@graphql-codegen/cli";
+import dotenv from "dotenv";
+import path from "path";
 
-dotenv.config();
+dotenv.config({
+  path: path.resolve(process.cwd(), ".dev.vars"),
+});
 
 if (!process.env.SHOPIFY_STOREFRONT_URL)
   throw new Error("SHOPIFY_STOREFRONT_URL is not set");
