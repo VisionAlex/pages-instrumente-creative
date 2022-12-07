@@ -3,4 +3,4 @@ node_modules
 /.cache
 functions
 /public/build
-.env
+.dev.vars
