@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
+import type { ProductSortKeys } from "~/generated/graphql";
 import type { QueryOptions } from "~/graphqlWrapper";
 import { sdk } from "~/graphqlWrapper";
-import type { ProductSortKeys } from "~/generated/graphql";
 import { storage } from "~/session.server";
 
 export function getProducts(

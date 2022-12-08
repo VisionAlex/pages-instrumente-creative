@@ -96,6 +96,11 @@ export const ProductModal: React.FC<Props> = ({
                 />
                 <ProductAddToWishList product={product} wishlist={wishlist} />
               </div>
+              <div className="mt-5">
+                <p className="text-subtitle">
+                  {product.description.split(".")[0]}
+                </p>
+              </div>
             </Dialog.Panel>
           </Transition.Child>
         </div>
