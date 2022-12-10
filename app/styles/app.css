@@ -1084,6 +1084,14 @@ input[type="number"] {
   height: 2.5rem;
 }
 
+.h-\[248px\] {
+  height: 248px;
+}
+
+.h-\[264px\] {
+  height: 264px;
+}
+
 .h-\[5px\] {
   height: 5px;
 }
@@ -1116,20 +1124,12 @@ input[type="number"] {
   height: 44px;
 }
 
-.h-14 {
-  height: 3.5rem;
-}
-
 .h-\[196px\] {
   height: 196px;
 }
 
-.h-\[248px\] {
-  height: 248px;
-}
-
-.h-\[264px\] {
-  height: 264px;
+.h-14 {
+  height: 3.5rem;
 }
 
 .max-h-\[550px\] {
@@ -1344,6 +1344,10 @@ input[type="number"] {
           user-select: none;
 }
 
+.scroll-m-0 {
+  scroll-margin: 0px;
+}
+
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -1479,6 +1483,18 @@ input[type="number"] {
 
 .overflow-x-hidden {
   overflow-x: hidden;
+}
+
+.overflow-x-visible {
+  overflow-x: visible;
+}
+
+.overflow-x-scroll {
+  overflow-x: scroll;
+}
+
+.overflow-y-scroll {
+  overflow-y: scroll;
 }
 
 .truncate {
@@ -1622,11 +1638,6 @@ input[type="number"] {
 .bg-gray-50 {
   --tw-bg-opacity: 1;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
-}
-
-.bg-green-100 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(220 252 231 / var(--tw-bg-opacity));
 }
 
 .bg-tag {

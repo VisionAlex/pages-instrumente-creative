@@ -146,7 +146,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="text-primary">
+      <body className=" text-primary">
         <ShoppingCart
           cart={cart}
           products={products}

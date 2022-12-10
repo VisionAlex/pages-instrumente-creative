@@ -7,6 +7,7 @@ import {
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";
+import { motion } from "framer-motion";
 import React from "react";
 import type { GetBlogArticleQuery } from "~/generated/graphql";
 import { getBlogArticle } from "~/providers/pages/articles";
@@ -51,14 +52,19 @@ export function CatchBoundary() {
   }
   throw new Error(`Unhandled error", ${caught.status}`);
 }
-
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
-    <div className="mx-auto mt-8 flex w-fit max-w-2xl flex-col items-center justify-center p-4">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="mx-auto mt-8 flex w-fit max-w-2xl flex-col items-center justify-center p-4"
+    >
       <h1 className="text-center text-lg text-red-700">Eroare!</h1>
       <p className="text-subtitle">Ne pare rău. Serverul e zăpăcit.</p>
       <p className="mt-4">{error.message}</p>
-    </div>
+    </motion.div>
   );
 }
 
