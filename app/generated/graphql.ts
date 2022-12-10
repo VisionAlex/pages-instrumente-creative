@@ -6845,6 +6845,13 @@ export type GetUserQueryVariables = Exact<{
 
 export type GetUserQuery = { __typename?: 'QueryRoot', customer?: { __typename?: 'Customer', id: string, firstName?: string | null, lastName?: string | null, acceptsMarketing: boolean, email?: string | null } | null };
 
+export type CustomerRecoverMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type CustomerRecoverMutation = { __typename?: 'Mutation', customerRecover?: { __typename?: 'CustomerRecoverPayload', customerUserErrors: Array<{ __typename?: 'CustomerUserError', code?: CustomerErrorCode | null, field?: Array<string> | null, message: string }> } | null };
+
 export type GetOrdersQueryVariables = Exact<{
   customerAccessToken: Scalars['String'];
   first?: InputMaybe<Scalars['Int']>;
@@ -7043,6 +7050,17 @@ export const GetUserDocument = gql`
     lastName
     acceptsMarketing
     email
+  }
+}
+    `;
+export const CustomerRecoverDocument = gql`
+    mutation customerRecover($email: String!) {
+  customerRecover(email: $email) {
+    customerUserErrors {
+      code
+      field
+      message
+    }
   }
 }
     `;
@@ -7359,6 +7377,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getUser(variables: GetUserQueryVariables, options?: C): Promise<GetUserQuery> {
       return requester<GetUserQuery, GetUserQueryVariables>(GetUserDocument, variables, options);
+    },
+    customerRecover(variables: CustomerRecoverMutationVariables, options?: C): Promise<CustomerRecoverMutation> {
+      return requester<CustomerRecoverMutation, CustomerRecoverMutationVariables>(CustomerRecoverDocument, variables, options);
     },
     getOrders(variables: GetOrdersQueryVariables, options?: C): Promise<GetOrdersQuery> {
       return requester<GetOrdersQuery, GetOrdersQueryVariables>(GetOrdersDocument, variables, options);

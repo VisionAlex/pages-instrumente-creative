@@ -22,7 +22,7 @@ export const FooterSubscribeToNewsletter: React.FC<Props> = ({ user }) => {
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.3 }}
             key="success"
-            className="mx-5 flex h-8 max-w-md items-center justify-center bg-[#d3eadd] text-[#437257] sm:mx-auto"
+            className="mx-5 flex h-8 max-w-md items-center justify-center bg-[#d3eadd] p-4 text-[#437257] sm:mx-auto"
           >
             <CheckCircleIcon className="mr-2 h-4 w-4" /> Te-ai abonat cu
             success! Mulțumim!

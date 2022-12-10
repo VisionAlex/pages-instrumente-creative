@@ -1,9 +1,9 @@
 import gql from "graphql-tag";
-import { sdk } from "~/graphqlWrapper";
 import type {
-  CustomerCreateInput,
   CustomerAccessTokenCreateInput,
+  CustomerCreateInput,
 } from "~/generated/graphql";
+import { sdk } from "~/graphqlWrapper";
 import { storage } from "~/session.server";
 
 export const register = ({
@@ -29,6 +29,10 @@ export const getUser = async (request: Request) => {
   if (!accessToken || typeof accessToken !== "string") return null;
   const user = await sdk.getUser({ accessToken });
   return user;
+};
+
+export const customerRecover = (email: string) => {
+  return sdk.customerRecover({ email });
 };
 
 gql`
@@ -73,6 +77,18 @@ gql`
       lastName
       acceptsMarketing
       email
+    }
+  }
+`;
+
+gql`
+  mutation customerRecover($email: String!) {
+    customerRecover(email: $email) {
+      customerUserErrors {
+        code
+        field
+        message
+      }
     }
   }
 `;

@@ -1000,10 +1000,6 @@ input[type="number"] {
   margin-bottom: 2rem;
 }
 
-.mt-auto {
-  margin-top: auto;
-}
-
 .block {
   display: block;
 }
@@ -1122,6 +1118,18 @@ input[type="number"] {
 
 .h-14 {
   height: 3.5rem;
+}
+
+.h-\[196px\] {
+  height: 196px;
+}
+
+.h-\[248px\] {
+  height: 248px;
+}
+
+.h-\[264px\] {
+  height: 264px;
 }
 
 .max-h-\[550px\] {
@@ -1614,6 +1622,11 @@ input[type="number"] {
 .bg-gray-50 {
   --tw-bg-opacity: 1;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
+}
+
+.bg-green-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 252 231 / var(--tw-bg-opacity));
 }
 
 .bg-tag {
