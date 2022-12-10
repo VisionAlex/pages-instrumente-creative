@@ -6,11 +6,11 @@ import { BsSearch } from "react-icons/bs";
 import { AddToCart } from "~/components/AddToCart";
 import { AddToWishlist } from "~/components/AddToWishlist";
 import { ProductModal } from "~/components/ProductModal";
+import { useProductModal } from "~/components/ProductModal/useProductModal";
 import { PageHeader } from "~/components/shared/PageHeader";
 import { Price } from "~/components/shared/Price";
 import { SaleTag } from "~/components/shared/SaleTag";
 import { config } from "~/config";
-import { useProductModal } from "~/components/ProductModal/useProductModal";
 import { getWishlist } from "~/providers/products/products";
 import type { RootContext } from "~/types";
 
@@ -84,7 +84,7 @@ const AllProducts: React.FC = () => {
                     />
                   ) : null}
                 </Link>
-                <div className=" z-10 border-t border-secondaryBackground py-8 px-8 text-subtitle xs:my-8 xs:border-t-0 xs:border-l xs:py-0">
+                <div className="z-10 flex flex-col border-t border-secondaryBackground py-8 px-8 text-subtitle xs:my-8 xs:border-t-0 xs:border-l xs:py-0">
                   <Link
                     className="hover:text-primary"
                     to={`${config.pages.produse.path}/${product.handle}`}
@@ -98,6 +98,7 @@ const AllProducts: React.FC = () => {
                     }
                     isGiftCard={product.productType === "Gift Cards"}
                   />
+                  <div className="grow" />
                   <div className="mt-5 flex items-center gap-1.5 text-primary">
                     <AddToCart product={product} openModal={openModal} />
                     <button

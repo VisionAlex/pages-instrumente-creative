@@ -1000,6 +1000,10 @@ input[type="number"] {
   margin-bottom: 2rem;
 }
 
+.mt-auto {
+  margin-top: auto;
+}
+
 .block {
   display: block;
 }
