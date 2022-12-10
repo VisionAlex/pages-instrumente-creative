@@ -2,6 +2,7 @@ import type { LoaderFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useLoaderData, useOutletContext } from "@remix-run/react";
 import React from "react";
+import { FadeIn } from "~/components/shared/FadeIn";
 import { NewsletterWidget } from "~/components/shared/widgets/NewsletterWidget";
 import { RecentArticlesWidget } from "~/components/shared/widgets/RecentArticlesWidget";
 import { SocialLinksWidget } from "~/components/shared/widgets/SocialLinksWidget";
@@ -33,12 +34,12 @@ const Index: React.FC = () => {
     .slice(0, 3);
 
   return (
-    <div>
+    <FadeIn>
       <SocialLinksWidget className="mb-8" />
       <RecentArticlesWidget articles={articles} className="mb-8" />
       <NewsletterWidget className="mb-8" user={user} />
       <TagsWidget tags={tags} className="mb-8" />
-    </div>
+    </FadeIn>
   );
 };
 

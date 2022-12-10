@@ -912,6 +912,10 @@ input[type="number"] {
   margin-bottom: 13px;
 }
 
+.mt-10 {
+  margin-top: 2.5rem;
+}
+
 .mb-7 {
   margin-bottom: 1.75rem;
 }
@@ -942,10 +946,6 @@ input[type="number"] {
 
 .mt-12 {
   margin-top: 3rem;
-}
-
-.mt-10 {
-  margin-top: 2.5rem;
 }
 
 .mt-5 {
@@ -998,6 +998,10 @@ input[type="number"] {
 
 .mb-8 {
   margin-bottom: 2rem;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
 }
 
 .block {
@@ -1354,6 +1358,10 @@ input[type="number"] {
 
 .grid-cols-7 {
   grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .flex-col {
@@ -2219,10 +2227,6 @@ input[type="number"] {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.ease-in {
-  transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
-}
-
 .description ul {
   list-style: disc;
 }
@@ -2582,6 +2586,10 @@ input[type="number"] {
 
   .sm\:max-w-none {
     max-width: none;
+  }
+
+  .sm\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .sm\:px-5 {

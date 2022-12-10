@@ -2,6 +2,7 @@ import type { LoaderFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import React from "react";
+import { FadeIn } from "~/components/shared/FadeIn";
 import type { GetOrdersQuery } from "~/generated/graphql";
 import { getCustomerOrders } from "~/providers/customers/orders";
 import { formatDate } from "~/shared/utils/formatDate";
@@ -38,24 +39,9 @@ type OrdersTableProps = {
   orders: Orders;
 };
 
-const people = [
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    email: "lindsay.walton@example.com",
-    role: "Member",
-  },
-  // More people...
-];
 const OrdersTable: React.FC<OrdersTableProps> = ({ orders }) => {
   return (
-    <div className="mt-8 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:-mx-6 md:mx-0 md:rounded-lg">
+    <FadeIn className="mt-8 overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:-mx-6 md:mx-0 md:rounded-lg">
       <table className="min-w-full divide-y divide-gray-300">
         <thead className="bg-gray-50">
           <tr>
@@ -121,6 +107,6 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders }) => {
           ))}
         </tbody>
       </table>
-    </div>
+    </FadeIn>
   );
 };

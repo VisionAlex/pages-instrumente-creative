@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 import { sdk } from "~/graphqlWrapper";
 
-export const getArticles = (first: number) => {
-  return sdk.getArticles({ first });
+export const getArticles = (first: number, query?: string) => {
+  return sdk.getArticles({ first, query });
 };
 
 export const getBlogArticle = (
@@ -18,8 +18,14 @@ gql`
     $first: Int
     $reverse: Boolean = true
     $sortKey: ArticleSortKeys = PUBLISHED_AT
+    $query: String
   ) {
-    articles(first: $first, reverse: $reverse, sortKey: $sortKey) {
+    articles(
+      first: $first
+      reverse: $reverse
+      sortKey: $sortKey
+      query: $query
+    ) {
       edges {
         node {
           id

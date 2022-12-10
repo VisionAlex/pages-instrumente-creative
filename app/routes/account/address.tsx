@@ -2,6 +2,7 @@ import type { LoaderFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import { Button } from "~/components/shared/Button";
+import { FadeIn } from "~/components/shared/FadeIn";
 import type { GetAddressesQuery } from "~/generated/graphql";
 import { getAddresses } from "~/providers/customers/address";
 
@@ -15,7 +16,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 const Address: React.FC = () => {
   const data = useLoaderData<LoaderData>();
   return (
-    <div className="mt-4">
+    <FadeIn className="mt-4">
       <div className="border border-line">
         <h2 className="border-b border-line px-5 py-5 text-xl">
           Adresă favorită
@@ -57,7 +58,7 @@ const Address: React.FC = () => {
           </div>
         );
       })}
-    </div>
+    </FadeIn>
   );
 };
 

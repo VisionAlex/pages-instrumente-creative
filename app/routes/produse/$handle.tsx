@@ -1,11 +1,12 @@
-import type { LoaderArgs, LoaderFunction } from "@remix-run/cloudflare";
+import type { LoaderFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
-import { sdk } from "~/graphqlWrapper";
 import { useState } from "react";
 import { ImageGallery } from "~/components/ImageGallery";
 import { Breadcrumb } from "~/components/shared/Breadcrumb/Breadcrumb";
+import { FadeIn } from "~/components/shared/FadeIn";
 import { Price } from "~/components/shared/Price";
+import { sdk } from "~/graphqlWrapper";
 import { Availability } from "~/pages/product/Availability";
 import { BuyNow } from "~/pages/product/BuyNow";
 import { GiftPrice } from "~/pages/product/GiftPrice";
@@ -14,10 +15,10 @@ import { ProductAddToWishList } from "~/pages/product/ProductAddToWishList";
 import { ProductDescription } from "~/pages/product/ProductDescription";
 import { Quantity } from "~/pages/product/Quantity";
 import { Variants } from "~/pages/product/Variants";
+import { getWishlist } from "~/providers/products/products";
 import { useSSRLayoutEffect } from "~/shared/hooks/useSSRLayoutEffect";
 import { preloadImage } from "~/shared/utils/preloadImage";
 import type { DetailedProduct } from "~/types";
-import { getWishlist } from "~/providers/products/products";
 
 type ProductLoaderData = {
   product: DetailedProduct;
@@ -64,7 +65,7 @@ const SingleProduct: React.FC = () => {
   if (!product) return <div>Produsul nu a fost gasit.</div>;
 
   return (
-    <div className="mx-auto px-5 lg:max-w-7xl lg:px-8">
+    <FadeIn className="mx-auto px-5 lg:max-w-7xl lg:px-8">
       <div className="mt-8 lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-8">
         <div className="relative rounded-md lg:col-span-4">
           <ImageGallery images={images} />
@@ -117,7 +118,7 @@ const SingleProduct: React.FC = () => {
         </div>
       </div>
       <ProductDescription product={product} />
-    </div>
+    </FadeIn>
   );
 };
 

@@ -132,7 +132,6 @@ export function ErrorBoundary({ error }: { error: Error }) {
     </html>
   );
 }
-
 export default function App() {
   const { user, wishlist, products, cart } = useLoaderData<LoaderData>();
 

@@ -10,8 +10,8 @@ import {
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";
-import { motion } from "framer-motion";
 import React from "react";
+import { FadeIn } from "~/components/shared/FadeIn";
 import { Link as CustomLink } from "~/components/shared/Link";
 import { PageHeader } from "~/components/shared/PageHeader";
 import { NewsletterWidget } from "~/components/shared/widgets/NewsletterWidget";
@@ -114,12 +114,7 @@ const BlogIndex: React.FC = () => {
   const { user } = useOutletContext<RootContext>();
   const articles = data.articles ? data.articles : data.blog.articles.edges;
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-    >
+    <FadeIn>
       <PageHeader customTitle={data.blog.title} />
       <div className="page mx-auto  px-5 lg:px-8 xl:px-20">
         <div className="grid grid-cols-7 gap-x-8 gap-y-8">
@@ -180,7 +175,7 @@ const BlogIndex: React.FC = () => {
           </aside>
         </div>
       </div>
-    </motion.div>
+    </FadeIn>
   );
 };
 

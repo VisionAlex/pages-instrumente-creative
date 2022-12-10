@@ -6865,6 +6865,7 @@ export type GetArticlesQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
   reverse?: InputMaybe<Scalars['Boolean']>;
   sortKey?: InputMaybe<ArticleSortKeys>;
+  query?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -7092,8 +7093,8 @@ export const GetOrdersDocument = gql`
 }
     `;
 export const GetArticlesDocument = gql`
-    query getArticles($first: Int, $reverse: Boolean = true, $sortKey: ArticleSortKeys = PUBLISHED_AT) {
-  articles(first: $first, reverse: $reverse, sortKey: $sortKey) {
+    query getArticles($first: Int, $reverse: Boolean = true, $sortKey: ArticleSortKeys = PUBLISHED_AT, $query: String) {
+  articles(first: $first, reverse: $reverse, sortKey: $sortKey, query: $query) {
     edges {
       node {
         id

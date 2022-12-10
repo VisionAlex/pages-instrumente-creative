@@ -1,8 +1,10 @@
+import type { HeadersFunction } from "@remix-run/cloudflare";
 import { useFetcher } from "@remix-run/react";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
 import { FaFacebook, FaPinterest, FaTiktok, FaYoutube } from "react-icons/fa";
 import { Button } from "~/components/shared/Button";
+import { FadeIn } from "~/components/shared/FadeIn";
 import { InstagramIcon } from "~/components/shared/icons/InstagramIcon";
 import { Input } from "~/components/shared/Input";
 import { PageHeader } from "~/components/shared/PageHeader";
@@ -10,6 +12,12 @@ import { SocialLink } from "~/components/shared/SocialLinks/SocialLinks";
 import { config, links } from "~/config";
 
 const size = 28;
+
+export const headers: HeadersFunction = () => {
+  return {
+    "Cache-Control": "public, max-age=86400",
+  };
+};
 
 const Contact: React.FC = () => {
   const [emailSent, setEmailSent] = useState(false);
@@ -24,7 +32,7 @@ const Contact: React.FC = () => {
   }, [fetcher.data]);
 
   return (
-    <div>
+    <FadeIn>
       <PageHeader className="max-w-screen-2xl" />
       <div className="mx-auto grid max-w-screen-2xl grid-cols-1 gap-8 px-5 md:grid-cols-2 lg:px-8 xl:px-20">
         <div>
@@ -131,7 +139,7 @@ const Contact: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </FadeIn>
   );
 };
 export default Contact;

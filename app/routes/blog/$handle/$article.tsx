@@ -7,8 +7,8 @@ import {
   useLoaderData,
   useOutletContext,
 } from "@remix-run/react";
-import { motion } from "framer-motion";
 import React from "react";
+import { FadeIn } from "~/components/shared/FadeIn";
 import type { GetBlogArticleQuery } from "~/generated/graphql";
 import { getBlogArticle } from "~/providers/pages/articles";
 import { classNames } from "~/shared/utils/classNames";
@@ -54,17 +54,11 @@ export function CatchBoundary() {
 }
 export function ErrorBoundary({ error }: { error: Error }) {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className="mx-auto mt-8 flex w-fit max-w-2xl flex-col items-center justify-center p-4"
-    >
+    <FadeIn className="mx-auto mt-8 flex w-fit max-w-2xl flex-col items-center justify-center p-4">
       <h1 className="text-center text-lg text-red-700">Eroare!</h1>
       <p className="text-subtitle">Ne pare rău. Serverul e zăpăcit.</p>
       <p className="mt-4">{error.message}</p>
-    </motion.div>
+    </FadeIn>
   );
 }
 
@@ -73,7 +67,7 @@ const Article: React.FC = () => {
   const { user } = useOutletContext<RootContext>();
 
   return (
-    <div className="page mx-auto  px-5 lg:px-8 xl:px-20">
+    <FadeIn className="page mx-auto  px-5 lg:px-8 xl:px-20">
       <div className="mt-8 grid grid-cols-7 gap-x-8">
         <section className="col-span-7 lg:col-span-5">
           <p className="mb-4 flex items-center gap-2">
@@ -104,7 +98,7 @@ const Article: React.FC = () => {
           <Outlet context={{ tags: article.tags, id: article.id, user }} />
         </aside>
       </div>
-    </div>
+    </FadeIn>
   );
 };
 export default Article;

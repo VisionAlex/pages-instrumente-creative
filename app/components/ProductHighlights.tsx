@@ -24,7 +24,7 @@ export const ProductsHighlights: React.FC<Props> = ({ products, wishlist }) => {
         wishlist={wishlist}
         onClose={closeModal}
       />
-      <div className="mx-auto max-w-3xl py-4 px-5">
+      <div className="mx-auto mt-10 max-w-3xl py-4 px-5">
         <h3 className="mb-7 text-center text-3xl leading-tight text-primary">
           Dezvoltă competențele copilului tău
         </h3>

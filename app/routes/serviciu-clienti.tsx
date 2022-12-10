@@ -1,8 +1,8 @@
 import type { HeadersFunction, MetaFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
-import { motion } from "framer-motion";
 import React from "react";
+import { FadeIn } from "~/components/shared/FadeIn";
 import { PageHeader } from "~/components/shared/PageHeader";
 import { PAGE_HANDLE } from "~/config";
 import type { GetPageQuery } from "~/generated/graphql";
@@ -46,18 +46,13 @@ export const meta: MetaFunction = ({ data }) => {
 const CustomerService: React.FC = () => {
   const { page } = useLoaderData<LoaderData>();
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-    >
+    <FadeIn>
       <PageHeader />
       <div
         className="page mx-auto max-w-7xl px-5 lg:px-8 xl:px-20"
         dangerouslySetInnerHTML={{ __html: page.body }}
       />
-    </motion.div>
+    </FadeIn>
   );
 };
 

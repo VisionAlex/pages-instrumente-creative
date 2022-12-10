@@ -1,12 +1,12 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { Link, useLoaderData, useOutletContext } from "@remix-run/react";
-import { motion } from "framer-motion";
 import { BsSearch } from "react-icons/bs";
 import { AddToCart } from "~/components/AddToCart";
 import { AddToWishlist } from "~/components/AddToWishlist";
 import { ProductModal } from "~/components/ProductModal";
 import { useProductModal } from "~/components/ProductModal/useProductModal";
+import { FadeIn } from "~/components/shared/FadeIn";
 import { PageHeader } from "~/components/shared/PageHeader";
 import { Price } from "~/components/shared/Price";
 import { SaleTag } from "~/components/shared/SaleTag";
@@ -36,11 +36,7 @@ const AllProducts: React.FC = () => {
 
   if (!products) return null;
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-    >
+    <FadeIn>
       <PageHeader className="max-w-screen-2xl" />
       <ProductModal
         open={isOpen}
@@ -118,7 +114,7 @@ const AllProducts: React.FC = () => {
           })}
         </div>
       </div>
-    </motion.div>
+    </FadeIn>
   );
 };
 
