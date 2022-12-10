@@ -952,6 +952,14 @@ input[type="number"] {
   margin-top: 1.25rem;
 }
 
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
+}
+
 .mt-6 {
   margin-top: 1.5rem;
 }
@@ -966,10 +974,6 @@ input[type="number"] {
 
 .mr-\[11px\] {
   margin-right: 11px;
-}
-
-.mb-5 {
-  margin-bottom: 1.25rem;
 }
 
 .mt-2 {
@@ -998,10 +1002,6 @@ input[type="number"] {
 
 .mb-8 {
   margin-bottom: 2rem;
-}
-
-.mt-3 {
-  margin-top: 0.75rem;
 }
 
 .block {
@@ -1358,10 +1358,6 @@ input[type="number"] {
 
 .grid-cols-7 {
   grid-template-columns: repeat(7, minmax(0, 1fr));
-}
-
-.grid-cols-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .flex-col {

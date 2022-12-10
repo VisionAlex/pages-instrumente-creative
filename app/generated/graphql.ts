@@ -6885,7 +6885,7 @@ export type GetBlogQueryVariables = Exact<{
 }>;
 
 
-export type GetBlogQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', title: string, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, publishedAt: string, tags: Array<string>, title: string, excerptHtml?: string | null, thumbnail?: { __typename?: 'Image', url: string } | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: string } | null } }> } } | null };
+export type GetBlogQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', title: string, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, publishedAt: string, tags: Array<string>, title: string, excerptHtml?: string | null, thumbnail?: { __typename?: 'Image', url: string } | null, blog: { __typename?: 'Blog', handle: string }, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: string } | null } }> } } | null };
 
 export type GetRecentArticlesQueryVariables = Exact<{
   handle?: InputMaybe<Scalars['String']>;
@@ -6893,7 +6893,7 @@ export type GetRecentArticlesQueryVariables = Exact<{
 }>;
 
 
-export type GetRecentArticlesQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, publishedAt: string, title: string, thumbnail?: { __typename?: 'Image', url: string, width?: number | null, height?: number | null, altText?: string | null } | null } }> } } | null };
+export type GetRecentArticlesQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, publishedAt: string, title: string, thumbnail?: { __typename?: 'Image', url: string, width?: number | null, height?: number | null, altText?: string | null } | null, blog: { __typename?: 'Blog', handle: string } } }> } } | null };
 
 export type GetPageQueryVariables = Exact<{
   handle?: InputMaybe<Scalars['String']>;
@@ -7166,6 +7166,9 @@ export const GetBlogDocument = gql`
           thumbnail: image {
             url(transform: {maxWidth: 210})
           }
+          blog {
+            handle
+          }
           image {
             altText
             height
@@ -7195,6 +7198,9 @@ export const GetRecentArticlesDocument = gql`
             width
             height
             altText
+          }
+          blog {
+            handle
           }
         }
       }

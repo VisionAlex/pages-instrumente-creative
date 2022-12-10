@@ -32,7 +32,11 @@ export const RecentArticlesWidget: React.FC<Props> = ({
                 alt={article.thumbnail?.altText ?? ""}
               />
               <div>
-                <Link to={article.handle} prefetch="intent" className="text-lg">
+                <Link
+                  to={`/blog/${article.blog.handle}/${article.handle}`}
+                  prefetch="intent"
+                  className="text-lg"
+                >
                   {article.title}
                 </Link>
 

@@ -28,6 +28,9 @@ gql`
             thumbnail: image {
               url(transform: { maxWidth: 210 })
             }
+            blog {
+              handle
+            }
             image {
               altText
               height
@@ -58,6 +61,9 @@ gql`
               width
               height
               altText
+            }
+            blog {
+              handle
             }
           }
         }
