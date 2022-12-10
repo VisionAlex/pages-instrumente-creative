@@ -1344,10 +1344,6 @@ input[type="number"] {
           user-select: none;
 }
 
-.scroll-m-0 {
-  scroll-margin: 0px;
-}
-
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -1483,18 +1479,6 @@ input[type="number"] {
 
 .overflow-x-hidden {
   overflow-x: hidden;
-}
-
-.overflow-x-visible {
-  overflow-x: visible;
-}
-
-.overflow-x-scroll {
-  overflow-x: scroll;
-}
-
-.overflow-y-scroll {
-  overflow-y: scroll;
 }
 
 .truncate {
