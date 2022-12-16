@@ -113,6 +113,7 @@ export function CatchBoundary() {
 }
 
 export function ErrorBoundary({ error }: { error: Error }) {
+  console.log(error);
   return (
     <html lang="ro">
       <head>
@@ -126,7 +127,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
           <h1 className="mb-4 text-center text-xl text-red-700">
             Eroare de aplicatie!
           </h1>
-          <pre>{error.message}</pre>
+          <pre>{error}</pre>
         </div>
       </body>
     </html>
