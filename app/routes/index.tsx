@@ -28,6 +28,8 @@ const Index: React.FC = () => {
   const { wishlist, resources } = useLoaderData<LoaderData>();
 
   const { products } = useOutletContext<{ products: Product[] }>();
+
+  if (!products) return null;
   return (
     <FadeIn>
       <Hero />
