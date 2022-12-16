@@ -1,4 +1,6 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
+import { json } from "@remix-run/cloudflare";
+import type { ShouldReloadFunction } from "@remix-run/react";
 import {
   Links,
   LiveReload,
@@ -65,29 +67,36 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request, context }) => {
-  if (
-    typeof context.SHOPIFY_STOREFRONT_TOKEN === "string" &&
-    typeof context.SHOPIFY_STOREFRONT_URL === "string"
-  ) {
-    setEnvs(context.SHOPIFY_STOREFRONT_TOKEN, context.SHOPIFY_STOREFRONT_URL);
-  }
+  try {
+    if (
+      typeof context.SHOPIFY_STOREFRONT_TOKEN === "string" &&
+      typeof context.SHOPIFY_STOREFRONT_URL === "string"
+    ) {
+      setEnvs(context.SHOPIFY_STOREFRONT_TOKEN, context.SHOPIFY_STOREFRONT_URL);
+    }
 
-  if (typeof context.SENDGRID_API_KEY === "string") {
-    setSendGridApiKey(context.SENDGRID_API_KEY);
+    if (typeof context.SENDGRID_API_KEY === "string") {
+      setSendGridApiKey(context.SENDGRID_API_KEY);
+    }
+  } catch (error) {
+    throw new Error("setting Env error: " + (error as Error).message);
   }
-
-  const user = await getUser(request);
-  const productsQuery = await getProducts(20);
-  const products = productsQuery.products.edges.map((edge) => edge.node);
-  const wishlist = await getWishlist(request);
-  const cart = await getCart(request);
-  const loaderData: LoaderData = {
-    user,
-    cart,
-    wishlist: wishlist,
-    products: products,
-  };
-  return loaderData;
+  try {
+    const user = await getUser(request);
+    const productsQuery = await getProducts(20);
+    const products = productsQuery.products.edges.map((edge) => edge.node);
+    const wishlist = await getWishlist(request);
+    const cart = await getCart(request);
+    const loaderData: LoaderData = {
+      user,
+      cart,
+      wishlist: wishlist,
+      products: products,
+    };
+    return json(loaderData);
+  } catch (error) {
+    throw new Error("loader error: " + (error as Error).message);
+  }
 };
 
 export function CatchBoundary() {
@@ -133,6 +142,14 @@ export function ErrorBoundary({ error }: { error: Error }) {
     </html>
   );
 }
+
+export const unstable_ShouldReload: ShouldReloadFunction = ({ prevUrl }) => {
+  if (prevUrl.pathname === "/wishlist") return true;
+  if (prevUrl.pathname.includes("account")) return true;
+  if (prevUrl.pathname.includes("cart")) return true;
+  return false;
+};
+
 export default function App() {
   const { user, wishlist, products, cart } = useLoaderData<LoaderData>();
 
