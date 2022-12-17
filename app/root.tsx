@@ -86,7 +86,7 @@ export default function App() {
   const { user, wishlist, products, cart } = useLoaderData<LoaderData>();
 
   const [showCart, setShowCart] = useState(false);
-  const [showWishlist, setShowWishlist] = useState(true);
+  const [showWishlist, setShowWishlist] = useState(false);
   const [showAccountModal, setShowAccountModal] = useState(false);
   const cartSize = useMemo(() => getCartSize(cart), [cart]);
   return (
