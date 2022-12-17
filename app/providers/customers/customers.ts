@@ -28,6 +28,7 @@ export const getUser = async (request: Request) => {
   const accessToken = session.get("accessToken");
   if (!accessToken || typeof accessToken !== "string") return null;
   const user = await sdk.getUser({ accessToken });
+  if (!user.customer) return null;
   return user;
 };
 
