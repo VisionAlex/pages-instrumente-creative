@@ -1,13 +1,11 @@
 import type { LoaderFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import { Link, useLoaderData, useOutletContext } from "@remix-run/react";
+import { useLoaderData, useOutletContext } from "@remix-run/react";
 import { Hero } from "~/components/Hero";
 import { ProductsHighlights } from "~/components/ProductHighlights";
 import { FadeIn } from "~/components/shared/FadeIn";
 import type { GetArticlesQuery } from "~/generated/graphql";
-import { getArticles } from "~/providers/pages/articles";
 import { getWishlist } from "~/providers/products/products";
-import { getImageAspectRatio } from "~/shared/utils/getImageAspectRatio";
 import type { Product } from "~/types";
 type LoaderData = {
   wishlist: string[];
@@ -16,16 +14,11 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const wishlist = await getWishlist(request);
-  const resourcesResponse = await getArticles(
-    3,
-    "blog_title:'Resurse gratuite pentru dezvoltarea și educația copilului'"
-  );
-  const resources = resourcesResponse.articles.edges.map(({ node }) => node);
-  return json({ wishlist, resources });
+  return json({ wishlist });
 };
 
 const Index: React.FC = () => {
-  const { wishlist, resources } = useLoaderData<LoaderData>();
+  const { wishlist } = useLoaderData<LoaderData>();
 
   const { products } = useOutletContext<{ products: Product[] }>();
   return (
@@ -37,7 +30,7 @@ const Index: React.FC = () => {
           .filter((product) => product.availableForSale)
           .slice(0, 3)}
       />
-      <section className="mx-auto mt-10 max-w-7xl px-5 lg:px-8 xl:px-20">
+      {/* <section className="mx-auto mt-10 max-w-7xl px-5 lg:px-8 xl:px-20">
         <h3 className="mb-7 text-center text-3xl leading-tight text-primary">
           Resurse gratuite
         </h3>
@@ -66,7 +59,7 @@ const Index: React.FC = () => {
             );
           })}
         </div>
-      </section>
+      </section> */}
     </FadeIn>
   );
 };
