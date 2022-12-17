@@ -16,12 +16,9 @@ import AccountModal from "./components/AccountModal";
 import { Footer } from "./components/Footer";
 import { FooterMenu } from "./components/FooterMenu";
 import { Logo } from "./components/Logo";
-import { Menu } from "./components/Menu";
-import { Navbar } from "./components/Navbar";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { ShoppingCart } from "./components/ShoppingCart/ShoppingCart";
 import { getCartSize } from "./components/ShoppingCart/utils";
-import { Toolbar } from "./components/Toolbar";
 import { Wishlist } from "./components/Wishlist";
 import type { GetUserQuery } from "./generated/graphql";
 import { setEnvs } from "./graphqlWrapper";
@@ -180,7 +177,7 @@ export default function App() {
           open={showAccountModal}
           onClose={() => setShowAccountModal(false)}
         />
-        <Navbar>
+        {/* <Navbar>
           <Logo />
           <Menu />
           <Toolbar
@@ -191,7 +188,7 @@ export default function App() {
             setShowWishlist={setShowWishlist}
             setShowAccountModal={setShowAccountModal}
           />
-        </Navbar>
+        </Navbar> */}
         <ScrollToTop />
         <div className={`pt-[123px] pb-[50px] lg:pb-0`}>
           <main>
