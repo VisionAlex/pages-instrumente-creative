@@ -1,5 +1,6 @@
 import type { ActionFunction, HeadersFunction } from "@remix-run/cloudflare";
 import { redirect } from "@remix-run/cloudflare";
+import { createSdk } from "~/graphqlWrapper";
 import { getCart } from "~/providers/cart/cart";
 import { checkoutWithWebUrl } from "~/providers/checkout/checkout";
 
@@ -7,7 +8,9 @@ export const headers: HeadersFunction = ({ actionHeaders }) => {
   return actionHeaders;
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request, context }) => {
+  const sdk = createSdk(context);
+
   const formData = await request.formData();
   const variantId = formData.get("variantId") as string;
   const quantity = formData.get("quantity") as string;
@@ -17,7 +20,10 @@ export const action: ActionFunction = async ({ request }) => {
     ? [{ variantId, quantity: parseInt(quantity) ?? 1 }]
     : await getCart(request);
 
-  const { errors, webUrl } = await checkoutWithWebUrl(request, lineItems);
+  const { errors, webUrl } = await checkoutWithWebUrl(sdk, {
+    request,
+    lineItems,
+  });
   console.log({ errors, webUrl });
   if (webUrl) {
     const realWebUrl = webUrl.replace(

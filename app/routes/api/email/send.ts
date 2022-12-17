@@ -1,11 +1,12 @@
 import type { ActionFunction, HeadersFunction } from "@remix-run/cloudflare";
-import sendgrid from "~/providers/sendgrid";
+import { createSendGridSdk } from "~/providers/sendgrid";
 
 export const headers: HeadersFunction = ({ actionHeaders }) => {
   return actionHeaders;
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request, context }) => {
+  const sendgrid = createSendGridSdk(context);
   const formData = await request.formData();
   const firstName = formData.get("firstName") as string;
   const lastName = formData.get("lastName") as string;

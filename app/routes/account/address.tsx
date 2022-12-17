@@ -4,12 +4,14 @@ import { useLoaderData } from "@remix-run/react";
 import { Button } from "~/components/shared/Button";
 import { FadeIn } from "~/components/shared/FadeIn";
 import type { GetAddressesQuery } from "~/generated/graphql";
+import { createSdk } from "~/graphqlWrapper";
 import { getAddresses } from "~/providers/customers/address";
 
 type LoaderData = GetAddressesQuery["customer"];
 
-export const loader: LoaderFunction = async ({ request }) => {
-  const response = await getAddresses(request);
+export const loader: LoaderFunction = async ({ request, context }) => {
+  const sdk = createSdk(context);
+  const response = await getAddresses(sdk, request);
   return json(response?.customer);
 };
 

@@ -5,6 +5,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "~/components/shared/Button";
 import { Input } from "~/components/shared/Input";
+import { createSdk } from "~/graphqlWrapper";
 import { FormError } from "~/pages/account/FormError";
 import { login } from "~/providers/customers/customers";
 import { storage } from "~/session.server";
@@ -13,7 +14,8 @@ type ActionData = {
   formError: string;
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request, context }) => {
+  const sdk = createSdk(context);
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
@@ -30,7 +32,7 @@ export const action: ActionFunction = async ({ request }) => {
     );
   }
 
-  const data = await login({ email, password });
+  const data = await login(sdk, { email, password });
   if (!data.customerAccessTokenCreate?.customerAccessToken) {
     return json(
       { formError: "Adresă de e-mail sau parolă incorectă." },

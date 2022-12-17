@@ -19,6 +19,7 @@ import { SocialLinksWidget } from "~/components/shared/widgets/SocialLinksWidget
 import { TagsWidget } from "~/components/shared/widgets/TagsWidget";
 import { PAGE_HANDLE } from "~/config";
 import type { GetArticlesQuery, GetBlogQuery } from "~/generated/graphql";
+import { createSdk } from "~/graphqlWrapper";
 import { getArticles } from "~/providers/pages/articles";
 import { getBlog } from "~/providers/pages/blog";
 import { classNames } from "~/shared/utils/classNames";
@@ -31,17 +32,20 @@ type LoaderData = {
   tags: string[];
 };
 
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async ({ params, context }) => {
   if (!params.handle) {
     throw new Response("Not found", { status: 404 });
   }
-  const blogQuery = await getBlog(params.handle);
+
+  const sdk = createSdk(context);
+  const blogQuery = await getBlog(sdk, params.handle);
   if (!blogQuery.blog) {
     throw new Response("Not found", { status: 404 });
   }
+
   let articles;
   if (params.handle === PAGE_HANDLE.BLOG_RESOURCES) {
-    const articlesQuery = await getArticles(30);
+    const articlesQuery = await getArticles(sdk, { first: 30 });
     articles = articlesQuery.articles.edges.filter(({ node: article }) => {
       return article.blog.handle === PAGE_HANDLE.BLOG_RESOURCES;
     });

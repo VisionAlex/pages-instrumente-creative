@@ -4,11 +4,13 @@ import { useLoaderData } from "@remix-run/react";
 import React from "react";
 import { FadeIn } from "~/components/shared/FadeIn";
 import type { GetOrdersQuery } from "~/generated/graphql";
+import { createSdk } from "~/graphqlWrapper";
 import { getCustomerOrders } from "~/providers/customers/orders";
 import { formatDate } from "~/shared/utils/formatDate";
 
-export const loader: LoaderFunction = async ({ request }) => {
-  const response = await getCustomerOrders(request);
+export const loader: LoaderFunction = async ({ request, context }) => {
+  const sdk = createSdk(context);
+  const response = await getCustomerOrders(sdk, { request });
   if (!response.customer) throw new Error("User not found");
   const orders = response.customer.orders.edges.map((edge) => edge.node);
   const pageInfo = response.customer.orders.pageInfo;

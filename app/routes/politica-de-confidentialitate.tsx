@@ -10,6 +10,7 @@ import { FadeIn } from "~/components/shared/FadeIn";
 import { PageHeader } from "~/components/shared/PageHeader";
 import { PAGE_HANDLE } from "~/config";
 import type { GetPageQuery } from "~/generated/graphql";
+import { createSdk } from "~/graphqlWrapper";
 import { getPage } from "~/providers/pages/page";
 import pageStyles from "~/styles/page.css";
 
@@ -17,8 +18,9 @@ type LoaderData = {
   page: NonNullable<GetPageQuery["page"]>;
 };
 
-export const loader: LoaderFunction = async () => {
-  const page = await getPage({ handle: PAGE_HANDLE.PRIVACY_POLICY });
+export const loader: LoaderFunction = async ({ context }) => {
+  const sdk = createSdk(context);
+  const page = await getPage(sdk, { handle: PAGE_HANDLE.PRIVACY_POLICY });
   return json(
     {
       page: page.page,

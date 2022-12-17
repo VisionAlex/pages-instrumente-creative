@@ -1,11 +1,18 @@
 import gql from "graphql-tag";
-import { sdk } from "~/graphqlWrapper";
+import type { SDK } from "~/graphqlWrapper";
 
-export const getBlog = async (handle: string) => {
+export const getBlog = async (sdk: SDK, handle: string) => {
   return await sdk.getBlog({ handle });
 };
 
-export const getRecentArticles = async (handle: string, first: number) => {
+type GetRecentArticlesOptions = {
+  handle: string;
+  first: number;
+};
+export const getRecentArticles = async (
+  sdk: SDK,
+  { handle, first }: GetRecentArticlesOptions
+) => {
   return await sdk.getRecentArticles({ handle, first });
 };
 

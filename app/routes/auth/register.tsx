@@ -1,11 +1,12 @@
 import type { ActionFunction } from "@remix-run/cloudflare";
-import { redirect } from "@remix-run/cloudflare";
-import { json } from "@remix-run/cloudflare";
+import { json, redirect } from "@remix-run/cloudflare";
 import { useActionData } from "@remix-run/react";
 import { Link } from "react-router-dom";
 import { Button } from "~/components/shared/Button";
 import { FormField } from "~/pages/account/FormField";
 
+import { createSdk } from "~/graphqlWrapper";
+import { FormError } from "~/pages/account/FormError";
 import {
   formatRegisterErrors,
   validateEmail,
@@ -14,7 +15,6 @@ import {
   validatePassword,
 } from "~/pages/account/validate.server";
 import { login, register } from "~/providers/customers/customers";
-import { FormError } from "~/pages/account/FormError";
 import { storage } from "~/session.server";
 
 export type RegisterActionData = {
@@ -33,7 +33,9 @@ export type RegisterActionData = {
   };
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request, context }) => {
+  const sdk = createSdk(context);
+
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
@@ -67,7 +69,7 @@ export const action: ActionFunction = async ({ request }) => {
     return json({ fieldErrors, fields }, { status: 400 });
   }
 
-  const response = await register({
+  const response = await register(sdk, {
     email,
     password,
     firstName: firstName ?? undefined,
@@ -84,7 +86,7 @@ export const action: ActionFunction = async ({ request }) => {
       return json({ formError }, { status: 400 });
     }
   } else {
-    const response = await login({ email, password });
+    const response = await login(sdk, { email, password });
     if (response.customerAccessTokenCreate?.customerAccessToken?.accessToken) {
       const session = await storage.getSession(request.headers.get("Cookie"));
       session.set(

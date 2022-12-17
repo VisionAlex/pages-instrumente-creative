@@ -1,15 +1,15 @@
 import gql from "graphql-tag";
-import { sdk } from "~/graphqlWrapper";
+import type { SDK } from "~/graphqlWrapper";
 import { storage } from "~/session.server";
 
-export const getAddresses = async (request: Request) => {
+export const getAddresses = async (sdk: SDK, request: Request) => {
   const session = await storage.getSession(request.headers.get("Cookie"));
   const accessToken = session.get("accessToken");
   if (!accessToken || typeof accessToken !== "string") return null;
   return sdk.getAddresses({ customerAccessToken: accessToken });
 };
 
-export const getDefaultAddress = async (request: Request) => {
+export const getDefaultAddress = async (sdk: SDK, request: Request) => {
   const session = await storage.getSession(request.headers.get("Cookie"));
   const accessToken = session.get("accessToken");
   if (!accessToken || typeof accessToken !== "string") return null;

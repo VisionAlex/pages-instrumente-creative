@@ -3,27 +3,28 @@ import type {
   CustomerAccessTokenCreateInput,
   CustomerCreateInput,
 } from "~/generated/graphql";
-import { sdk } from "~/graphqlWrapper";
+import type { SDK } from "~/graphqlWrapper";
 import { storage } from "~/session.server";
 
-export const register = ({
-  email,
-  password,
-  firstName,
-  lastName,
-}: CustomerCreateInput) => {
+export const register = (
+  sdk: SDK,
+  { email, password, firstName, lastName }: CustomerCreateInput
+) => {
   return sdk.register({
     input: { email, password, firstName, lastName },
   });
 };
 
-export const login = ({ email, password }: CustomerAccessTokenCreateInput) => {
+export const login = (
+  sdk: SDK,
+  { email, password }: CustomerAccessTokenCreateInput
+) => {
   return sdk.login({
     input: { email, password },
   });
 };
 
-export const getUser = async (request: Request) => {
+export const getUser = async (request: Request, sdk: SDK) => {
   const session = await storage.getSession(request.headers.get("Cookie"));
   const accessToken = session.get("accessToken");
   if (!accessToken || typeof accessToken !== "string") return null;
@@ -31,7 +32,14 @@ export const getUser = async (request: Request) => {
   return user;
 };
 
-export const customerRecover = (email: string) => {
+type CustomerRecoverOptions = {
+  email: string;
+};
+
+export const customerRecover = (
+  sdk: SDK,
+  { email }: CustomerRecoverOptions
+) => {
   return sdk.customerRecover({ email });
 };
 

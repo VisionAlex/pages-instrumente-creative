@@ -6,11 +6,12 @@ import React from "react";
 import { Button } from "~/components/shared/Button";
 import { Input } from "~/components/shared/Input";
 import { LinkButton } from "~/components/shared/LinkButton";
-import { sdk } from "~/graphqlWrapper";
+import { createSdk } from "~/graphqlWrapper";
 
 // https://community.shopify.com/c/shopify-apis-and-sdks/reset-password-token-in-notification-email/td-p/367455
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction = async ({ request, context }) => {
+  const sdk = createSdk(context);
   const formData = await request.formData();
   const email = formData.get("email");
 

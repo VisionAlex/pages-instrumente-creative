@@ -1,13 +1,23 @@
 import gql from "graphql-tag";
-import { sdk } from "~/graphqlWrapper";
+import type { SDK } from "~/graphqlWrapper";
 
-export const getArticles = (first: number, query?: string) => {
+type GetArticlesOptions = {
+  first: number;
+  query?: string;
+};
+
+export const getArticles = (sdk: SDK, { first, query }: GetArticlesOptions) => {
   return sdk.getArticles({ first, query });
 };
 
+type GetBlogArticleOptions = {
+  handle: string;
+  articleHandle: string;
+};
+
 export const getBlogArticle = (
-  handle: string | undefined,
-  articleHandle: string | undefined
+  sdk: SDK,
+  { handle, articleHandle }: GetBlogArticleOptions
 ) => {
   if (!handle || !articleHandle) return undefined;
   return sdk.getBlogArticle({ handle, articleHandle });

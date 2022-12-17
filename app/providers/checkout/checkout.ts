@@ -1,12 +1,17 @@
 import gql from "graphql-tag";
-import { sdk } from "~/graphqlWrapper";
 import type { CheckoutLineItemInput } from "~/generated/graphql";
 import { CountryCode } from "~/generated/graphql";
+import type { SDK } from "~/graphqlWrapper";
 import { storage } from "~/session.server";
 
+type CheckoutWithWebUrlOptions = {
+  request: Request;
+  lineItems: CheckoutLineItemInput[];
+};
+
 export const checkoutWithWebUrl = async (
-  request: Request,
-  lineItems: CheckoutLineItemInput[]
+  sdk: SDK,
+  { request, lineItems }: CheckoutWithWebUrlOptions
 ) => {
   const session = await storage.getSession(request.headers.get("Cookie"));
   const customerAccessToken = session.get("accessToken");

@@ -1,8 +1,16 @@
 import gql from "graphql-tag";
-import { sdk } from "~/graphqlWrapper";
+import type { SDK } from "~/graphqlWrapper";
 import { storage } from "~/session.server";
 
-export const getCustomerOrders = async (request: Request, after?: string) => {
+type GetCustomerOrdersOptions = {
+  request: Request;
+  after?: string;
+};
+
+export const getCustomerOrders = async (
+  sdk: SDK,
+  { request, after }: GetCustomerOrdersOptions
+) => {
   const session = await storage.getSession(request.headers.get("Cookie"));
   const accessToken = session.get("accessToken");
   if (!accessToken || typeof accessToken !== "string")

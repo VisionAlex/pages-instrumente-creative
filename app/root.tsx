@@ -24,12 +24,11 @@ import { getCartSize } from "./components/ShoppingCart/utils";
 import { Toolbar } from "./components/Toolbar";
 import { Wishlist } from "./components/Wishlist";
 import type { GetUserQuery } from "./generated/graphql";
-import { setEnvs } from "./graphqlWrapper";
+import { createSdk } from "./graphqlWrapper";
 import type { Cart } from "./providers/cart/cart";
 import { getCart } from "./providers/cart/cart";
 import { getUser } from "./providers/customers/customers";
 import { getProducts, getWishlist } from "./providers/products/products";
-import { setSendGridApiKey } from "./providers/sendgrid";
 import styles from "./styles/app.css";
 import type { Product } from "./types";
 
@@ -67,87 +66,20 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request, context }) => {
-  try {
-    if (
-      typeof context.SHOPIFY_STOREFRONT_TOKEN === "string" &&
-      typeof context.SHOPIFY_STOREFRONT_URL === "string"
-    ) {
-      setEnvs(context.SHOPIFY_STOREFRONT_TOKEN, context.SHOPIFY_STOREFRONT_URL);
-    }
+  const sdk = createSdk(context);
+  const user = await getUser(request, sdk);
+  const productsQuery = await getProducts(sdk, { first: 20 });
+  const products = productsQuery.products.edges.map((edge) => edge.node);
+  const wishlist = await getWishlist(request);
+  const cart = await getCart(request);
 
-    if (typeof context.SENDGRID_API_KEY === "string") {
-      setSendGridApiKey(context.SENDGRID_API_KEY);
-    }
-  } catch (error) {
-    throw new Error("setting Env error: " + (error as Error).message);
-  }
-  try {
-    const user = await getUser(request);
-    const productsQuery = await getProducts(20);
-    const products = productsQuery.products.edges.map((edge) => edge.node);
-    const wishlist = await getWishlist(request);
-    const cart = await getCart(request);
-    const loaderData: LoaderData = {
-      user,
-      cart,
-      wishlist: wishlist,
-      products: products,
-    };
-    return json(loaderData);
-  } catch (error) {
-    throw new Error("loader error: " + (error as Error).message);
-  }
-};
-
-export function CatchBoundary() {
-  const caught = useCatch();
-  console.error("CatchBoundary", caught);
-  if (caught.status === 404) {
-    return (
-      <html lang="ro">
-        <head>
-          <title>Oh nu...</title>
-          <Links />
-        </head>
-        <body className="flex h-screen w-screen flex-col items-center justify-center gap-4">
-          <Logo />
-          <h1>Oops!</h1>
-          <p>Pagina nu exista pe Instrumente Creative</p>
-          <Scripts />
-        </body>
-      </html>
-    );
-  }
-  throw new Error("Unhandled error");
-}
-
-export function ErrorBoundary({ error }: { error: Error }) {
-  console.log(error);
-  return (
-    <html lang="ro">
-      <head>
-        <Meta />
-        <title>Uh-Oh!</title>
-        <Links />
-      </head>
-
-      <body className="flex h-screen w-screen flex-col items-center justify-center gap-4 rounded-md">
-        <div className=" bg-red-100 p-4">
-          <h1 className="mb-4 text-center text-xl text-red-700">
-            Eroare de aplicatie!
-          </h1>
-          <pre>{error}</pre>
-        </div>
-      </body>
-    </html>
-  );
-}
-
-export const unstable_ShouldReload: ShouldReloadFunction = ({ prevUrl }) => {
-  if (prevUrl.pathname === "/wishlist") return true;
-  if (prevUrl.pathname.includes("account")) return true;
-  if (prevUrl.pathname.includes("cart")) return true;
-  return false;
+  const loaderData: LoaderData = {
+    user,
+    cart,
+    wishlist: wishlist,
+    products: products,
+  };
+  return json(loaderData);
 };
 
 export default function App() {
@@ -216,6 +148,57 @@ export default function App() {
           src="https://static.cloudflareinsights.com/beacon.min.js"
           data-cf-beacon='{"token": "77bcf41a90f346a78f402cd5a9cda9e7"}'
         ></script>
+      </body>
+    </html>
+  );
+}
+
+export const unstable_ShouldReload: ShouldReloadFunction = ({ prevUrl }) => {
+  if (prevUrl.pathname === "/wishlist") return true;
+  if (prevUrl.pathname.includes("account")) return true;
+  if (prevUrl.pathname.includes("cart")) return true;
+  return false;
+};
+
+export function CatchBoundary() {
+  const caught = useCatch();
+  console.error("CatchBoundary", caught);
+  if (caught.status === 404) {
+    return (
+      <html lang="ro">
+        <head>
+          <title>Oh nu...</title>
+          <Links />
+        </head>
+        <body className="flex h-screen w-screen flex-col items-center justify-center gap-4">
+          <Logo />
+          <h1>Oops!</h1>
+          <p>Pagina nu exista pe Instrumente Creative</p>
+          <Scripts />
+        </body>
+      </html>
+    );
+  }
+  throw new Error("Unhandled error");
+}
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  console.log(error);
+  return (
+    <html lang="ro">
+      <head>
+        <Meta />
+        <title>Uh-Oh!</title>
+        <Links />
+      </head>
+
+      <body className="flex h-screen w-screen flex-col items-center justify-center gap-4 rounded-md">
+        <div className=" bg-red-100 p-4">
+          <h1 className="mb-4 text-center text-xl text-red-700">
+            Eroare de aplicatie!
+          </h1>
+          <pre>{error}</pre>
+        </div>
       </body>
     </html>
   );

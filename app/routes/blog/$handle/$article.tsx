@@ -8,8 +8,10 @@ import {
   useOutletContext,
 } from "@remix-run/react";
 import React from "react";
+import invariant from "tiny-invariant";
 import { FadeIn } from "~/components/shared/FadeIn";
 import type { GetBlogArticleQuery } from "~/generated/graphql";
+import { createSdk } from "~/graphqlWrapper";
 import { getBlogArticle } from "~/providers/pages/articles";
 import { classNames } from "~/shared/utils/classNames";
 import { formatDate } from "~/shared/utils/formatDate";
@@ -25,9 +27,16 @@ type LoaderData = {
   article: BlogArticle;
 };
 
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async ({ params, context }) => {
+  const sdk = createSdk(context);
   const { handle, article } = params;
-  const articleQuery = await getBlogArticle(handle, article);
+  invariant(typeof handle === "string", "Missing param");
+  invariant(typeof article === "string", "Missing param");
+
+  const articleQuery = await getBlogArticle(sdk, {
+    handle,
+    articleHandle: article,
+  });
   if (!articleQuery?.blog?.articleByHandle) {
     throw new Response("Not found", { status: 404 });
   }

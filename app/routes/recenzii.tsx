@@ -1,4 +1,4 @@
-import type { MetaFunction } from "@remix-run/cloudflare";
+import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
 import React from "react";
@@ -6,6 +6,7 @@ import { FadeIn } from "~/components/shared/FadeIn";
 import { PageHeader } from "~/components/shared/PageHeader";
 import { PAGE_HANDLE } from "~/config";
 import type { GetPageQuery } from "~/generated/graphql";
+import { createSdk } from "~/graphqlWrapper";
 import { getPage } from "~/providers/pages/page";
 import pageStyles from "~/styles/page.css";
 
@@ -13,8 +14,9 @@ type LoaderData = {
   page: NonNullable<GetPageQuery["page"]>;
 };
 
-export const loader = async () => {
-  const page = await getPage({ handle: PAGE_HANDLE.REVIEWS });
+export const loader: LoaderFunction = async ({ context }) => {
+  const sdk = createSdk(context);
+  const page = await getPage(sdk, { handle: PAGE_HANDLE.REVIEWS });
   return json(
     {
       page: page.page,

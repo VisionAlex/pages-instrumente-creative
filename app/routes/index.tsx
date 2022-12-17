@@ -1,6 +1,6 @@
 import type { LoaderFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import { useLoaderData, useOutletContext } from "@remix-run/react";
+import { Outlet, useLoaderData, useOutletContext } from "@remix-run/react";
 import { Hero } from "~/components/Hero";
 import { ProductsHighlights } from "~/components/ProductHighlights";
 import { FadeIn } from "~/components/shared/FadeIn";
@@ -30,6 +30,7 @@ const Index: React.FC = () => {
           .filter((product) => product.availableForSale)
           .slice(0, 3)}
       />
+      <Outlet />
       {/* <section className="mx-auto mt-10 max-w-7xl px-5 lg:px-8 xl:px-20">
         <h3 className="mb-7 text-center text-3xl leading-tight text-primary">
           Resurse gratuite

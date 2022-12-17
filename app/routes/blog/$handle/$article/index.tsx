@@ -9,6 +9,7 @@ import { SocialLinksWidget } from "~/components/shared/widgets/SocialLinksWidget
 import { TagsWidget } from "~/components/shared/widgets/TagsWidget";
 import { PAGE_HANDLE } from "~/config";
 import type { GetBlogQuery, GetUserQuery } from "~/generated/graphql";
+import { createSdk } from "~/graphqlWrapper";
 import { getRecentArticles } from "~/providers/pages/blog";
 
 type LoaderData = {
@@ -17,8 +18,13 @@ type LoaderData = {
 
 type ArticleContext = { tags: string[]; id: string; user: GetUserQuery | null };
 
-export const loader: LoaderFunction = async () => {
-  const blog = await getRecentArticles(PAGE_HANDLE.BLOG_CHILD_DEVELOPMENT, 5);
+export const loader: LoaderFunction = async ({ context }) => {
+  const sdk = createSdk(context);
+
+  const blog = await getRecentArticles(sdk, {
+    handle: PAGE_HANDLE.BLOG_CHILD_DEVELOPMENT,
+    first: 5,
+  });
   return json({
     articles: blog.blog?.articles?.edges,
   });

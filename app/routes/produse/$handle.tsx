@@ -6,7 +6,7 @@ import { ImageGallery } from "~/components/ImageGallery";
 import { Breadcrumb } from "~/components/shared/Breadcrumb/Breadcrumb";
 import { FadeIn } from "~/components/shared/FadeIn";
 import { Price } from "~/components/shared/Price";
-import { sdk } from "~/graphqlWrapper";
+import { createSdk } from "~/graphqlWrapper";
 import { Availability } from "~/pages/product/Availability";
 import { BuyNow } from "~/pages/product/BuyNow";
 import { GiftPrice } from "~/pages/product/GiftPrice";
@@ -25,7 +25,8 @@ type ProductLoaderData = {
   wishlist: string[];
 };
 
-export const loader: LoaderFunction = async ({ params, request }) => {
+export const loader: LoaderFunction = async ({ params, request, context }) => {
+  const sdk = createSdk(context);
   const productData = await sdk.getProductByHandle(
     { handle: params.handle! },
     { request }

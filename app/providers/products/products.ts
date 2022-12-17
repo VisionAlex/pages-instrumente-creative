@@ -1,19 +1,31 @@
 import gql from "graphql-tag";
 import type { ProductSortKeys } from "~/generated/graphql";
-import type { QueryOptions } from "~/graphqlWrapper";
-import { sdk } from "~/graphqlWrapper";
+import type { QueryOptions, SDK } from "~/graphqlWrapper";
 import { storage } from "~/session.server";
 
+type GetProductOptions = {
+  first: number;
+  query?: string;
+  sortKey?: ProductSortKeys;
+  options?: QueryOptions;
+};
+
 export function getProducts(
-  first: number,
-  query?: string,
-  sortKey?: ProductSortKeys,
-  options?: QueryOptions
+  sdk: SDK,
+  { first, query, sortKey, options }: GetProductOptions
 ) {
   return sdk.getProducts({ first, query, sortKey }, options);
 }
 
-export function getProductByHandle(handle: string, options?: QueryOptions) {
+type GetProductByHandleOptions = {
+  handle: string;
+  options?: QueryOptions;
+};
+
+export function getProductByHandle(
+  sdk: SDK,
+  { handle, options }: GetProductByHandleOptions
+) {
   return sdk.getProductByHandle({ handle }, options);
 }
 

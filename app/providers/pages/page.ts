@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
-import { sdk } from "~/graphqlWrapper";
 import type { PageHandle } from "~/config";
+import type { SDK } from "~/graphqlWrapper";
 
-export const getPage = async ({ handle }: { handle: PageHandle }) => {
+export const getPage = async (sdk: SDK, { handle }: { handle: PageHandle }) => {
   return sdk.getPage({ handle });
 };
 
