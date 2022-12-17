@@ -45,7 +45,7 @@ const Index: React.FC = () => {
         </h3>
         <p className="text-center">Pentru dezvoltarea copilului</p>
         <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3">
-          {resources?.map((resource) => {
+          {resources.map((resource) => {
             return (
               <Link
                 to={`/blog/${resource.blog.handle}/${resource.handle}`}
@@ -74,15 +74,3 @@ const Index: React.FC = () => {
 };
 
 export default Index;
-
-export function ErrorBoundary({ error }: { error: Error }) {
-  console.log(error);
-  return (
-    <div className=" bg-red-100 p-4">
-      <h1 className="mb-4 text-center text-xl text-red-700">
-        Eroare de aplicatie!
-      </h1>
-      <pre>{error}</pre>
-    </div>
-  );
-}
