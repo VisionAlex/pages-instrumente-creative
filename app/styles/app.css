@@ -1044,8 +1044,8 @@ input[type="number"] {
   height: 1.25rem;
 }
 
-.h-\[36px\] {
-  height: 36px;
+.h-\[44px\] {
+  height: 44px;
 }
 
 .h-6 {
@@ -1124,16 +1124,16 @@ input[type="number"] {
   height: 46px;
 }
 
-.h-\[44px\] {
-  height: 44px;
-}
-
 .h-\[196px\] {
   height: 196px;
 }
 
 .h-14 {
   height: 3.5rem;
+}
+
+.h-\[36px\] {
+  height: 36px;
 }
 
 .max-h-\[550px\] {
@@ -1158,8 +1158,8 @@ input[type="number"] {
   width: 1.25rem;
 }
 
-.w-\[36px\] {
-  width: 36px;
+.w-\[44px\] {
+  width: 44px;
 }
 
 .w-full {
@@ -1216,8 +1216,8 @@ input[type="number"] {
   width: fit-content;
 }
 
-.w-\[44px\] {
-  width: 44px;
+.w-\[36px\] {
+  width: 36px;
 }
 
 .min-w-\[16px\] {
@@ -1577,14 +1577,14 @@ input[type="number"] {
   background-color: rgb(44 44 44 / var(--tw-bg-opacity));
 }
 
-.bg-background {
-  --tw-bg-opacity: 1;
-  background-color: rgb(239 239 239 / var(--tw-bg-opacity));
-}
-
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-background {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 239 239 / var(--tw-bg-opacity));
 }
 
 .bg-\[\#d3eadd\] {
@@ -1688,6 +1688,11 @@ input[type="number"] {
   padding: 0.25rem;
 }
 
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
 .py-20 {
   padding-top: 5rem;
   padding-bottom: 5rem;
@@ -1736,11 +1741,6 @@ input[type="number"] {
 .py-6 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
-}
-
-.px-4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
 }
 
 .px-8 {
@@ -2173,6 +2173,14 @@ input[type="number"] {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
+.transition-colors {
+  transition-property: color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
 .transition-all {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -2193,26 +2201,18 @@ input[type="number"] {
   transition-duration: 150ms;
 }
 
-.transition-colors {
-  transition-property: color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
 .transition-opacity {
   transition-property: opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
 
-.duration-300 {
-  transition-duration: 300ms;
-}
-
 .duration-500 {
   transition-duration: 500ms;
+}
+
+.duration-300 {
+  transition-duration: 300ms;
 }
 
 .duration-400 {
@@ -2440,18 +2440,23 @@ input[type="number"] {
   border-color: rgb(44 44 44 / var(--tw-border-opacity));
 }
 
-.hover\:bg-white:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
 .hover\:bg-primary:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(44 44 44 / var(--tw-bg-opacity));
 }
 
+.hover\:bg-white:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
 .hover\:bg-transparent:hover {
   background-color: transparent;
+}
+
+.hover\:text-white:hover {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .hover\:text-primary:hover {
@@ -2462,11 +2467,6 @@ input[type="number"] {
 .hover\:text-subtitle:hover {
   --tw-text-opacity: 1;
   color: rgb(112 112 112 / var(--tw-text-opacity));
-}
-
-.hover\:text-white:hover {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .hover\:placeholder-opacity-70:hover::-moz-placeholder {
@@ -2817,6 +2817,10 @@ input[type="number"] {
 @media (min-width: 1536px) {
   .\32xl\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .\32xl\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 

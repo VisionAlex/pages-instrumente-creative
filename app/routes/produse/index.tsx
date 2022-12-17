@@ -45,7 +45,7 @@ const AllProducts: React.FC = () => {
         wishlist={wishlist}
       />
       <div>
-        <div className="mx-auto grid max-w-screen-2xl grid-cols-1 gap-6 px-5 md:grid-cols-2 lg:grid-cols-3 lg:px-8 xl:grid-cols-4 xl:px-20">
+        <div className="mx-auto grid max-w-screen-2xl grid-cols-1 gap-6 px-5 md:grid-cols-2 lg:grid-cols-3 lg:px-8 xl:px-20 2xl:grid-cols-4">
           {products.map((product) => {
             const isFavorite = wishlist.some((item) => item === product.id);
             return (
