@@ -1,5 +1,11 @@
 import { XIcon } from "@heroicons/react/outline";
-import { Form, Link, useLocation, useNavigate } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useFetcher,
+  useLocation,
+  useNavigate,
+} from "@remix-run/react";
 import { useMemo } from "react";
 import { config } from "~/config";
 import type { Product } from "~/types";
@@ -23,6 +29,7 @@ export const Wishlist: React.FC<Props> = ({
   const wishlistInfo = useMemo(() => {
     return products.filter((product) => wishlist.includes(product.id));
   }, [products, wishlist]);
+  const fetcher = useFetcher();
 
   return (
     <Drawer
@@ -40,7 +47,7 @@ export const Wishlist: React.FC<Props> = ({
               const isAvailable = item.availableForSale;
               return (
                 <li
-                  className="relative flex gap-4 border-t border-t-secondaryBackground py-5 first:border-none"
+                  className="relative grid grid-cols-3 gap-4 border-t border-t-secondaryBackground py-5 first:border-none"
                   key={item.id}
                 >
                   <Link
@@ -56,7 +63,7 @@ export const Wishlist: React.FC<Props> = ({
                       alt={item.thumbnail?.altText ?? ""}
                     />
                   </Link>
-                  <div className="pr-4">
+                  <div className="col-span-2 pr-4">
                     <Link
                       prefetch="intent"
                       to={`${config.pages.produse.path}/${item.handle}`}
@@ -73,6 +80,25 @@ export const Wishlist: React.FC<Props> = ({
                       className="h-[38px] text-sm"
                       onClick={() => {
                         if (!isAvailable) {
+                          navigate(
+                            `${config.pages.produse.path}/${item.handle}`
+                          );
+                          setShowWishlist(false);
+                        } else if (!hasVariants) {
+                          fetcher.submit(
+                            {
+                              _action: "add",
+                              variantID: item.variants.edges[0].node.id,
+                              quantity: "1",
+                              redirectTo: location.pathname,
+                            },
+                            {
+                              method: "post",
+                              action: "/cart",
+                            }
+                          );
+                          setShowWishlist(false);
+                        } else {
                           navigate(
                             `${config.pages.produse.path}/${item.handle}`
                           );
