@@ -96,10 +96,10 @@ const AllProducts: React.FC = () => {
                   />
                   <div className="grow" />
                   <div className="mt-5 flex items-center gap-1.5 text-primary">
-                    <AddToCart product={product} openModal={openModal} />
+                    <AddToCart product={product} openModal={openModal} asText />
                     <button
                       onClick={() => openModal(product)}
-                      className="flex h-[36px] w-[36px] cursor-pointer items-center justify-center border border-primary"
+                      className="flex h-[44px] w-[44px] cursor-pointer items-center justify-center border border-primary transition-colors duration-500 hover:bg-primary hover:text-white"
                     >
                       <BsSearch />
                     </button>

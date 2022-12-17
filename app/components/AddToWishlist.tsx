@@ -16,11 +16,11 @@ export const AddToWishlist: React.FC<Props> = ({ productID, isFavorite }) => {
       <input type="hidden" name="productID" value={productID} />
       <input type="hidden" name="_action" value="add" />
       <input type="hidden" name="redirectTo" value={location.pathname} />
-      <button className="flex h-[36px] w-[36px] cursor-pointer items-center justify-center border border-primary">
+      <button className="flex h-[44px] w-[44px] cursor-pointer items-center justify-center border border-primary transition-colors duration-500">
         <HeartIcon
           strokeWidth={1}
           className={classNames(
-            "h-5 w-5 fill-primary transition-all duration-300 ease-in-out"
+            "h-5 w-5 fill-primary transition-all duration-500 ease-in-out"
           )}
           fillOpacity={isFavorite ? 1 : 0}
         />
