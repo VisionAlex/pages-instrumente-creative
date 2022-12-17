@@ -1132,10 +1132,6 @@ input[type="number"] {
   height: 3.5rem;
 }
 
-.h-\[36px\] {
-  height: 36px;
-}
-
 .max-h-\[550px\] {
   max-height: 550px;
 }
@@ -1214,10 +1210,6 @@ input[type="number"] {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-}
-
-.w-\[36px\] {
-  width: 36px;
 }
 
 .min-w-\[16px\] {
@@ -1370,6 +1362,10 @@ input[type="number"] {
 
 .flex-wrap {
   flex-wrap: wrap;
+}
+
+.place-items-center {
+  place-items: center;
 }
 
 .items-start {
@@ -2804,10 +2800,6 @@ input[type="number"] {
 }
 
 @media (min-width: 1280px) {
-  .xl\:grid-cols-4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
   .xl\:px-20 {
     padding-left: 5rem;
     padding-right: 5rem;
@@ -2815,12 +2807,12 @@ input[type="number"] {
 }
 
 @media (min-width: 1536px) {
-  .\32xl\:grid-cols-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
   .\32xl\:grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .\32xl\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 

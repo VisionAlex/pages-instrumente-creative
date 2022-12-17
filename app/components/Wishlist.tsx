@@ -47,19 +47,17 @@ export const Wishlist: React.FC<Props> = ({
               const isAvailable = item.availableForSale;
               return (
                 <li
-                  className="relative grid grid-cols-3 gap-4 border-t border-t-secondaryBackground py-5 first:border-none"
+                  className="relative  grid grid-cols-3 border-t border-t-secondaryBackground pt-4 first:border-none first:pt-0"
                   key={item.id}
                 >
                   <Link
                     to={`${config.pages.produse.path}/${item.handle}`}
                     prefetch="intent"
+                    className="p-2"
                     onClick={() => setShowWishlist(false)}
                   >
                     <img
                       src={item.thumbnail?.url ?? ""}
-                      width={100}
-                      height={67}
-                      className="h-[67px] w-[100px]"
                       alt={item.thumbnail?.altText ?? ""}
                     />
                   </Link>
