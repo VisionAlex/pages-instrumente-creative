@@ -1,4 +1,4 @@
-import { MinusSmIcon, PlusSmIcon } from "@heroicons/react/outline";
+import { MinusSmIcon, PlusSmIcon, XIcon } from "@heroicons/react/outline";
 import { Form, Link, useLocation } from "@remix-run/react";
 import { config } from "~/config";
 import type { VariantInfo } from "~/types";
@@ -13,8 +13,16 @@ export const CartItem: React.FC<Props> = ({ cartItem, setShowCart }) => {
   return (
     <li
       key={cartItem.id}
-      className="flex gap-5 border-t border-secondaryBackground pt-5 pb-5 first:border-none first:pt-0"
+      className="relative flex gap-5 border-t border-secondaryBackground pt-5 pb-5 first:border-none first:pt-0"
     >
+      <Form method="post" action="/cart" className="absolute right-0 z-20">
+        <input type="hidden" name="variantID" value={cartItem.id} />
+        <input type="hidden" name="_action" value="removeAll" />
+        <input type="hidden" name="redirectTo" value={location.pathname} />
+        <button>
+          <XIcon className="h-4 w-4 hover:opacity-70" />
+        </button>
+      </Form>
       <Link
         prefetch="intent"
         to={`${config.pages.produse.path}/${cartItem.handle}`}
@@ -30,7 +38,7 @@ export const CartItem: React.FC<Props> = ({ cartItem, setShowCart }) => {
           alt={cartItem.thumbnail?.altText ?? ""}
         />
       </Link>
-      <div className="flex flex-1 flex-col gap-5 ">
+      <div className="flex flex-1 flex-col gap-5">
         <Link
           prefetch="intent"
           to={`${config.pages.produse.path}/${cartItem.handle}`}

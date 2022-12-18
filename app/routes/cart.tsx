@@ -45,6 +45,10 @@ export const action: ActionFunction = async ({ request }) => {
       }, []);
       break;
     }
+    case "removeAll": {
+      newCart = cart.filter((item) => item.variantId !== variantID);
+      break;
+    }
     default: {
       newCart = cart;
     }

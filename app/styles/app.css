@@ -1076,10 +1076,6 @@ input[type="number"] {
   height: 42px;
 }
 
-.h-\[67px\] {
-  height: 67px;
-}
-
 .h-\[38px\] {
   height: 38px;
 }
@@ -1172,10 +1168,6 @@ input[type="number"] {
 
 .w-\[26px\] {
   width: 26px;
-}
-
-.w-\[100px\] {
-  width: 100px;
 }
 
 .w-10 {
@@ -1362,10 +1354,6 @@ input[type="number"] {
 
 .flex-wrap {
   flex-wrap: wrap;
-}
-
-.place-items-center {
-  place-items: center;
 }
 
 .items-start {
