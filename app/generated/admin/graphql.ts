@@ -11411,7 +11411,7 @@ export type FulfillmentOrder = Node & {
   lineItems: FulfillmentOrderLineItemConnection;
   /** A list of locations that the fulfillment order can potentially move to. */
   locationsForMove: FulfillmentOrderLocationForMoveConnection;
-  /** A list of requests sent by the merchant to the fulfillment service for this fulfillment order. */
+  /** A list of requests sent by the merchant or an order management app to the fulfillment service for the fulfillment order. */
   merchantRequests: FulfillmentOrderMerchantRequestConnection;
   /** The order that's associated with the fulfillment order. */
   order: Order;
@@ -11873,7 +11873,8 @@ export type FulfillmentOrderLocationForMoveEdge = {
 };
 
 /**
- * Represents a request made by the merchant to a fulfillment service for a fulfillment order.
+ * A request made by the merchant or an order management app to a fulfillment service
+ * for a fulfillment order.
  *
  */
 export type FulfillmentOrderMerchantRequest = Node & {

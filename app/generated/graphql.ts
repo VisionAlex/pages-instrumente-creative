@@ -1311,6 +1311,8 @@ export enum CheckoutErrorCode {
   CustomerAlreadyUsedOncePerCustomerDiscountNotice = 'CUSTOMER_ALREADY_USED_ONCE_PER_CUSTOMER_DISCOUNT_NOTICE',
   /** Discount already applied. */
   DiscountAlreadyApplied = 'DISCOUNT_ALREADY_APPLIED',
+  /** Discount code isn't working right now. Please contact us for help. */
+  DiscountCodeApplicationFailed = 'DISCOUNT_CODE_APPLICATION_FAILED',
   /** Discount disabled. */
   DiscountDisabled = 'DISCOUNT_DISABLED',
   /** Discount expired. */
@@ -6869,7 +6871,7 @@ export type GetArticlesQueryVariables = Exact<{
 }>;
 
 
-export type GetArticlesQuery = { __typename?: 'QueryRoot', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, publishedAt: string, tags: Array<string>, handle: string, title: string, excerptHtml?: string | null, thumbnail?: { __typename?: 'Image', url: string } | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: string } | null, blog: { __typename?: 'Blog', handle: string } } }> } };
+export type GetArticlesQuery = { __typename?: 'QueryRoot', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, publishedAt: string, tags: Array<string>, handle: string, title: string, excerptHtml?: string | null, thumbnail?: { __typename?: 'Image', url: string } | null, small?: { __typename?: 'Image', url: string } | null, medium?: { __typename?: 'Image', url: string } | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: string } | null, blog: { __typename?: 'Blog', handle: string } } }> } };
 
 export type GetBlogArticleQueryVariables = Exact<{
   handle: Scalars['String'];
@@ -7102,6 +7104,12 @@ export const GetArticlesDocument = gql`
         tags
         thumbnail: image {
           url(transform: {maxWidth: 210})
+        }
+        small: image {
+          url(transform: {maxWidth: 430})
+        }
+        medium: image {
+          url(transform: {maxWidth: 860})
         }
         image {
           altText

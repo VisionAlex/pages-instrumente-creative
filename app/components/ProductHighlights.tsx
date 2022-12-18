@@ -11,9 +11,14 @@ import { SaleTag } from "./shared/SaleTag";
 interface Props {
   products: Product[];
   wishlist: string[];
+  showNotification: () => void;
 }
 
-export const ProductsHighlights: React.FC<Props> = ({ products, wishlist }) => {
+export const ProductsHighlights: React.FC<Props> = ({
+  products,
+  wishlist,
+  showNotification,
+}) => {
   const { product, isOpen, closeModal, openModal } = useProductModal(products);
   if (!products) return null;
   return (
@@ -46,12 +51,10 @@ export const ProductsHighlights: React.FC<Props> = ({ products, wishlist }) => {
                   prefetch="intent"
                 >
                   <img
-                    className="cursor-pointer transition duration-400 hover:scale-110"
+                    className="mx-auto cursor-pointer transition duration-400 hover:scale-110"
                     loading="lazy"
                     src={product.imageSmall.edges[0].node.url}
                     alt={product.imageSmall.edges[0].node.altText ?? ""}
-                    width={215}
-                    height={143}
                   />
                   <SaleTag amount={price} compareAtPrice={compareAtPrice} />
                 </Link>
@@ -63,7 +66,11 @@ export const ProductsHighlights: React.FC<Props> = ({ products, wishlist }) => {
                   >
                     {product.title}
                   </Link>
-                  <AddToCart product={product} openModal={openModal} />
+                  <AddToCart
+                    product={product}
+                    openModal={openModal}
+                    showNotification={showNotification}
+                  />
                 </div>
                 <Price
                   price={price}

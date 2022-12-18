@@ -1377,6 +1377,9 @@ enum CheckoutErrorCode {
   """Discount already applied."""
   DISCOUNT_ALREADY_APPLIED
 
+  """Discount code isn't working right now. Please contact us for help."""
+  DISCOUNT_CODE_APPLICATION_FAILED
+
   """Discount disabled."""
   DISCOUNT_DISABLED
 

@@ -3474,7 +3474,7 @@ type Company implements CommentEventSubject & HasEvents & Navigable & Node {
     """Returns up to the last `n` elements from the list."""
     last: Int
 
-    "Supported filter parameters:\n - `company_id`\n - `company_location_id`\n - `created_at`\n - `email`\n - `location_name`\n - `name`\n - `role_name`\n - `updated_at`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
+    "Supported filter parameters:\n - `company_id`\n - `company_location_id`\n - `created_at`\n - `email`\n - `location_name`\n - `name`\n - `role_name`\n - `status`\n - `updated_at`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
     query: String
 
     """Reverse the order of the underlying list."""
@@ -13073,7 +13073,7 @@ type FulfillmentOrder implements Node {
   ): FulfillmentOrderLocationForMoveConnection!
 
   """
-  A list of requests sent by the merchant to the fulfillment service for this fulfillment order.
+  A list of requests sent by the merchant or an order management app to the fulfillment service for the fulfillment order.
   """
   merchantRequests(
     """Returns the elements that come after the specified cursor."""
@@ -13454,7 +13454,7 @@ type FulfillmentOrderLocationForMoveEdge {
   node: FulfillmentOrderLocationForMove!
 }
 
-"Represents a request made by the merchant to a fulfillment service for a fulfillment order.\n"
+"A request made by the merchant or an order management app to a fulfillment service\nfor a fulfillment order.\n"
 type FulfillmentOrderMerchantRequest implements Node {
   """A globally-unique identifier."""
   id: ID!
@@ -28534,7 +28534,7 @@ type QueryRoot {
     """Returns up to the last `n` elements from the list."""
     last: Int
 
-    "Supported filter parameters:\n - `created_at`\n - `discount_type`\n - `ends_at`\n - `starts_at`\n - `status`\n - `times_used`\n - `type`\n - `updated_at`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
+    "Supported filter parameters:\n - `combines_with`\n - `created_at`\n - `discount_type`\n - `ends_at`\n - `starts_at`\n - `status`\n - `times_used`\n - `title`\n - `type`\n - `updated_at`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
     query: String
 
     """Reverse the order of the underlying list."""
@@ -28883,7 +28883,7 @@ type QueryRoot {
     """Returns up to the last `n` elements from the list."""
     last: Int
 
-    "Supported filter parameters:\n - `combines_with`\n   - Acceptable Values:\n     - `PRODUCT_DISCOUNTS`\n     - `ORDER_DISCOUNTS`\n     - `SHIPPING_DISCOUNTS`\n - `discount_class`\n   - Acceptable Values:\n     - `PRODUCT`\n     - `ORDER`\n     - `SHIPPING`\n - `discount_type`\n - `method`\n - `starts_at`\n - `status`\n - `times_used`\n - `type`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
+    "Supported filter parameters:\n - `combines_with`\n   - Acceptable Values:\n     - `PRODUCT_DISCOUNTS`\n     - `ORDER_DISCOUNTS`\n     - `SHIPPING_DISCOUNTS`\n - `discount_class`\n   - Acceptable Values:\n     - `PRODUCT`\n     - `ORDER`\n     - `SHIPPING`\n - `discount_type`\n - `method`\n - `starts_at`\n - `status`\n - `times_used`\n - `title`\n - `type`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
     query: String
 
     """Reverse the order of the underlying list."""
@@ -29615,7 +29615,7 @@ type QueryRoot {
     """Returns up to the last `n` elements from the list."""
     last: Int
 
-    "Supported filter parameters:\n - `created_at`\n - `discount_type`\n - `ends_at`\n - `starts_at`\n - `status`\n - `times_used`\n - `updated_at`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
+    "Supported filter parameters:\n - `combines_with`\n - `created_at`\n - `discount_type`\n - `ends_at`\n - `starts_at`\n - `status`\n - `times_used`\n - `title`\n - `updated_at`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
     query: String
 
     """Reverse the order of the underlying list."""
@@ -29721,7 +29721,7 @@ type QueryRoot {
     """Returns up to the last `n` elements from the list."""
     last: Int
 
-    "Supported filter parameters:\n - `barcode`\n - `collection`\n - `delivery_profile_id`\n - `exclude_composite`\n - `gift_card`\n - `inventory_quantity`\n - `location_id`\n - `managed`\n - `managed_by`\n - `product_id`\n - `product_status`\n - `product_type`\n - `publishable_status`\n - `published_status`\n - `sku`\n - `tag`\n - `tag_not`\n - `taxable`\n - `title`\n - `updated_at`\n - `vendor`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
+    "Supported filter parameters:\n - `available_quantity`\n - `barcode`\n - `collection`\n - `committed_quantity`\n - `delivery_profile_id`\n - `exclude_composite`\n - `gift_card`\n - `incoming_quantity`\n - `inventory_quantity`\n - `location_id`\n - `managed`\n - `managed_by`\n - `on_hand_quantity`\n - `product_id`\n - `product_status`\n - `product_type`\n - `publishable_status`\n - `published_status`\n - `reserved_quantity`\n - `sku`\n - `tag`\n - `tag_not`\n - `taxable`\n - `title`\n - `updated_at`\n - `vendor`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
     query: String
 
     """Reverse the order of the underlying list."""
@@ -33697,7 +33697,7 @@ type Shop implements HasMetafields & HasPublishedTranslations & Node {
     """Returns up to the last `n` elements from the list."""
     last: Int
 
-    "Supported filter parameters:\n - `created_at`\n - `discount_type`\n - `ends_at`\n - `starts_at`\n - `status`\n - `times_used`\n - `updated_at`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
+    "Supported filter parameters:\n - `combines_with`\n - `created_at`\n - `discount_type`\n - `ends_at`\n - `starts_at`\n - `status`\n - `times_used`\n - `title`\n - `updated_at`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
     query: String
 
     """Reverse the order of the underlying list."""
@@ -33818,7 +33818,7 @@ type Shop implements HasMetafields & HasPublishedTranslations & Node {
     """Returns up to the last `n` elements from the list."""
     last: Int
 
-    "Supported filter parameters:\n - `barcode`\n - `collection`\n - `delivery_profile_id`\n - `exclude_composite`\n - `gift_card`\n - `inventory_quantity`\n - `location_id`\n - `managed`\n - `managed_by`\n - `product_id`\n - `product_status`\n - `product_type`\n - `publishable_status`\n - `published_status`\n - `sku`\n - `tag`\n - `tag_not`\n - `taxable`\n - `title`\n - `updated_at`\n - `vendor`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
+    "Supported filter parameters:\n - `available_quantity`\n - `barcode`\n - `collection`\n - `committed_quantity`\n - `delivery_profile_id`\n - `exclude_composite`\n - `gift_card`\n - `incoming_quantity`\n - `inventory_quantity`\n - `location_id`\n - `managed`\n - `managed_by`\n - `on_hand_quantity`\n - `product_id`\n - `product_status`\n - `product_type`\n - `publishable_status`\n - `published_status`\n - `reserved_quantity`\n - `sku`\n - `tag`\n - `tag_not`\n - `taxable`\n - `title`\n - `updated_at`\n - `vendor`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
     query: String
 
     """Reverse the order of the underlying list."""

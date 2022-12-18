@@ -50,7 +50,6 @@ interface BuyButtonProps {
   asText?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
-
 const BuyButton: React.FC<BuyButtonProps> = ({ disabled, asText, onClick }) => {
   return (
     <button
