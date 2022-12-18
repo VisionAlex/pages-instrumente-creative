@@ -5,8 +5,8 @@ import { LinkButton } from "./shared/LinkButton";
 export const Hero: React.FC = () => {
   return (
     <div className="relative h-[110vw] max-h-[550px] w-full bg-[#fcf8f5]">
-      <div className="absolute bottom-0 z-0 h-[100.7px] w-full bg-[#e8e2db]"></div>
-      <div className="absolute z-20 flex w-full flex-col items-center justify-center p-5 text-center">
+      <div className="absolute bottom-0 z-0 h-[100.7px] w-full bg-[#e8e2db]" />
+      <div className="absolute z-20 flex w-full flex-col items-center justify-center gap-4 p-5 text-center">
         <h2 className="text-[8.6vw] leading-tight text-primary sm:mb-6 sm:text-header ">
           Editura Instrumente Creative
         </h2>
@@ -17,7 +17,7 @@ export const Hero: React.FC = () => {
         <LinkButton
           to={config.pages.produse.path}
           text="Vizualizează toate produsele"
-          responsive
+          className="min-h-[44px]"
         />
       </div>
       <img

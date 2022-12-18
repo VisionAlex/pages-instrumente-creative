@@ -1,13 +1,14 @@
 import { Link } from "@remix-run/react";
 import React from "react";
 import { config } from "~/config";
+import { classNames } from "~/shared/utils/classNames";
+import { getImageAspectRatio } from "~/shared/utils/getImageAspectRatio";
 import type { Product } from "~/types";
 import { AddToCart } from "./AddToCart";
 import { ProductModal } from "./ProductModal";
 import { useProductModal } from "./ProductModal/useProductModal";
 import { Price } from "./shared/Price";
 import { SaleTag } from "./shared/SaleTag";
-
 interface Props {
   products: Product[];
   wishlist: string[];
@@ -50,15 +51,22 @@ export const ProductsHighlights: React.FC<Props> = ({
                   to={`${config.pages.produse.path}/${product.handle}`}
                   prefetch="intent"
                 >
-                  <img
-                    className="mx-auto cursor-pointer transition duration-400 hover:scale-110"
-                    loading="lazy"
-                    src={product.imageSmall.edges[0].node.url}
-                    alt={product.imageSmall.edges[0].node.altText ?? ""}
-                  />
+                  <div
+                    className={classNames(
+                      getImageAspectRatio(product.imageSmall.edges[0].node),
+                      "relative overflow-hidden"
+                    )}
+                  >
+                    <img
+                      className="mx-auto cursor-pointer transition duration-400 hover:scale-110"
+                      loading="lazy"
+                      src={product.imageMedium.edges[0].node.url}
+                      alt={product.imageMedium.edges[0].node.altText ?? ""}
+                    />
+                  </div>
                   <SaleTag amount={price} compareAtPrice={compareAtPrice} />
                 </Link>
-                <div className="flex items-start justify-between  pt-2">
+                <div className="flex items-start justify-between pt-2">
                   <Link
                     className="max-w-fit text-subtitle hover:text-primary"
                     to={`/produse/${product.handle}`}

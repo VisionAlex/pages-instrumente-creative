@@ -1150,6 +1150,10 @@ input[type="number"] {
   max-height: fit-content;
 }
 
+.min-h-\[44px\] {
+  min-height: 44px;
+}
+
 .min-h-\[calc\(100vh_-_123px_-_50px\)\] {
   min-height: calc(100vh - 123px - 50px);
 }
