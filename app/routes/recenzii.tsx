@@ -12,18 +12,20 @@ import pageStyles from "~/styles/page.css";
 
 type LoaderData = {
   page: NonNullable<GetPageQuery["page"]>;
+  reviews: any;
 };
 
 export const loader: LoaderFunction = async ({ context }) => {
   console.log(context);
   const kv = context.REVIEWS as KVNamespace;
-  const reviews = await kv.list({ limit: 10 });
+  const reviews = await kv.get("recenzii", { type: "json" });
   console.log(reviews);
   const sdk = createSdk(context);
   const page = await getPage(sdk, { handle: PAGE_HANDLE.REVIEWS });
   return json(
     {
       page: page.page,
+      reviews,
     },
     {
       headers: {
@@ -51,7 +53,8 @@ export const links = () => {
   return [{ rel: "stylesheet", href: pageStyles }];
 };
 const Reviews: React.FC = () => {
-  const { page } = useLoaderData<LoaderData>();
+  const { page, reviews } = useLoaderData<LoaderData>();
+  console.log("reviews", reviews);
   return (
     <FadeIn>
       <PageHeader />
@@ -59,6 +62,7 @@ const Reviews: React.FC = () => {
         className="page mx-auto max-w-7xl px-5 lg:px-8 xl:px-20"
         dangerouslySetInnerHTML={{ __html: page.body }}
       />
+      <pre>{JSON.stringify(reviews)}</pre>
     </FadeIn>
   );
 };
