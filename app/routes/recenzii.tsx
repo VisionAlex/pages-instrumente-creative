@@ -15,6 +15,10 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ context }) => {
+  console.log(context);
+  const kv = context.REVIEWS as KVNamespace;
+  const reviews = await kv.list({ limit: 10 });
+  console.log(reviews);
   const sdk = createSdk(context);
   const page = await getPage(sdk, { handle: PAGE_HANDLE.REVIEWS });
   return json(
