@@ -19,6 +19,7 @@ import { Logo } from "./components/Logo";
 import { Menu } from "./components/Menu";
 import { Navbar } from "./components/Navbar";
 import { ScrollToTop } from "./components/ScrollToTop";
+import { Notifications } from "./components/shared/Notification/Notifications";
 import { ShoppingCart } from "./components/ShoppingCart/ShoppingCart";
 import { getCartSize } from "./components/ShoppingCart/utils";
 import { Toolbar } from "./components/Toolbar";
@@ -88,6 +89,7 @@ export default function App() {
   const [showCart, setShowCart] = useState(false);
   const [showWishlist, setShowWishlist] = useState(false);
   const [showAccountModal, setShowAccountModal] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
   const cartSize = useMemo(() => getCartSize(cart), [cart]);
   return (
     <html lang="ro">
@@ -127,8 +129,18 @@ export default function App() {
         <ScrollToTop />
         <div className={`pt-[123px] pb-[50px] lg:pb-0`}>
           <main>
-            <Outlet context={{ products, user }} />
+            <Outlet
+              context={{
+                products,
+                user,
+                showNotification: () => setShowNotification(true),
+              }}
+            />
           </main>
+          <Notifications
+            show={showNotification}
+            setShow={setShowNotification}
+          />
           <Footer user={user} />
         </div>
         <FooterMenu

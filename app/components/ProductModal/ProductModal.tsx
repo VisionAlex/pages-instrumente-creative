@@ -64,8 +64,11 @@ export const ProductModal: React.FC<Props> = ({
             <Dialog.Panel className="absolute inset-0 m-auto max-h-fit w-[95vw] max-w-[490px] bg-white px-5 py-8 md:px-12 md:py-14">
               <div className="absolute right-4 top-4">
                 <span className="sr-only">Close</span>
-                <button className="cursor-pointer text-primary outline-none hover:text-subtitle">
-                  <XIcon className="h-4 w-4" onClick={onClose} />
+                <button
+                  className="cursor-pointer text-primary outline-none hover:text-subtitle"
+                  onClick={onClose}
+                >
+                  <XIcon className="h-4 w-4" />
                 </button>
               </div>
               <div>

@@ -21,4 +21,5 @@ export type DetailedProduct = NonNullable<GetProductByHandleQuery["product"]>;
 export type RootContext = {
   products: Product[];
   user: GetUserQuery | null;
+  showNotification: () => void;
 };

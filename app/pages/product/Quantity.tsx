@@ -36,12 +36,11 @@ export const Quantity: React.FC<Props> = ({ quantity, setQuantity }) => {
           setQuantity(Number(e.target.value));
         }}
       />
-      <button className="border border-background p-2 hover:bg-primary hover:text-white">
-        <PlusSmIcon
-          strokeWidth={1.5}
-          className="h-6 w-6"
-          onClick={addQuantity}
-        />
+      <button
+        className="border border-background p-2 hover:bg-primary hover:text-white"
+        onClick={addQuantity}
+      >
+        <PlusSmIcon strokeWidth={1.5} className="h-6 w-6" />
       </button>
     </div>
   );

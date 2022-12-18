@@ -8,9 +8,15 @@ interface Props {
   product: Product;
   openModal: (product: Product) => void;
   asText?: boolean;
+  showNotification?: () => void;
 }
 
-export const AddToCart: React.FC<Props> = ({ product, openModal, asText }) => {
+export const AddToCart: React.FC<Props> = ({
+  product,
+  openModal,
+  asText,
+  showNotification,
+}) => {
   const location = useLocation();
   const isProductAvailable = product.availableForSale;
   const hasOnlyOneVariant = product.variants.edges.length === 1;
@@ -26,7 +32,7 @@ export const AddToCart: React.FC<Props> = ({ product, openModal, asText }) => {
         <input type="hidden" name="variantID" value={variant.id} />
         <input type="hidden" name="_action" value="add" />
         <input type="hidden" name="redirectTo" value={location.pathname} />
-        <BuyButton asText={asText} />
+        <BuyButton asText={asText} onClick={showNotification} />
       </Form>
     );
   return (

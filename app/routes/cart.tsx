@@ -15,12 +15,12 @@ export const action: ActionFunction = async ({ request }) => {
   const variantID = formData.get("variantID") as string;
   const formQuantity = formData.get("quantity") as string | null;
   const cart = JSON.parse(session.get("cart") || "[]") as Cart;
+  const quantity = formQuantity ? parseInt(formQuantity) : 1;
 
   let newCart = cart;
   switch (action) {
     case "add": {
       const foundItem = cart.find((item) => item.variantId === variantID);
-      const quantity = formQuantity ? parseInt(formQuantity) : 1;
       if (foundItem) {
         newCart = cart.map((item) => {
           if (item.variantId === variantID) {

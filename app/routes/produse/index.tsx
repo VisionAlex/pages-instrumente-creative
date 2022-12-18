@@ -31,9 +31,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 const AllProducts: React.FC = () => {
   const { wishlist } = useLoaderData<LoaderData>();
-  const { products } = useOutletContext<RootContext>();
+  const { products, showNotification } = useOutletContext<RootContext>();
   const { isOpen, product, openModal, closeModal } = useProductModal(products);
-
   if (!products) return null;
   return (
     <FadeIn>
@@ -96,7 +95,12 @@ const AllProducts: React.FC = () => {
                   />
                   <div className="grow" />
                   <div className="mt-5 flex items-center gap-1.5 text-primary">
-                    <AddToCart product={product} openModal={openModal} asText />
+                    <AddToCart
+                      product={product}
+                      openModal={openModal}
+                      asText
+                      showNotification={showNotification}
+                    />
                     <button
                       onClick={() => openModal(product)}
                       className="flex h-[44px] w-[44px] cursor-pointer items-center justify-center border border-primary transition-colors duration-500 hover:bg-primary hover:text-white"
