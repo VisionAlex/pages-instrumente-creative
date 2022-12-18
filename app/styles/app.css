@@ -952,14 +952,6 @@ input[type="number"] {
   margin-top: 1.25rem;
 }
 
-.mb-5 {
-  margin-bottom: 1.25rem;
-}
-
-.mt-3 {
-  margin-top: 0.75rem;
-}
-
 .mt-6 {
   margin-top: 1.5rem;
 }
@@ -976,6 +968,10 @@ input[type="number"] {
   margin-right: 11px;
 }
 
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
 .mt-2 {
   margin-top: 0.5rem;
 }
@@ -990,6 +986,10 @@ input[type="number"] {
 
 .-mt-4 {
   margin-top: -1rem;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
 }
 
 .ml-3 {
@@ -1140,6 +1140,14 @@ input[type="number"] {
   height: 0.25rem;
 }
 
+.h-96 {
+  height: 24rem;
+}
+
+.h-11 {
+  height: 2.75rem;
+}
+
 .max-h-\[550px\] {
   max-height: 550px;
 }
@@ -1148,6 +1156,14 @@ input[type="number"] {
   max-height: -webkit-fit-content;
   max-height: -moz-fit-content;
   max-height: fit-content;
+}
+
+.max-h-80 {
+  max-height: 20rem;
+}
+
+.max-h-96 {
+  max-height: 24rem;
 }
 
 .min-h-\[44px\] {
@@ -1206,18 +1222,18 @@ input[type="number"] {
   width: 2rem;
 }
 
+.w-fit {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
 .w-11 {
   width: 2.75rem;
 }
 
 .w-1\/2 {
   width: 50%;
-}
-
-.w-fit {
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
-  width: fit-content;
 }
 
 .w-0 {
@@ -1659,6 +1675,11 @@ input[type="number"] {
   background-color: rgb(143 143 143 / var(--tw-bg-opacity));
 }
 
+.bg-banner {
+  --tw-bg-opacity: 1;
+  background-color: rgb(246 222 208 / var(--tw-bg-opacity));
+}
+
 .bg-opacity-25 {
   --tw-bg-opacity: 0.25;
 }
@@ -1973,12 +1994,24 @@ input[type="number"] {
   line-height: 1rem;
 }
 
+.text-\[40px\] {
+  font-size: 40px;
+}
+
 .font-normal {
   font-weight: 400;
 }
 
 .font-medium {
   font-weight: 500;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-light {
+  font-weight: 300;
 }
 
 .uppercase {
@@ -2844,12 +2877,12 @@ input[type="number"] {
     max-width: 80rem;
   }
 
-  .lg\:grid-cols-7 {
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-  }
-
   .lg\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lg\:grid-cols-7 {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
   }
 
   .lg\:grid-rows-1 {

@@ -161,7 +161,7 @@ const BlogIndex: React.FC = () => {
                       <div>
                         <CustomLink
                           className="w-fit"
-                          to={`/blog/${article.handle}`}
+                          to={`/blog/${article.blog.handle}/${article.handle}`}
                         >
                           Citește mai mult
                         </CustomLink>

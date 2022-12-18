@@ -8,6 +8,7 @@ module.exports = {
       },
       colors: {
         background: "#efefef",
+        banner: "#f6ded0",
         secondaryBackground: "#ebeeee",
         errorBackground: "#ffc0cf",
         secondaryLine: "#dbdbdb",

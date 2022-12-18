@@ -1,41 +1,54 @@
 import type { LoaderFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import {
-  Link,
   Outlet,
   useLoaderData,
+  useNavigate,
   useOutletContext,
 } from "@remix-run/react";
+import { motion } from "framer-motion";
 import { Hero } from "~/components/Hero";
 import { ProductsHighlights } from "~/components/ProductHighlights";
 import { FadeIn } from "~/components/shared/FadeIn";
+import { PAGE_HANDLE } from "~/config";
 import type { GetArticlesQuery } from "~/generated/graphql";
 import { createSdk } from "~/graphqlWrapper";
+import { ArticlesSection } from "~/pages/index/ArticlesSection";
+import { ResourcesSection } from "~/pages/index/ResourcesSection";
 import { getArticles } from "~/providers/pages/articles";
 import { getWishlist } from "~/providers/products/products";
-import { getImageAspectRatio } from "~/shared/utils/getImageAspectRatio";
 import type { Product, RootContext } from "~/types";
+
+type Articles = GetArticlesQuery["articles"]["edges"][number]["node"][];
+
 type LoaderData = {
   wishlist: string[];
-  resources: GetArticlesQuery["articles"]["edges"][number]["node"][];
+  resources: Articles;
+  articles: Articles;
 };
 
 export const loader: LoaderFunction = async ({ request, context }) => {
   const wishlist = await getWishlist(request);
   const sdk = createSdk(context);
-  const resourcesResponse = await getArticles(sdk, {
-    first: 3,
-    query:
-      "blog_title:'Resurse gratuite pentru dezvoltarea și educația copilului'",
+  const articleResponse = await getArticles(sdk, {
+    first: 20,
   });
-  const resources = resourcesResponse.articles.edges.map(({ node }) => node);
-  return json({ wishlist, resources });
+  let articles: Articles = [];
+  let resources: Articles = [];
+  articleResponse.articles.edges.forEach(({ node: article }) => {
+    if (article.blog.handle === PAGE_HANDLE.BLOG_RESOURCES) {
+      resources.push(article);
+    } else {
+      articles.push(article);
+    }
+  });
+  return json({ wishlist, resources, articles: articles.slice(0, 3) });
 };
 
 const Index: React.FC = () => {
-  const { wishlist, resources } = useLoaderData<LoaderData>();
+  const navigate = useNavigate();
+  const { wishlist, resources, articles } = useLoaderData<LoaderData>();
   const { showNotification } = useOutletContext<RootContext>();
-
   const { products } = useOutletContext<{ products: Product[] }>();
   return (
     <FadeIn>
@@ -48,36 +61,24 @@ const Index: React.FC = () => {
         showNotification={showNotification}
       />
       <Outlet />
+      <ResourcesSection resources={resources} />
+      <ArticlesSection articles={articles} />
       <section className="mx-auto mt-10 max-w-7xl px-5 lg:px-8 xl:px-20">
-        <h3 className="mb-7 text-center text-3xl leading-tight text-primary">
-          Resurse gratuite
-        </h3>
-        <p className="text-center text-subtitle">
-          Pentru dezvoltarea si educația copilului
-        </p>
-        <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3">
-          {resources.map((resource) => {
-            return (
-              <Link
-                to={`/blog/${resource.blog.handle}/${resource.handle}`}
-                key={resource.id}
-                className="mb-5"
-              >
-                <div className={getImageAspectRatio(resource.image)}>
-                  <img
-                    src={resource.small?.url}
-                    alt={
-                      resource.image?.altText ??
-                      "cursor-pointer object-cover object-center"
-                    }
-                  />
-                </div>
-                <h4 className="mt-3 text-center text-xl leading-tight text-primary">
-                  {resource.title}
-                </h4>
-              </Link>
-            );
-          })}
+        <div className="flex h-96 w-full flex-col items-center justify-center bg-banner uppercase">
+          <h5 className="mb-5 flex flex-col items-center gap-2 uppercase">
+            <span className="text-sm font-light">Descoperă</span>
+            <span className="text-[40px] font-bold">părerea</span>
+            <span>clienților noștri</span>
+          </h5>
+          <motion.button
+            className="flex h-11 items-center justify-center border border-primary px-4 transition-colors duration-500 hover:bg-primary hover:text-white"
+            whileTap={{ scale: 0.9 }}
+            onClick={() => {
+              navigate("/recenzii");
+            }}
+          >
+            RECENZII
+          </motion.button>
         </div>
       </section>
     </FadeIn>
