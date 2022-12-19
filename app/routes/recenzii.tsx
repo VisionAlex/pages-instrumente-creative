@@ -8,7 +8,6 @@ import { ReviewRating } from "~/components/shared/ReviewRating";
 import { PAGE_HANDLE } from "~/config";
 import type { GetPageQuery } from "~/generated/graphql";
 import { createSdk } from "~/graphqlWrapper";
-import reviewJson from "~/kv/reviews.json";
 import { getPage } from "~/providers/pages/page";
 import { formatDate } from "~/shared/utils/formatDate";
 import pageStyles from "~/styles/page.css";
@@ -31,6 +30,7 @@ type LoaderData = {
 export const loader: LoaderFunction = async ({ context }) => {
   let reviews;
   if (context.ENV === "development") {
+    const reviewJson = require("~/kv/reviews.json");
     if (!reviewJson)
       throw new Error(
         "No reviews found. Run 'npm run get:reviews' before starting the dev server."
@@ -75,7 +75,6 @@ export const links = () => {
 };
 const Reviews: React.FC = () => {
   const { reviews } = useLoaderData<LoaderData>();
-  console.log("reviews", reviews);
   return (
     <FadeIn>
       <PageHeader />
