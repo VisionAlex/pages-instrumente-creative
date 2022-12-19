@@ -148,7 +148,7 @@ const BlogIndex: React.FC = () => {
                       </div>
                     </Link>
                     <div className="mt-4 flex flex-grow flex-col p-5">
-                      <Link className="mb-4" to={`/blog/${article.handle}`}>
+                      <Link className="mb-4" to={`${article.handle}`}>
                         <h2 className=" text-xl">{article.title}</h2>
                       </Link>
                       <div
