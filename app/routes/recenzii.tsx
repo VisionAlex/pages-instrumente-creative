@@ -5,10 +5,6 @@ import React from "react";
 import { FadeIn } from "~/components/shared/FadeIn";
 import { PageHeader } from "~/components/shared/PageHeader";
 import { ReviewRating } from "~/components/shared/ReviewRating";
-import { PAGE_HANDLE } from "~/config";
-import type { GetPageQuery } from "~/generated/graphql";
-import { createSdk } from "~/graphqlWrapper";
-import { getPage } from "~/providers/pages/page";
 import { formatDate } from "~/shared/utils/formatDate";
 import pageStyles from "~/styles/page.css";
 
@@ -23,30 +19,23 @@ type Review = {
 };
 
 type LoaderData = {
-  page: NonNullable<GetPageQuery["page"]>;
   reviews: Review[];
 };
 
 export const loader: LoaderFunction = async ({ context }) => {
   let reviews;
   if (context.ENV === "development") {
-    const reviewJson = require("~/kv/reviews.json");
-    if (!reviewJson)
-      throw new Error(
-        "No reviews found. Run 'npm run get:reviews' before starting the dev server."
-      );
-    reviews = reviewJson;
+    reviews = await fetch("https://reviews.adm-alexandru1.workers.dev/").then(
+      (res) => res.json()
+    );
   } else {
     reviews = JSON.parse(
       (await (context.REVIEWS as KVNamespace).get("reviews")) ?? "[]"
     );
   }
-  const sdk = createSdk(context);
-  const page = await getPage(sdk, { handle: PAGE_HANDLE.REVIEWS });
   return json(
     {
       reviews,
-      page: page.page,
     },
     {
       headers: {
@@ -62,10 +51,11 @@ export const headers = () => {
   };
 };
 
-export const meta: MetaFunction = ({ data }) => {
+export const meta: MetaFunction = () => {
   return {
-    title: data.page.seo.title,
-    description: data.page.seo.description,
+    title: "Recenzii produse Editura Instrumente Creative",
+    description:
+      "Află părerea celor care au intrat în posesia produselor Editurii Instrumente Creative. Recenzii ale produselor: Animale și mediul lor de viață, Casa mea! Potrivește, Primele Cuvinte - singular și plural, Sunete, Seturi Puzzle Animale Hrană și foloase.",
     keywords: "recenzii, instrumente creative, pareri",
   };
 };
