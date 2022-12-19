@@ -6,15 +6,22 @@ import { useBreakpoint } from "~/shared/hooks/useBreakpoint";
 interface Props {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  hasProgressBar?: boolean;
 }
 
-export const Notifications: React.FC<Props> = ({ show, setShow }) => {
+const TIMER = 5000;
+
+export const Notifications: React.FC<Props> = ({
+  show,
+  setShow,
+  hasProgressBar,
+}) => {
   const isDesktop = useBreakpoint("md");
   useEffect(() => {
     if (show) {
       const timer = setTimeout(() => {
         setShow(false);
-      }, 5000);
+      }, TIMER);
       return () => clearTimeout(timer);
     }
   }, [setShow, show]);
@@ -70,12 +77,14 @@ export const Notifications: React.FC<Props> = ({ show, setShow }) => {
                   </div>
                 </div>
               </div>
-              <motion.div
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 5, ease: "linear" }}
-                className="h-1 w-full origin-left rounded-md bg-subtitle"
-              />
+              {hasProgressBar ? (
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 5, ease: "linear" }}
+                  className="h-1 w-full origin-left rounded-md bg-subtitle"
+                />
+              ) : null}
             </motion.div>
           )}
         </AnimatePresence>
