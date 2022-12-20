@@ -19,6 +19,10 @@ type Config = {
     };
   };
   email: string;
+  cart: {
+    transport: number;
+    minimumValueForFreeTransport: number;
+  };
 };
 
 export const config: Config = {
@@ -65,4 +69,8 @@ export const config: Config = {
     },
   },
   email: "contact@instrumente-creative.ro",
+  cart: {
+    transport: 10,
+    minimumValueForFreeTransport: 193,
+  },
 };

@@ -1,15 +1,14 @@
-import { LinkButton } from "../shared/LinkButton";
-import { Drawer } from "../shared/Drawer";
-import type { Cart } from "~/providers/cart/cart";
-import { useMemo } from "react";
-import { getCartSize } from "./utils";
-import { CartItem } from "./CartItem";
 import { Form, useLocation, useTransition } from "@remix-run/react";
+import { useMemo } from "react";
+import { config } from "~/config";
+import type { Cart } from "~/providers/cart/cart";
+import type { Product } from "~/types";
+import { Drawer } from "../shared/Drawer";
+import { LinkButton } from "../shared/LinkButton";
 import { Spinner } from "../shared/Spinner";
-import type { Product, Variant, VariantInfo } from "~/types";
+import { CartItem } from "./CartItem";
+import { getCartInfo, getCartSize } from "./utils";
 
-const TRANSPORT = 10;
-const MINIMUM_ORDER_FOR_FREE_TRANSPORT = 193;
 interface Props {
   cart: Cart;
   products: Product[];
@@ -28,6 +27,9 @@ export const ShoppingCart: React.FC<Props> = ({
   const cartInfo = useMemo(() => {
     return getCartInfo(cart, products);
   }, [cart, products]);
+
+  const minimumOrder = config.cart.minimumValueForFreeTransport;
+  const transport = config.cart.transport;
 
   const transition = useTransition();
   const isSubmitting =
@@ -65,25 +67,24 @@ export const ShoppingCart: React.FC<Props> = ({
             <div className="flex justify-between text-base  text-primary">
               <p>
                 Transport
-                {cartInfo.cartTotal < MINIMUM_ORDER_FOR_FREE_TRANSPORT &&
-                  " estimat"}
+                {cartInfo.cartTotal < minimumOrder && " estimat"}
               </p>
               <p className="text-lg text-subtitle">
-                {cartInfo.cartTotal > MINIMUM_ORDER_FOR_FREE_TRANSPORT
+                {cartInfo.cartTotal > minimumOrder
                   ? "GRATUIT"
-                  : `${TRANSPORT} lei`}
+                  : `${transport} lei`}
               </p>
             </div>
             <div className="flex justify-between text-base  text-primary">
               <p>Total</p>
               <p className="text-lg text-subtitle">
-                {cartInfo.cartTotal > MINIMUM_ORDER_FOR_FREE_TRANSPORT
+                {cartInfo.cartTotal > minimumOrder
                   ? cartInfo.cartTotal
-                  : cartInfo.cartTotal + TRANSPORT}{" "}
+                  : cartInfo.cartTotal + transport}{" "}
                 lei
               </p>
             </div>
-            <div className="mt-6">
+            <div className="mt-8">
               <Form method="post" action="/checkout">
                 <input type="hidden" name="formName" value="checkout" />
                 <input
@@ -107,7 +108,8 @@ export const ShoppingCart: React.FC<Props> = ({
                 </button>
               </Form>
               <LinkButton
-                to="#"
+                to="/cart"
+                onClick={() => setShowCart(false)}
                 text="Vezi Coșul de cumpărături"
                 variant="light"
                 className="lg:text-lg"
@@ -118,48 +120,4 @@ export const ShoppingCart: React.FC<Props> = ({
       </div>
     </Drawer>
   );
-};
-
-export const getCartInfo = (cart: Cart, products: Product[]) => {
-  const cartSize = getCartSize(cart);
-  const cartItems = products.reduce((result, product) => {
-    const productInCart = product.variants.edges.some((variant) => {
-      return cart.some((item) => item.variantId === variant.node.id);
-    });
-
-    if (productInCart) {
-      const variants: Variant[] = product.variants.edges
-        .filter(({ node: variant }) => {
-          return cart.some((item) => item.variantId === variant.id);
-        })
-        .map((variant) => {
-          return variant.node;
-        });
-
-      let variantsWithInfo = [];
-      for (const variant of variants) {
-        variantsWithInfo.push({
-          ...variant,
-          productID: product.id,
-          productTitle: product.title,
-          handle: product.handle,
-          thumbnail: product.thumbnail,
-          quantity:
-            cart.find((item) => item.variantId === variant.id)?.quantity || 0,
-        });
-      }
-      return [...result, ...variantsWithInfo];
-    }
-    return result;
-  }, [] as VariantInfo[]);
-
-  const cartTotal = cartItems.reduce((total, item) => {
-    return total + parseInt(item.price.amount) * item.quantity;
-  }, 0);
-
-  return {
-    cartTotal,
-    cartSize,
-    cartItems,
-  };
 };
