@@ -1,8 +1,6 @@
 import { Link } from "@remix-run/react";
 import React from "react";
 import { config } from "~/config";
-import { classNames } from "~/shared/utils/classNames";
-import { getImageAspectRatio } from "~/shared/utils/getImageAspectRatio";
 import type { Product } from "~/types";
 import { AddToCart } from "./AddToCart";
 import { ProductModal } from "./ProductModal";
@@ -51,12 +49,7 @@ export const ProductsHighlights: React.FC<Props> = ({
                   to={`${config.pages.produse.path}/${product.handle}`}
                   prefetch="intent"
                 >
-                  <div
-                    className={classNames(
-                      getImageAspectRatio(product.imageSmall.edges[0].node),
-                      "relative overflow-hidden"
-                    )}
-                  >
+                  <div className="overflow-hidden">
                     <img
                       className="mx-auto cursor-pointer transition duration-400 hover:scale-110"
                       loading="lazy"
