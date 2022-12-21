@@ -48,7 +48,7 @@ export const action: ActionFunction = async ({ request }) => {
           return item;
         });
       } else {
-        newCart = [...cart, { variantId: variantID, quantity: 1 }];
+        newCart = [...cart, { variantId: variantID, quantity }];
       }
       break;
     }
