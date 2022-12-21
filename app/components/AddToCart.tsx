@@ -58,7 +58,7 @@ const BuyButton: React.FC<BuyButtonProps> = ({ disabled, asText, onClick }) => {
       className={classNames(
         "flex h-[44px]  items-center justify-center border border-primary  transition-colors duration-500",
         disabled
-          ? "bg-subtitle text-white"
+          ? "bg-gray-500 text-white"
           : "cursor-pointer bg-white text-primary hover:bg-primary hover:text-white",
         asText ? "px-4" : "w-[44px]"
       )}

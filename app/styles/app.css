@@ -1662,9 +1662,9 @@ input[type="number"] {
   background-color: rgb(254 226 226 / var(--tw-bg-opacity));
 }
 
-.bg-subtitle {
+.bg-gray-500 {
   --tw-bg-opacity: 1;
-  background-color: rgb(112 112 112 / var(--tw-bg-opacity));
+  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
 }
 
 .bg-white {
@@ -1700,6 +1700,11 @@ input[type="number"] {
 .bg-primary {
   --tw-bg-opacity: 1;
   background-color: rgb(44 44 44 / var(--tw-bg-opacity));
+}
+
+.bg-subtitle {
+  --tw-bg-opacity: 1;
+  background-color: rgb(112 112 112 / var(--tw-bg-opacity));
 }
 
 .bg-lightGrey {

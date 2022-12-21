@@ -107,7 +107,7 @@ export const Wishlist: React.FC<Props> = ({
                       {hasVariants
                         ? "Selecteaza optiunea"
                         : isAvailable
-                        ? "Adauga in cos"
+                        ? "Adaugă în coș"
                         : "Stoc epuizat"}
                     </Button>
                   </div>

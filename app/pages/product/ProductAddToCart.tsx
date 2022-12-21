@@ -33,9 +33,9 @@ export const ProductAddToCart: React.FC<Props> = ({
         onClick={onAddToCart ? () => onAddToCart() : undefined}
         className={classNames(
           "flex h-12  w-full items-center justify-center bg-primary px-4 py-2 text-sm uppercase tracking-widest text-white transition-all ",
-          !product.availableForSale
-            ? "bg-subtitle"
-            : " border border-primary hover:bg-white hover:text-primary"
+          product.availableForSale
+            ? " border border-primary hover:bg-white hover:text-primary"
+            : "bg-gray-500"
         )}
       >
         {product.availableForSale ? "Adaugă în coș" : "Stoc epuizat"}
