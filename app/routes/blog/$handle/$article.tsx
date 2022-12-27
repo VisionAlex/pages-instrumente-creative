@@ -77,7 +77,7 @@ const Article: React.FC = () => {
   const { user } = useOutletContext<RootContext>();
 
   return (
-    <FadeIn className="page mx-auto  px-5 lg:px-8 xl:px-20">
+    <FadeIn className="page mx-auto  max-w-screen-2xl px-5 lg:px-8 xl:px-20">
       <div className="mt-8 grid grid-cols-7 gap-x-8">
         <section className="col-span-7 lg:col-span-5">
           <p className="mb-4 flex items-center gap-2">
