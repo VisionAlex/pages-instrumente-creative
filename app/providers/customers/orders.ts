@@ -26,10 +26,9 @@ export const getCustomerOrders = async (
   const accessToken = session.get("accessToken");
   if (!accessToken || typeof accessToken !== "string")
     throw new Error("No access token found");
-
   return sdk.getOrders({
     customerAccessToken: accessToken,
-    first: 10,
+    first: 25,
     after,
   });
 };
@@ -37,16 +36,19 @@ export const getCustomerOrders = async (
 gql`
   query getOrders(
     $customerAccessToken: String!
-    $first: Int = 10
+    $first: Int = 25
+    $before: String
     $after: String
   ) {
     customer(customerAccessToken: $customerAccessToken) {
       orders(
         first: $first
         after: $after
+        before: $before
         sortKey: PROCESSED_AT
         reverse: true
       ) {
+        totalCount
         pageInfo {
           startCursor
           hasNextPage

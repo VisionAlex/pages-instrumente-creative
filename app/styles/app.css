@@ -853,10 +853,6 @@ input[type="number"] {
   margin: auto;
 }
 
-.m-1 {
-  margin: 0.25rem;
-}
-
 .my-4 {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -1435,10 +1431,6 @@ input[type="number"] {
   flex-wrap: wrap;
 }
 
-.flex-nowrap {
-  flex-wrap: nowrap;
-}
-
 .items-start {
   align-items: flex-start;
 }
@@ -1567,10 +1559,6 @@ input[type="number"] {
 
 .self-start {
   align-self: flex-start;
-}
-
-.self-end {
-  align-self: flex-end;
 }
 
 .self-center {
@@ -2217,11 +2205,6 @@ input[type="number"] {
   color: rgb(191 13 18 / var(--tw-text-opacity));
 }
 
-.text-red-500 {
-  --tw-text-opacity: 1;
-  color: rgb(239 68 68 / var(--tw-text-opacity));
-}
-
 .text-gray-900 {
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
@@ -2230,6 +2213,11 @@ input[type="number"] {
 .text-gray-700 {
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
+}
+
+.text-red-500 {
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 
 .text-green-700 {
@@ -2330,14 +2318,14 @@ input[type="number"] {
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
 }
 
-.ring-primary {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(44 44 44 / var(--tw-ring-opacity));
-}
-
 .ring-black {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(0 0 0 / var(--tw-ring-opacity));
+}
+
+.ring-primary {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(44 44 44 / var(--tw-ring-opacity));
 }
 
 .ring-opacity-5 {

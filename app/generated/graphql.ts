@@ -6857,11 +6857,12 @@ export type CustomerRecoverMutation = { __typename?: 'Mutation', customerRecover
 export type GetOrdersQueryVariables = Exact<{
   customerAccessToken: Scalars['String'];
   first?: InputMaybe<Scalars['Int']>;
+  before?: InputMaybe<Scalars['String']>;
   after?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetOrdersQuery = { __typename?: 'QueryRoot', customer?: { __typename?: 'Customer', orders: { __typename?: 'OrderConnection', pageInfo: { __typename?: 'PageInfo', startCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'OrderEdge', node: { __typename?: 'Order', id: string, orderNumber: number, processedAt: string, fulfillmentStatus: OrderFulfillmentStatus, financialStatus?: OrderFinancialStatus | null, statusUrl: string, totalPrice: { __typename?: 'MoneyV2', amount: string } } }> } } | null };
+export type GetOrdersQuery = { __typename?: 'QueryRoot', customer?: { __typename?: 'Customer', orders: { __typename?: 'OrderConnection', totalCount: string, pageInfo: { __typename?: 'PageInfo', startCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'OrderEdge', node: { __typename?: 'Order', id: string, orderNumber: number, processedAt: string, fulfillmentStatus: OrderFulfillmentStatus, financialStatus?: OrderFinancialStatus | null, statusUrl: string, totalPrice: { __typename?: 'MoneyV2', amount: string } } }> } } | null };
 
 export type GetOrderQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -7077,9 +7078,16 @@ export const CustomerRecoverDocument = gql`
 }
     `;
 export const GetOrdersDocument = gql`
-    query getOrders($customerAccessToken: String!, $first: Int = 10, $after: String) {
+    query getOrders($customerAccessToken: String!, $first: Int = 25, $before: String, $after: String) {
   customer(customerAccessToken: $customerAccessToken) {
-    orders(first: $first, after: $after, sortKey: PROCESSED_AT, reverse: true) {
+    orders(
+      first: $first
+      after: $after
+      before: $before
+      sortKey: PROCESSED_AT
+      reverse: true
+    ) {
+      totalCount
       pageInfo {
         startCursor
         hasNextPage

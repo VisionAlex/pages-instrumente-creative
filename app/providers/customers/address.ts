@@ -19,7 +19,7 @@ export const getDefaultAddress = async (sdk: SDK, request: Request) => {
 gql`
   query getAddresses($customerAccessToken: String!) {
     customer(customerAccessToken: $customerAccessToken) {
-      addresses(first: 5) {
+      addresses(first: 20) {
         edges {
           node {
             id
