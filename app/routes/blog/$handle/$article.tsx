@@ -16,6 +16,7 @@ import { getBlogArticle } from "~/providers/pages/articles";
 import { classNames } from "~/shared/utils/classNames";
 import { formatDate } from "~/shared/utils/formatDate";
 import { getImageAspectRatio } from "~/shared/utils/getImageAspectRatio";
+import { getImageUrl } from "~/shared/utils/images";
 import blogStyles from "~/styles/blog.css";
 import type { RootContext } from "~/types";
 
@@ -94,7 +95,15 @@ const Article: React.FC = () => {
               "object-contain object-center"
             )}
           >
-            <img src={article.image?.url} alt={article.image?.altText ?? ""} />
+            <img
+              loading="lazy"
+              srcSet={`${getImageUrl(article.image?.url, 890)} 890w, ${
+                article.image?.url
+              } 2000w`}
+              sizes="(max-width:600px) 890px, 2000px"
+              src={article.image?.url}
+              alt={article.image?.altText ?? ""}
+            />
           </div>
           <div>
             <div
