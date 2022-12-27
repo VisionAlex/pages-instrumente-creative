@@ -26,8 +26,9 @@ export const RecentArticlesWidget: React.FC<Props> = ({
               className="flex gap-4 border-b border-secondaryBackground py-4"
             >
               <img
-                width={70}
-                height={70}
+                className="object-cover object-center"
+                width={80}
+                height={80}
                 src={article.thumbnail?.url}
                 alt={article.thumbnail?.altText ?? ""}
               />
@@ -35,7 +36,7 @@ export const RecentArticlesWidget: React.FC<Props> = ({
                 <Link
                   to={`/blog/${article.blog.handle}/${article.handle}`}
                   prefetch="intent"
-                  className="text-lg"
+                  className="text-lg line-clamp-2"
                 >
                   {article.title}
                 </Link>
