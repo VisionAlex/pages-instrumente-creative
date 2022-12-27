@@ -25747,10 +25747,7 @@ export enum PubSubWebhookSubscriptionUpdateUserErrorCode {
  */
 export type Publication = Node & {
   __typename?: 'Publication';
-  /**
-   * The app associated with the publication.
-   * @deprecated Apps have been moved to Catalogs, use `AppCatalog.apps` instead.
-   */
+  /** The app associated with the publication. */
   app: App;
   /** The collection publications for the list of collections published to the publication. */
   collectionPublicationsV3: ResourcePublicationConnection;
@@ -25760,10 +25757,7 @@ export type Publication = Node & {
   hasCollection: Scalars['Boolean'];
   /** A globally-unique identifier. */
   id: Scalars['ID'];
-  /**
-   * Name of the publication.
-   * @deprecated Name has been moved to Catalogs, use `Catalog.title` instead.
-   */
+  /** Name of the publication. */
   name: Scalars['String'];
   /** The product publications for the list of products published to the publication. */
   productPublicationsV3: ResourcePublicationConnection;

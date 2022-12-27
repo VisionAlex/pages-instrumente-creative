@@ -7,6 +7,17 @@ type GetCustomerOrdersOptions = {
   after?: string;
 };
 
+export const getOrder = async (
+  sdk: SDK,
+  { id, first, last }: { id: string; first?: number; last?: number }
+) => {
+  return sdk.getOrder({
+    id,
+    first,
+    last,
+  });
+};
+
 export const getCustomerOrders = async (
   sdk: SDK,
   { request, after }: GetCustomerOrdersOptions
@@ -53,6 +64,131 @@ gql`
             fulfillmentStatus
             financialStatus
             statusUrl
+          }
+        }
+      }
+    }
+  }
+`;
+
+gql`
+  query getOrder($id: ID!, $first: Int = 20, $last: Int) {
+    node(id: $id) {
+      __typename
+      id
+      ... on Order {
+        name
+        processedAt
+        discountApplications(first: 5) {
+          edges {
+            node {
+              ... on DiscountCodeApplication {
+                code
+              }
+            }
+          }
+        }
+        shippingDiscountAllocations {
+          allocatedAmount {
+            amount
+          }
+          discountApplication {
+            __typename
+            ... on DiscountCodeApplication {
+              code
+            }
+          }
+        }
+        canceledAt
+        edited
+        totalRefunded {
+          amount
+        }
+        successfulFulfillments {
+          fulfillmentLineItems(first: $first, last: $last) {
+            pageInfo {
+              endCursor
+              hasNextPage
+              hasPreviousPage
+              startCursor
+            }
+            edges {
+              cursor
+              node {
+                quantity
+                lineItem {
+                  variant {
+                    id
+                  }
+                }
+              }
+            }
+          }
+          trackingCompany
+          trackingInfo {
+            url
+            number
+          }
+        }
+        fulfillmentStatus
+        orderNumber
+        cancelReason
+        canceledAt
+        currentSubtotalPrice {
+          amount
+        }
+        totalShippingPrice {
+          amount
+        }
+        currentTotalPrice {
+          amount
+        }
+        customerUrl
+        statusUrl
+        financialStatus
+        shippingAddress {
+          name
+          formatted
+        }
+        email
+        lineItems(first: $first, last: $last) {
+          pageInfo {
+            endCursor
+            hasNextPage
+            hasPreviousPage
+            startCursor
+          }
+          edges {
+            cursor
+            node {
+              title
+              quantity
+              currentQuantity
+              discountedTotalPrice {
+                amount
+              }
+              originalTotalPrice {
+                amount
+              }
+              discountAllocations {
+                allocatedAmount {
+                  amount
+                }
+                discountApplication {
+                  __typename
+                  ... on DiscountCodeApplication {
+                    code
+                  }
+                }
+              }
+              variant {
+                id
+                title
+                product {
+                  id
+                }
+              }
+            }
           }
         }
       }

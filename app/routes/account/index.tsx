@@ -1,12 +1,16 @@
 import type { LoaderFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import React from "react";
 import { FadeIn } from "~/components/shared/FadeIn";
 import type { GetOrdersQuery } from "~/generated/graphql";
 import { createSdk } from "~/graphqlWrapper";
 import { getCustomerOrders } from "~/providers/customers/orders";
 import { formatDate } from "~/shared/utils/formatDate";
+import {
+  getFinancialStatus,
+  getFulfillmentStatus,
+} from "~/shared/utils/orders";
 
 export const loader: LoaderFunction = async ({ request, context }) => {
   const sdk = createSdk(context);
@@ -83,13 +87,15 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders }) => {
           {orders.map((order) => (
             <tr key={order.orderNumber}>
               <td className="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-6">
-                #{order.orderNumber}
+                <Link to={`/account/orders/${btoa(order.id)}`}>
+                  #{order.orderNumber}
+                </Link>
                 <dl className="font-normal lg:hidden">
                   <dd className="mt-1 truncate text-gray-700">
                     {formatDate(order.processedAt)}
                   </dd>
                   <dd className="mt-1 truncate text-gray-500 sm:hidden">
-                    {order.fulfillmentStatus}
+                    {getFulfillmentStatus(order.fulfillmentStatus)}
                   </dd>
                 </dl>
               </td>
@@ -97,10 +103,10 @@ const OrdersTable: React.FC<OrdersTableProps> = ({ orders }) => {
                 {formatDate(order.processedAt)}
               </td>
               <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                {order.financialStatus}
+                {getFinancialStatus(order.financialStatus)}
               </td>
               <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">
-                {order.fulfillmentStatus}
+                {getFulfillmentStatus(order.fulfillmentStatus)}
               </td>
               <td className="px-3 py-4 text-sm text-gray-500">
                 {order.totalPrice.amount}

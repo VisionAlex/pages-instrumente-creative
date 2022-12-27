@@ -6863,6 +6863,15 @@ export type GetOrdersQueryVariables = Exact<{
 
 export type GetOrdersQuery = { __typename?: 'QueryRoot', customer?: { __typename?: 'Customer', orders: { __typename?: 'OrderConnection', pageInfo: { __typename?: 'PageInfo', startCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean, endCursor?: string | null }, edges: Array<{ __typename?: 'OrderEdge', node: { __typename?: 'Order', id: string, orderNumber: number, processedAt: string, fulfillmentStatus: OrderFulfillmentStatus, financialStatus?: OrderFinancialStatus | null, statusUrl: string, totalPrice: { __typename?: 'MoneyV2', amount: string } } }> } } | null };
 
+export type GetOrderQueryVariables = Exact<{
+  id: Scalars['ID'];
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetOrderQuery = { __typename?: 'QueryRoot', node?: { __typename: 'AppliedGiftCard', id: string } | { __typename: 'Article', id: string } | { __typename: 'Blog', id: string } | { __typename: 'Cart', id: string } | { __typename: 'CartLine', id: string } | { __typename: 'Checkout', id: string } | { __typename: 'CheckoutLineItem', id: string } | { __typename: 'Collection', id: string } | { __typename: 'Comment', id: string } | { __typename: 'ExternalVideo', id: string } | { __typename: 'GenericFile', id: string } | { __typename: 'Location', id: string } | { __typename: 'MailingAddress', id: string } | { __typename: 'MediaImage', id: string } | { __typename: 'Menu', id: string } | { __typename: 'MenuItem', id: string } | { __typename: 'Metafield', id: string } | { __typename: 'Model3d', id: string } | { __typename: 'Order', name: string, processedAt: string, canceledAt?: string | null, edited: boolean, fulfillmentStatus: OrderFulfillmentStatus, orderNumber: number, cancelReason?: OrderCancelReason | null, customerUrl?: string | null, statusUrl: string, financialStatus?: OrderFinancialStatus | null, email?: string | null, id: string, discountApplications: { __typename?: 'DiscountApplicationConnection', edges: Array<{ __typename?: 'DiscountApplicationEdge', node: { __typename?: 'AutomaticDiscountApplication' } | { __typename?: 'DiscountCodeApplication', code: string } | { __typename?: 'ManualDiscountApplication' } | { __typename?: 'ScriptDiscountApplication' } }> }, shippingDiscountAllocations: Array<{ __typename?: 'DiscountAllocation', allocatedAmount: { __typename?: 'MoneyV2', amount: string }, discountApplication: { __typename: 'AutomaticDiscountApplication' } | { __typename: 'DiscountCodeApplication', code: string } | { __typename: 'ManualDiscountApplication' } | { __typename: 'ScriptDiscountApplication' } }>, totalRefunded: { __typename?: 'MoneyV2', amount: string }, successfulFulfillments?: Array<{ __typename?: 'Fulfillment', trackingCompany?: string | null, fulfillmentLineItems: { __typename?: 'FulfillmentLineItemConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null }, edges: Array<{ __typename?: 'FulfillmentLineItemEdge', cursor: string, node: { __typename?: 'FulfillmentLineItem', quantity: number, lineItem: { __typename?: 'OrderLineItem', variant?: { __typename?: 'ProductVariant', id: string } | null } } }> }, trackingInfo: Array<{ __typename?: 'FulfillmentTrackingInfo', url?: string | null, number?: string | null }> }> | null, currentSubtotalPrice: { __typename?: 'MoneyV2', amount: string }, totalShippingPrice: { __typename?: 'MoneyV2', amount: string }, currentTotalPrice: { __typename?: 'MoneyV2', amount: string }, shippingAddress?: { __typename?: 'MailingAddress', name?: string | null, formatted: Array<string> } | null, lineItems: { __typename?: 'OrderLineItemConnection', pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null }, edges: Array<{ __typename?: 'OrderLineItemEdge', cursor: string, node: { __typename?: 'OrderLineItem', title: string, quantity: number, currentQuantity: number, discountedTotalPrice: { __typename?: 'MoneyV2', amount: string }, originalTotalPrice: { __typename?: 'MoneyV2', amount: string }, discountAllocations: Array<{ __typename?: 'DiscountAllocation', allocatedAmount: { __typename?: 'MoneyV2', amount: string }, discountApplication: { __typename: 'AutomaticDiscountApplication' } | { __typename: 'DiscountCodeApplication', code: string } | { __typename: 'ManualDiscountApplication' } | { __typename: 'ScriptDiscountApplication' } }>, variant?: { __typename?: 'ProductVariant', id: string, title: string, product: { __typename?: 'Product', id: string } } | null } }> } } | { __typename: 'Page', id: string } | { __typename: 'Payment', id: string } | { __typename: 'Product', id: string } | { __typename: 'ProductOption', id: string } | { __typename: 'ProductVariant', id: string } | { __typename: 'Shop', id: string } | { __typename: 'ShopPolicy', id: string } | { __typename: 'UrlRedirect', id: string } | { __typename: 'Video', id: string } | null };
+
 export type GetArticlesQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
   reverse?: InputMaybe<Scalars['Boolean']>;
@@ -7088,6 +7097,130 @@ export const GetOrdersDocument = gql`
           fulfillmentStatus
           financialStatus
           statusUrl
+        }
+      }
+    }
+  }
+}
+    `;
+export const GetOrderDocument = gql`
+    query getOrder($id: ID!, $first: Int = 20, $last: Int) {
+  node(id: $id) {
+    __typename
+    id
+    ... on Order {
+      name
+      processedAt
+      discountApplications(first: 5) {
+        edges {
+          node {
+            ... on DiscountCodeApplication {
+              code
+            }
+          }
+        }
+      }
+      shippingDiscountAllocations {
+        allocatedAmount {
+          amount
+        }
+        discountApplication {
+          __typename
+          ... on DiscountCodeApplication {
+            code
+          }
+        }
+      }
+      canceledAt
+      edited
+      totalRefunded {
+        amount
+      }
+      successfulFulfillments {
+        fulfillmentLineItems(first: $first, last: $last) {
+          pageInfo {
+            endCursor
+            hasNextPage
+            hasPreviousPage
+            startCursor
+          }
+          edges {
+            cursor
+            node {
+              quantity
+              lineItem {
+                variant {
+                  id
+                }
+              }
+            }
+          }
+        }
+        trackingCompany
+        trackingInfo {
+          url
+          number
+        }
+      }
+      fulfillmentStatus
+      orderNumber
+      cancelReason
+      canceledAt
+      currentSubtotalPrice {
+        amount
+      }
+      totalShippingPrice {
+        amount
+      }
+      currentTotalPrice {
+        amount
+      }
+      customerUrl
+      statusUrl
+      financialStatus
+      shippingAddress {
+        name
+        formatted
+      }
+      email
+      lineItems(first: $first, last: $last) {
+        pageInfo {
+          endCursor
+          hasNextPage
+          hasPreviousPage
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            title
+            quantity
+            currentQuantity
+            discountedTotalPrice {
+              amount
+            }
+            originalTotalPrice {
+              amount
+            }
+            discountAllocations {
+              allocatedAmount {
+                amount
+              }
+              discountApplication {
+                __typename
+                ... on DiscountCodeApplication {
+                  code
+                }
+              }
+            }
+            variant {
+              id
+              title
+              product {
+                id
+              }
+            }
+          }
         }
       }
     }
@@ -7398,6 +7531,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getOrders(variables: GetOrdersQueryVariables, options?: C): Promise<GetOrdersQuery> {
       return requester<GetOrdersQuery, GetOrdersQueryVariables>(GetOrdersDocument, variables, options);
+    },
+    getOrder(variables: GetOrderQueryVariables, options?: C): Promise<GetOrderQuery> {
+      return requester<GetOrderQuery, GetOrderQueryVariables>(GetOrderDocument, variables, options);
     },
     getArticles(variables?: GetArticlesQueryVariables, options?: C): Promise<GetArticlesQuery> {
       return requester<GetArticlesQuery, GetArticlesQueryVariables>(GetArticlesDocument, variables, options);
