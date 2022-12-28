@@ -1,67 +1,92 @@
-import type { LoaderFunction } from "@remix-run/cloudflare";
+import type { ActionFunction, LoaderFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
 import { useLoaderData } from "@remix-run/react";
+import { useState } from "react";
+import invariant from "tiny-invariant";
 import { Button } from "~/components/shared/Button";
 import { FadeIn } from "~/components/shared/FadeIn";
-import type { GetAddressesQuery } from "~/generated/graphql";
 import { createSdk } from "~/graphqlWrapper";
-import { getAddresses } from "~/providers/customers/address";
-
-type LoaderData = GetAddressesQuery["customer"];
+import type { AddressType } from "~/pages/address/Address";
+import { Address } from "~/pages/address/Address";
+import { ConfirmationModal } from "~/pages/address/ConfirmationModal";
+import { deleteAddress, getAddresses } from "~/providers/customers/address";
 
 export const loader: LoaderFunction = async ({ request, context }) => {
   const sdk = createSdk(context);
   const response = await getAddresses(sdk, request);
-  return json(response?.customer);
+  const defaultAddress = response?.customer?.defaultAddress;
+  const addresses = response?.customer?.addresses.edges.map(
+    (address) => address.node
+  );
+  return json({ defaultAddress, addresses });
 };
 
-const Address: React.FC = () => {
-  const data = useLoaderData<LoaderData>();
+type LoaderData = {
+  defaultAddress: AddressType | null;
+  addresses: AddressType[];
+};
+
+export const action: ActionFunction = async ({ request, context }) => {
+  const sdk = createSdk(context);
+  const formData = await request.formData();
+  const id = formData.get("id");
+  invariant(typeof id === "string", "Invalid id");
+  const response = await deleteAddress(sdk, id, request);
+  const errors = response?.customerAddressDelete?.customerUserErrors;
+  if (errors && errors.length > 0) {
+    return json(
+      { error: errors[0].message, code: errors[0].code },
+      {
+        status: 400,
+      }
+    );
+  }
+  return json({ success: true });
+};
+
+const AddressPage: React.FC = () => {
+  const { addresses, defaultAddress } = useLoaderData<LoaderData>();
+  const [isOpen, setIsOpen] = useState(false);
+  const [id, setId] = useState<string>();
+
+  const closeModal = () => setIsOpen(false);
+  const deleteAddress = (id: string) => {
+    setId(id);
+    setIsOpen(true);
+  };
+
+  if (!addresses || addresses.length === 0)
+    return (
+      <FadeIn>
+        <div>
+          <Button variant="dark">Adaugă o adresă</Button>
+        </div>
+      </FadeIn>
+    );
   return (
-    <FadeIn className="mt-4">
-      <div className="border border-line">
-        <h2 className="border-b border-line px-5 py-5 text-xl">
-          Adresă favorită
-        </h2>
-        <div className="px-5 py-5 text-subtitle">
-          <p>{data?.defaultAddress?.name}</p>
-          {data?.defaultAddress?.formatted.map((line, index) => (
-            <p key={index}>{line}</p>
-          ))}
+    <>
+      <ConfirmationModal isOpen={isOpen} onClose={closeModal} id={id} />
+      <FadeIn className="mt-4">
+        <div className="flex flex-col gap-5">
+          <Address
+            address={defaultAddress}
+            isDefault
+            deleteAddress={deleteAddress}
+          />
+          {addresses.map((address) => {
+            if (address.id === defaultAddress?.id) return null;
+            return (
+              <Address
+                key={address.id}
+                address={address}
+                deleteAddress={deleteAddress}
+              />
+            );
+          })}
         </div>
-        <div className="flex gap-3 px-5 pb-5">
-          <Button variant="light" slim>
-            Editeaza
-          </Button>
-          <Button variant="light" slim>
-            Șterge
-          </Button>
-        </div>
-      </div>
-      {data?.addresses.edges.map((address) => {
-        if (address.node.id === data.defaultAddress?.id) return null;
-        return (
-          <div
-            key={address.node.id}
-            className="mt-5 border border-line p-5  text-subtitle"
-          >
-            <p>{address.node.name}</p>
-            {address.node.formatted.map((line, index) => (
-              <p key={index}>{line}</p>
-            ))}
-            <div className="mt-5 flex gap-3">
-              <Button variant="light" slim>
-                Editeaza
-              </Button>
-              <Button variant="light" slim>
-                Șterge
-              </Button>
-            </div>
-          </div>
-        );
-      })}
-    </FadeIn>
+      </FadeIn>
+    </>
   );
 };
 
-export default Address;
+export default AddressPage;

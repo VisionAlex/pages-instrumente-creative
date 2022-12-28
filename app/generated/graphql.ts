@@ -6826,6 +6826,14 @@ export type GetDefaultAddressQueryVariables = Exact<{
 
 export type GetDefaultAddressQuery = { __typename?: 'QueryRoot', customer?: { __typename?: 'Customer', defaultAddress?: { __typename?: 'MailingAddress', firstName?: string | null, lastName?: string | null, address1?: string | null, address2?: string | null, city?: string | null, company?: string | null, country?: string | null, province?: string | null, phone?: string | null, zip?: string | null } | null } | null };
 
+export type CustomerAddressDeleteMutationVariables = Exact<{
+  customerAccessToken: Scalars['String'];
+  id: Scalars['ID'];
+}>;
+
+
+export type CustomerAddressDeleteMutation = { __typename?: 'Mutation', customerAddressDelete?: { __typename?: 'CustomerAddressDeletePayload', deletedCustomerAddressId?: string | null, customerUserErrors: Array<{ __typename?: 'CustomerUserError', code?: CustomerErrorCode | null, field?: Array<string> | null, message: string }> } | null };
+
 export type RegisterMutationVariables = Exact<{
   input: CustomerCreateInput;
 }>;
@@ -6988,7 +6996,7 @@ export const AssociateCustomerWithCheckoutDocument = gql`
 export const GetAddressesDocument = gql`
     query getAddresses($customerAccessToken: String!) {
   customer(customerAccessToken: $customerAccessToken) {
-    addresses(first: 5) {
+    addresses(first: 20) {
       edges {
         node {
           id
@@ -7020,6 +7028,18 @@ export const GetDefaultAddressDocument = gql`
       phone
       zip
     }
+  }
+}
+    `;
+export const CustomerAddressDeleteDocument = gql`
+    mutation customerAddressDelete($customerAccessToken: String!, $id: ID!) {
+  customerAddressDelete(customerAccessToken: $customerAccessToken, id: $id) {
+    customerUserErrors {
+      code
+      field
+      message
+    }
+    deletedCustomerAddressId
   }
 }
     `;
@@ -7524,6 +7544,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     getDefaultAddress(variables: GetDefaultAddressQueryVariables, options?: C): Promise<GetDefaultAddressQuery> {
       return requester<GetDefaultAddressQuery, GetDefaultAddressQueryVariables>(GetDefaultAddressDocument, variables, options);
+    },
+    customerAddressDelete(variables: CustomerAddressDeleteMutationVariables, options?: C): Promise<CustomerAddressDeleteMutation> {
+      return requester<CustomerAddressDeleteMutation, CustomerAddressDeleteMutationVariables>(CustomerAddressDeleteDocument, variables, options);
     },
     register(variables: RegisterMutationVariables, options?: C): Promise<RegisterMutation> {
       return requester<RegisterMutation, RegisterMutationVariables>(RegisterDocument, variables, options);

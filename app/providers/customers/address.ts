@@ -16,6 +16,13 @@ export const getDefaultAddress = async (sdk: SDK, request: Request) => {
   return sdk.getDefaultAddress({ customerAccessToken: accessToken });
 };
 
+export const deleteAddress = async (sdk: SDK, id: string, request: Request) => {
+  const session = await storage.getSession(request.headers.get("Cookie"));
+  const accessToken = session.get("accessToken");
+  if (!accessToken || typeof accessToken !== "string") return null;
+  return sdk.customerAddressDelete({ customerAccessToken: accessToken, id });
+};
+
 gql`
   query getAddresses($customerAccessToken: String!) {
     customer(customerAccessToken: $customerAccessToken) {
@@ -52,6 +59,19 @@ gql`
         phone
         zip
       }
+    }
+  }
+`;
+
+gql`
+  mutation customerAddressDelete($customerAccessToken: String!, $id: ID!) {
+    customerAddressDelete(customerAccessToken: $customerAccessToken, id: $id) {
+      customerUserErrors {
+        code
+        field
+        message
+      }
+      deletedCustomerAddressId
     }
   }
 `;
