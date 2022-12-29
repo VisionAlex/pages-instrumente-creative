@@ -883,6 +883,11 @@ input[type="number"] {
   margin-bottom: -1.5rem;
 }
 
+.my-5 {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
 .mx-4 {
   margin-left: 1rem;
   margin-right: 1rem;
@@ -1750,11 +1755,6 @@ input[type="number"] {
 .bg-tag {
   --tw-bg-opacity: 1;
   background-color: rgb(143 143 143 / var(--tw-bg-opacity));
-}
-
-.bg-black {
-  --tw-bg-opacity: 1;
-  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
 
 .bg-opacity-25 {
