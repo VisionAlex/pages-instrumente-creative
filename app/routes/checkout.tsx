@@ -28,7 +28,7 @@ export const action: ActionFunction = async ({ request, context }) => {
   if (webUrl) {
     const realWebUrl = webUrl.replace(
       "instrumentecreative.myshopify.com",
-      "www.instrumente-creative.ro"
+      "shop.instrumente-creative.ro"
     );
     return redirect(realWebUrl);
   }
