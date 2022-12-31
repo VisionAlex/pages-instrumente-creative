@@ -61,6 +61,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                     Înapoi
                   </Button>
                   <Form method="post" action="/account/address">
+                    <input type="hidden" name="_action" value="delete" />
                     <input type="hidden" name="id" value={id} />
                     <Button type="submit" variant="dark" onClick={onClose}>
                       Șterge

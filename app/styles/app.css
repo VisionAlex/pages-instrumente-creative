@@ -883,11 +883,6 @@ input[type="number"] {
   margin-bottom: -1.5rem;
 }
 
-.my-5 {
-  margin-top: 1.25rem;
-  margin-bottom: 1.25rem;
-}
-
 .mx-4 {
   margin-left: 1rem;
   margin-right: 1rem;
@@ -1036,6 +1031,10 @@ input[type="number"] {
 
 .block {
   display: block;
+}
+
+.inline-block {
+  display: inline-block;
 }
 
 .inline {
@@ -1268,6 +1267,10 @@ input[type="number"] {
 
 .min-w-\[16px\] {
   min-width: 16px;
+}
+
+.min-w-\[183px\] {
+  min-width: 183px;
 }
 
 .min-w-full {

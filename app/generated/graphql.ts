@@ -6817,7 +6817,7 @@ export type GetAddressesQueryVariables = Exact<{
 }>;
 
 
-export type GetAddressesQuery = { __typename?: 'QueryRoot', customer?: { __typename?: 'Customer', addresses: { __typename?: 'MailingAddressConnection', edges: Array<{ __typename?: 'MailingAddressEdge', node: { __typename?: 'MailingAddress', id: string, name?: string | null, formatted: Array<string> } }> }, defaultAddress?: { __typename?: 'MailingAddress', id: string, name?: string | null, formatted: Array<string> } | null } | null };
+export type GetAddressesQuery = { __typename?: 'QueryRoot', customer?: { __typename?: 'Customer', addresses: { __typename?: 'MailingAddressConnection', edges: Array<{ __typename?: 'MailingAddressEdge', node: { __typename?: 'MailingAddress', id: string, name?: string | null, formatted: Array<string>, firstName?: string | null, lastName?: string | null, company?: string | null, address1?: string | null, address2?: string | null, city?: string | null, country?: string | null, province?: string | null, zip?: string | null, phone?: string | null } }> }, defaultAddress?: { __typename?: 'MailingAddress', id: string, name?: string | null, formatted: Array<string>, firstName?: string | null, lastName?: string | null, company?: string | null, address1?: string | null, address2?: string | null, city?: string | null, country?: string | null, province?: string | null, zip?: string | null, phone?: string | null } | null } | null };
 
 export type GetDefaultAddressQueryVariables = Exact<{
   customerAccessToken: Scalars['String'];
@@ -6833,6 +6833,23 @@ export type CustomerAddressDeleteMutationVariables = Exact<{
 
 
 export type CustomerAddressDeleteMutation = { __typename?: 'Mutation', customerAddressDelete?: { __typename?: 'CustomerAddressDeletePayload', deletedCustomerAddressId?: string | null, customerUserErrors: Array<{ __typename?: 'CustomerUserError', code?: CustomerErrorCode | null, field?: Array<string> | null, message: string }> } | null };
+
+export type CustomerAddressUpdateMutationVariables = Exact<{
+  address: MailingAddressInput;
+  customerAccessToken: Scalars['String'];
+  id: Scalars['ID'];
+}>;
+
+
+export type CustomerAddressUpdateMutation = { __typename?: 'Mutation', customerAddressUpdate?: { __typename?: 'CustomerAddressUpdatePayload', customerAddress?: { __typename?: 'MailingAddress', formatted: Array<string> } | null, customerUserErrors: Array<{ __typename?: 'CustomerUserError', code?: CustomerErrorCode | null, field?: Array<string> | null, message: string }> } | null };
+
+export type CustomerDefaultAddressUpdateMutationVariables = Exact<{
+  addressId: Scalars['ID'];
+  customerAccessToken: Scalars['String'];
+}>;
+
+
+export type CustomerDefaultAddressUpdateMutation = { __typename?: 'Mutation', customerDefaultAddressUpdate?: { __typename?: 'CustomerDefaultAddressUpdatePayload', customer?: { __typename?: 'Customer', id: string } | null, customerUserErrors: Array<{ __typename?: 'CustomerUserError', code?: CustomerErrorCode | null, field?: Array<string> | null, message: string }> } | null };
 
 export type RegisterMutationVariables = Exact<{
   input: CustomerCreateInput;
@@ -7002,6 +7019,16 @@ export const GetAddressesDocument = gql`
           id
           name
           formatted
+          firstName
+          lastName
+          company
+          address1
+          address2
+          city
+          country
+          province
+          zip
+          phone
         }
       }
     }
@@ -7009,6 +7036,16 @@ export const GetAddressesDocument = gql`
       id
       name
       formatted
+      firstName
+      lastName
+      company
+      address1
+      address2
+      city
+      country
+      province
+      zip
+      phone
     }
   }
 }
@@ -7040,6 +7077,41 @@ export const CustomerAddressDeleteDocument = gql`
       message
     }
     deletedCustomerAddressId
+  }
+}
+    `;
+export const CustomerAddressUpdateDocument = gql`
+    mutation customerAddressUpdate($address: MailingAddressInput!, $customerAccessToken: String!, $id: ID!) {
+  customerAddressUpdate(
+    address: $address
+    customerAccessToken: $customerAccessToken
+    id: $id
+  ) {
+    customerAddress {
+      formatted
+    }
+    customerUserErrors {
+      code
+      field
+      message
+    }
+  }
+}
+    `;
+export const CustomerDefaultAddressUpdateDocument = gql`
+    mutation customerDefaultAddressUpdate($addressId: ID!, $customerAccessToken: String!) {
+  customerDefaultAddressUpdate(
+    addressId: $addressId
+    customerAccessToken: $customerAccessToken
+  ) {
+    customer {
+      id
+    }
+    customerUserErrors {
+      code
+      field
+      message
+    }
   }
 }
     `;
@@ -7547,6 +7619,12 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     customerAddressDelete(variables: CustomerAddressDeleteMutationVariables, options?: C): Promise<CustomerAddressDeleteMutation> {
       return requester<CustomerAddressDeleteMutation, CustomerAddressDeleteMutationVariables>(CustomerAddressDeleteDocument, variables, options);
+    },
+    customerAddressUpdate(variables: CustomerAddressUpdateMutationVariables, options?: C): Promise<CustomerAddressUpdateMutation> {
+      return requester<CustomerAddressUpdateMutation, CustomerAddressUpdateMutationVariables>(CustomerAddressUpdateDocument, variables, options);
+    },
+    customerDefaultAddressUpdate(variables: CustomerDefaultAddressUpdateMutationVariables, options?: C): Promise<CustomerDefaultAddressUpdateMutation> {
+      return requester<CustomerDefaultAddressUpdateMutation, CustomerDefaultAddressUpdateMutationVariables>(CustomerDefaultAddressUpdateDocument, variables, options);
     },
     register(variables: RegisterMutationVariables, options?: C): Promise<RegisterMutation> {
       return requester<RegisterMutation, RegisterMutationVariables>(RegisterDocument, variables, options);
