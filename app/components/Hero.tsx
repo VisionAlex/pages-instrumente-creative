@@ -11,8 +11,8 @@ export const Hero: React.FC = () => {
           Editura Instrumente Creative
         </h2>
         <p className="mx-9 mb-6 block text-[4vw] text-subtitle sm:mx-5 sm:text-lg md:mb-12">
-          Produse create de psihologi și logopezi. Toate ilustrațiile sunt
-          originale
+          Produse create din pasiune pentru copii si educație. Toate
+          ilustrațiile sunt originale
         </p>
         <LinkButton
           to={config.pages.produse.path}
