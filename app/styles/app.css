@@ -1187,6 +1187,10 @@ input[type="number"] {
   max-height: fit-content;
 }
 
+.max-h-\[600px\] {
+  max-height: 600px;
+}
+
 .min-h-\[44px\] {
   min-height: 44px;
 }
