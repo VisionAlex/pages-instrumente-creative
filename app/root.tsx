@@ -115,7 +115,7 @@ export default function App() {
           onClose={() => setShowAccountModal(false)}
         />
         <Navbar>
-          <Logo />
+          <Logo className="-ml-[30px] lg:ml-0" />
           <Menu />
           <Toolbar
             user={user}

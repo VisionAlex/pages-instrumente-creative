@@ -805,6 +805,14 @@ input[type="number"] {
   left: 2rem;
 }
 
+.left-1\/2 {
+  left: 50%;
+}
+
+.right-1\/2 {
+  right: 50%;
+}
+
 .z-50 {
   z-index: 50;
 }
@@ -1031,6 +1039,10 @@ input[type="number"] {
 
 .mr-4 {
   margin-right: 1rem;
+}
+
+.-ml-\[30px\] {
+  margin-left: -30px;
 }
 
 .block {
@@ -2997,6 +3009,10 @@ input[type="number"] {
 }
 
 @media (min-width: 1024px) {
+  .lg\:static {
+    position: static;
+  }
+
   .lg\:order-1 {
     order: 1;
   }
