@@ -36,17 +36,17 @@ export const FooterSubscribeToNewsletter: React.FC<Props> = ({ user }) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="my-4 mx-5  flex  h-8 items-center justify-center"
+              className="my-4 flex  h-8 items-center justify-center"
             >
               <input
-                className="grow-1 mr-5 max-w-sm grow border-b border-line bg-background pl-2 leading-loose text-primary outline-none"
+                className="grow-1 mr-5 max-w-sm grow border-b border-line  bg-background pl-2 leading-loose text-primary outline-none"
                 type="email"
                 required
                 name="email"
                 placeholder="Adresă de e-mail"
               />
               <button
-                className="h-8 leading-relaxed text-subtitle transition duration-500 hover:text-primary"
+                className="h-8 whitespace-nowrap leading-relaxed text-subtitle transition duration-500 hover:text-primary"
                 type="submit"
               >
                 Abonează-te

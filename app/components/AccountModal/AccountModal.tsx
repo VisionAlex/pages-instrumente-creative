@@ -48,10 +48,13 @@ export const AccountModal: React.FC<Props> = ({ open, onClose }) => {
               <Dialog.Title className="text-center text-title md:text-3xl">
                 {title}
               </Dialog.Title>
-              <div className="absolute right-4 top-4">
+              <div className="absolute right-0 top-0">
                 <span className="sr-only">Close</span>
-                <button className="cursor-pointer text-primary outline-none hover:text-subtitle">
-                  <XIcon className="h-4 w-4" onClick={onClose} />
+                <button
+                  className="flex h-11 w-11 cursor-pointer items-center justify-center text-primary outline-none hover:text-subtitle"
+                  onClick={onClose}
+                >
+                  <XIcon className="h-4 w-4" />
                 </button>
               </div>
               {form === "login" && <LoginForm setForm={setForm} />}
