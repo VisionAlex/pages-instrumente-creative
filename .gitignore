@@ -5,3 +5,4 @@ functions
 /public/build
 .dev.vars
 /app/kv/
+.env

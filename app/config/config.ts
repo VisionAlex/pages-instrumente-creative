@@ -10,7 +10,7 @@ export const PAGE_HANDLE = {
 } as const;
 export type PageHandle = typeof PAGE_HANDLE[keyof typeof PAGE_HANDLE];
 
-type Config = {
+export type Config = {
   pages: {
     [key in PageHandle]: {
       name: string;
@@ -25,7 +25,7 @@ type Config = {
   };
 };
 
-export const config: Config = {
+export const config = {
   pages: {
     produse: {
       name: "Produse",
@@ -73,4 +73,4 @@ export const config: Config = {
     transport: 10,
     minimumValueForFreeTransport: 193,
   },
-};
+} satisfies Config;

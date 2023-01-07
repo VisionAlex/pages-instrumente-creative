@@ -1,5 +1,6 @@
 import React from "react";
-import { config } from "~/config";
+import { config, images } from "~/config";
+import { CFImage } from "./shared/image/CFImage";
 import { LinkButton } from "./shared/LinkButton";
 
 export const Hero: React.FC = () => {
@@ -20,10 +21,9 @@ export const Hero: React.FC = () => {
           className="min-h-[44px]"
         />
       </div>
-      <img
+      <CFImage
         className="absolute left-0 right-0 z-10 mx-auto max-h-[600px]"
-        src="https://imagedelivery.net/_Qvu0ID0pPyVjDxZnl16ng/74e03979-b796-4bc4-28ae-d6d032709b00/gamma=0"
-        alt="header"
+        image={images.images.hero_mobile}
       />
     </div>
   );
