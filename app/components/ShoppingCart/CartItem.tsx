@@ -2,6 +2,7 @@ import { MinusSmIcon, PlusSmIcon, XIcon } from "@heroicons/react/outline";
 import { Form, Link, useLocation } from "@remix-run/react";
 import { config } from "~/config";
 import type { VariantInfo } from "~/types";
+import { SImage } from "../shared/image/SImage";
 
 interface Props {
   cartItem: VariantInfo;
@@ -30,12 +31,10 @@ export const CartItem: React.FC<Props> = ({ cartItem, setShowCart }) => {
           setShowCart(false);
         }}
       >
-        <img
-          src={cartItem.thumbnail?.url ?? ""}
-          width={87}
-          height={60}
+        <SImage
+          image={cartItem.thumbnail}
+          width={174}
           className="h-[60px] w-[87px]"
-          alt={cartItem.thumbnail?.altText ?? ""}
         />
       </Link>
       <div className="flex flex-1 flex-col gap-5">

@@ -10,13 +10,15 @@ import {
 import React from "react";
 import invariant from "tiny-invariant";
 import { FadeIn } from "~/components/shared/FadeIn";
+import {
+  getImageAspectRatio,
+  getShopifyImageUrl,
+} from "~/components/shared/image/utils";
 import type { GetBlogArticleQuery } from "~/generated/graphql";
 import { createSdk } from "~/graphqlWrapper";
 import { getBlogArticle } from "~/providers/pages/articles";
 import { classNames } from "~/shared/utils/classNames";
 import { formatDate } from "~/shared/utils/formatDate";
-import { getImageAspectRatio } from "~/shared/utils/getImageAspectRatio";
-import { getImageUrl } from "~/shared/utils/images";
 import blogStyles from "~/styles/blog.css";
 import type { RootContext } from "~/types";
 
@@ -97,7 +99,7 @@ const Article: React.FC = () => {
           >
             <img
               loading="lazy"
-              srcSet={`${getImageUrl(article.image?.url, 890)} 890w, ${
+              srcSet={`${getShopifyImageUrl(article.image?.url, 890)} 890w, ${
                 article.image?.url
               } 2000w`}
               sizes="(max-width:600px) 890px, 2000px"

@@ -1,9 +1,11 @@
 import { Link } from "@remix-run/react";
 import React from "react";
+import {
+  getImageAspectRatio,
+  getShopifyImageUrl,
+} from "~/components/shared/image/utils";
 import type { GetArticlesQuery } from "~/generated/graphql";
 import { useBreakpoint } from "~/shared/hooks/useBreakpoint";
-import { getImageAspectRatio } from "~/shared/utils/getImageAspectRatio";
-import { getImageUrl } from "~/shared/utils/images";
 
 interface Props {
   resources: GetArticlesQuery["articles"]["edges"][number]["node"][];
@@ -31,7 +33,7 @@ export const ResourcesSection: React.FC<Props> = ({ resources }) => {
             >
               <div className={getImageAspectRatio(resource.image)}>
                 <img
-                  src={getImageUrl(resource.image?.url, 430)}
+                  src={getShopifyImageUrl(resource.image?.url, 430)}
                   alt={
                     resource.image?.altText ??
                     "cursor-pointer object-cover object-center"

@@ -5,6 +5,7 @@ import type { Product } from "~/types";
 import { AddToCart } from "./AddToCart";
 import { ProductModal } from "./ProductModal";
 import { useProductModal } from "./ProductModal/useProductModal";
+import { SImage } from "./shared/image/SImage";
 import { Price } from "./shared/Price";
 import { SaleTag } from "./shared/SaleTag";
 interface Props {
@@ -50,11 +51,11 @@ export const ProductsHighlights: React.FC<Props> = ({
                   prefetch="intent"
                 >
                   <div className="overflow-hidden">
-                    <img
+                    <SImage
+                      image={product.images.edges[0].node}
                       className="mx-auto cursor-pointer transition duration-400 hover:scale-110"
                       loading="lazy"
-                      src={product.imageMedium.edges[0].node.url}
-                      alt={product.imageMedium.edges[0].node.altText ?? ""}
+                      width={720}
                     />
                   </div>
                   <SaleTag amount={price} compareAtPrice={compareAtPrice} />

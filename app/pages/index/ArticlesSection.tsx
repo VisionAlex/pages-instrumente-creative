@@ -1,8 +1,8 @@
 import { Link } from "@remix-run/react";
 import React from "react";
+import { getImageAspectRatio } from "~/components/shared/image/utils";
 import { Link as CustomLink } from "~/components/shared/Link";
 import type { GetArticlesQuery } from "~/generated/graphql";
-import { getImageAspectRatio } from "~/shared/utils/getImageAspectRatio";
 
 interface Props {
   articles: GetArticlesQuery["articles"]["edges"][number]["node"][];

@@ -11,6 +11,7 @@ import { config } from "~/config";
 import type { Product } from "~/types";
 import { Button } from "./shared/Button";
 import { Drawer } from "./shared/Drawer";
+import { SImage } from "./shared/image/SImage";
 
 interface Props {
   wishlist: string[];
@@ -56,10 +57,7 @@ export const Wishlist: React.FC<Props> = ({
                     className="p-2"
                     onClick={() => setShowWishlist(false)}
                   >
-                    <img
-                      src={item.thumbnail?.url ?? ""}
-                      alt={item.thumbnail?.altText ?? ""}
-                    />
+                    <SImage image={item.images.edges[0].node} width={200} />
                   </Link>
                   <div className="col-span-2 pr-4">
                     <Link

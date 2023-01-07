@@ -60,32 +60,17 @@ gql`
               amount
             }
           }
-          thumbnail: featuredImage {
-            url(transform: { maxWidth: 200 })
-            altText
-            width
-            height
-          }
-          imageSmall: images(first: 10) {
+          images(first: 20) {
             edges {
               node {
-                url(transform: { maxWidth: 436 })
+                url
                 altText
                 width
                 height
               }
             }
           }
-          imageMedium: images(first: 10) {
-            edges {
-              node {
-                url(transform: { maxWidth: 720 })
-                altText
-                width
-                height
-              }
-            }
-          }
+
           variants(first: 10) {
             edges {
               node {
@@ -120,33 +105,11 @@ gql`
       title
       description
       descriptionHtml
-      imagesThumbnail: images(first: 20) {
+      images(first: 20) {
         edges {
           node {
             id
-            url(transform: { maxWidth: 200 })
-            altText
-            width
-            height
-          }
-        }
-      }
-      imagesSmall: images(first: 20) {
-        edges {
-          node {
-            id
-            url(transform: { maxWidth: 436 })
-            altText
-            width
-            height
-          }
-        }
-      }
-      imagesMedium: images(first: 20) {
-        edges {
-          node {
-            id
-            url(transform: { maxWidth: 1336 })
+            url
             altText
             width
             height

@@ -5,6 +5,10 @@ import { useState } from "react";
 import { ImageGallery } from "~/components/ImageGallery";
 import { Breadcrumb } from "~/components/shared/Breadcrumb/Breadcrumb";
 import { FadeIn } from "~/components/shared/FadeIn";
+import {
+  getShopifyImageUrl,
+  preloadImage,
+} from "~/components/shared/image/utils";
 import { Price } from "~/components/shared/Price";
 import { createSdk } from "~/graphqlWrapper";
 import { Availability } from "~/pages/product/Availability";
@@ -17,7 +21,6 @@ import { Quantity } from "~/pages/product/Quantity";
 import { Variants } from "~/pages/product/Variants";
 import { getWishlist } from "~/providers/products/products";
 import { useSSRLayoutEffect } from "~/shared/hooks/useSSRLayoutEffect";
-import { preloadImage } from "~/shared/utils/preloadImage";
 import type { DetailedProduct } from "~/types";
 
 type ProductLoaderData = {
@@ -52,7 +55,7 @@ const SingleProduct: React.FC = () => {
   const [quantity, setQuantity] = useState<number>(1);
   const variants = product.variants.edges.map(({ node: variant }) => variant);
 
-  const images = product.imagesMedium.edges.map(({ node: image }) => image);
+  const images = product.images.edges.map(({ node: image }) => image);
   const price = variants[selectedVariant].price.amount;
   const compareAtPrice = variants[selectedVariant].compareAtPrice?.amount;
   const isGiftCard = product.productType === "Gift Cards";
@@ -60,7 +63,11 @@ const SingleProduct: React.FC = () => {
   const hasMultipleVariants = variants.length > 1;
 
   useSSRLayoutEffect(() => {
-    Promise.all(images.map((image) => preloadImage(image.url)));
+    Promise.all(
+      images.map((image) =>
+        preloadImage(getShopifyImageUrl(image.url, 1336) as string)
+      )
+    );
   }, [images]);
 
   if (!product) return <div>Produsul nu a fost gasit.</div>;

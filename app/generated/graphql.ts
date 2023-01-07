@@ -6946,14 +6946,14 @@ export type GetProductsQueryVariables = Exact<{
 }>;
 
 
-export type GetProductsQuery = { __typename?: 'QueryRoot', products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, productType: string, title: string, handle: string, description: string, availableForSale: boolean, priceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: string } }, compareAtPriceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: string } }, thumbnail?: { __typename?: 'Image', url: string, altText?: string | null, width?: number | null, height?: number | null } | null, imageSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: string, altText?: string | null, width?: number | null, height?: number | null } }> }, imageMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: string, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, title: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, price: { __typename?: 'MoneyV2', amount: string }, compareAtPrice?: { __typename?: 'MoneyV2', amount: string } | null } }> } } }> } };
+export type GetProductsQuery = { __typename?: 'QueryRoot', products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, productType: string, title: string, handle: string, description: string, availableForSale: boolean, priceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: string } }, compareAtPriceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: string } }, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: string, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, title: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, price: { __typename?: 'MoneyV2', amount: string }, compareAtPrice?: { __typename?: 'MoneyV2', amount: string } | null } }> } } }> } };
 
 export type GetProductByHandleQueryVariables = Exact<{
   handle: Scalars['String'];
 }>;
 
 
-export type GetProductByHandleQuery = { __typename?: 'QueryRoot', product?: { __typename?: 'Product', id: string, handle: string, availableForSale: boolean, productType: string, tags: Array<string>, title: string, description: string, descriptionHtml: string, imagesThumbnail: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: string, altText?: string | null, width?: number | null, height?: number | null } }> }, imagesSmall: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: string, altText?: string | null, width?: number | null, height?: number | null } }> }, imagesMedium: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: string, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, title: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, requiresShipping: boolean, price: { __typename?: 'MoneyV2', amount: string, currencyCode: CurrencyCode }, compareAtPrice?: { __typename?: 'MoneyV2', amount: string, currencyCode: CurrencyCode } | null } }> } } | null };
+export type GetProductByHandleQuery = { __typename?: 'QueryRoot', product?: { __typename?: 'Product', id: string, handle: string, availableForSale: boolean, productType: string, tags: Array<string>, title: string, description: string, descriptionHtml: string, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: string, altText?: string | null, width?: number | null, height?: number | null } }> }, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, title: string, sku?: string | null, availableForSale: boolean, currentlyNotInStock: boolean, requiresShipping: boolean, price: { __typename?: 'MoneyV2', amount: string, currencyCode: CurrencyCode }, compareAtPrice?: { __typename?: 'MoneyV2', amount: string, currencyCode: CurrencyCode } | null } }> } } | null };
 
 
 export const CreateCheckoutDocument = gql`
@@ -7484,26 +7484,10 @@ export const GetProductsDocument = gql`
             amount
           }
         }
-        thumbnail: featuredImage {
-          url(transform: {maxWidth: 200})
-          altText
-          width
-          height
-        }
-        imageSmall: images(first: 10) {
+        images(first: 20) {
           edges {
             node {
-              url(transform: {maxWidth: 436})
-              altText
-              width
-              height
-            }
-          }
-        }
-        imageMedium: images(first: 10) {
-          edges {
-            node {
-              url(transform: {maxWidth: 720})
+              url
               altText
               width
               height
@@ -7543,33 +7527,11 @@ export const GetProductByHandleDocument = gql`
     title
     description
     descriptionHtml
-    imagesThumbnail: images(first: 20) {
+    images(first: 20) {
       edges {
         node {
           id
-          url(transform: {maxWidth: 200})
-          altText
-          width
-          height
-        }
-      }
-    }
-    imagesSmall: images(first: 20) {
-      edges {
-        node {
-          id
-          url(transform: {maxWidth: 436})
-          altText
-          width
-          height
-        }
-      }
-    }
-    imagesMedium: images(first: 20) {
-      edges {
-        node {
-          id
-          url(transform: {maxWidth: 1336})
+          url
           altText
           width
           height

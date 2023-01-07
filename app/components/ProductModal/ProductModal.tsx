@@ -27,7 +27,7 @@ export const ProductModal: React.FC<Props> = ({
   const [quantity, setQuantity] = useState<number>(1);
   if (!product) return null;
 
-  const images = product.imageMedium.edges.map((edge) => edge.node);
+  const images = product.images.edges.map((edge) => edge.node);
   const variants = product.variants.edges.map(({ node: variant }) => variant);
 
   const price = variants[selectedVariant].price.amount;

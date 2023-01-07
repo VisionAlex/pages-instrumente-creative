@@ -21321,7 +21321,7 @@ export enum OrderCancelReason {
   Fraud = 'FRAUD',
   /** There was insufficient inventory. */
   Inventory = 'INVENTORY',
-  /** Some other reason not listed. */
+  /** The order was canceled for an unlisted reason. */
   Other = 'OTHER'
 }
 

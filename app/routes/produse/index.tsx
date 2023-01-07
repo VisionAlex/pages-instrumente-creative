@@ -7,6 +7,7 @@ import { AddToWishlist } from "~/components/AddToWishlist";
 import { ProductModal } from "~/components/ProductModal";
 import { useProductModal } from "~/components/ProductModal/useProductModal";
 import { FadeIn } from "~/components/shared/FadeIn";
+import { SImage } from "~/components/shared/image/SImage";
 import { PageHeader } from "~/components/shared/PageHeader";
 import { Price } from "~/components/shared/Price";
 import { SaleTag } from "~/components/shared/SaleTag";
@@ -57,10 +58,9 @@ const AllProducts: React.FC = () => {
                   className=" relative cursor-pointer"
                 >
                   <div className="aspect-w-4 aspect-h-3 object-contain object-center">
-                    <img
+                    <SImage
+                      image={product.images.edges[0].node}
                       loading="lazy"
-                      src={product.imageMedium.edges[0].node.url}
-                      alt={product.imageMedium.edges[0].node.altText || ""}
                     />
                   </div>
                   {!product.availableForSale && (

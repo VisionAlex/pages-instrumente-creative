@@ -14274,7 +14274,7 @@ type GiftCardUserError implements DisplayableError {
   message: String!
 }
 
-"A string containing HTML code. Refer to the [HTML spec](https://html.spec.whatwg.org/#elements-3) for a\ncomplete list of HTML elements.\n\nExample value: `\"<p>Grey cotton knit sweater.</p>\"`.\n"
+"A string containing HTML code. Refer to the [HTML spec](https://html.spec.whatwg.org/#elements-3) for a\ncomplete list of HTML elements.\n\nExample value: `\"<p>Grey cotton knit sweater.</p>\"`\n"
 scalar HTML
 
 """Represents an object that has a list of events."""
@@ -22748,7 +22748,7 @@ enum OrderCancelReason {
   """There was insufficient inventory."""
   INVENTORY
 
-  """Some other reason not listed."""
+  """The order was canceled for an unlisted reason."""
   OTHER
 }
 

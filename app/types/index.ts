@@ -12,7 +12,7 @@ export type VariantInfo = Variant & {
   productID: string;
   productTitle: string;
   handle: string;
-  thumbnail: Product["thumbnail"];
+  thumbnail: Product["images"]["edges"][number]["node"];
   quantity: number;
 };
 

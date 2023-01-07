@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import { wrap } from "popmotion";
 import { AnimatePresence, motion } from "framer-motion";
-import { Dots } from "./Dots";
+import { wrap } from "popmotion";
+import { useState } from "react";
 import type { DetailedProduct } from "~/types";
+import { getShopifyImageUrl } from "../shared/image/utils";
+import { Dots } from "./Dots";
 
 const variants = {
   enter: (direction: number) => {
@@ -31,7 +32,7 @@ const swipePower = (offset: number, velocity: number) => {
 };
 
 interface Props {
-  images: DetailedProduct["imagesMedium"]["edges"][number]["node"][];
+  images: DetailedProduct["images"]["edges"][number]["node"][];
 }
 
 export const ImageGallery: React.FC<Props> = ({ images }) => {
@@ -48,7 +49,7 @@ export const ImageGallery: React.FC<Props> = ({ images }) => {
         <AnimatePresence initial={false} custom={direction}>
           <motion.img
             key={imageIndex}
-            src={images[imageIndex].url}
+            src={getShopifyImageUrl(images[imageIndex].url, 1336)}
             alt={images[imageIndex].altText ?? ""}
             custom={direction}
             variants={variants}

@@ -12,6 +12,7 @@ import {
 } from "@remix-run/react";
 import React from "react";
 import { FadeIn } from "~/components/shared/FadeIn";
+import { getImageAspectRatio } from "~/components/shared/image/utils";
 import { Link as CustomLink } from "~/components/shared/Link";
 import { PageHeader } from "~/components/shared/PageHeader";
 import { NewsletterWidget } from "~/components/shared/widgets/NewsletterWidget";
@@ -23,7 +24,6 @@ import { createSdk } from "~/graphqlWrapper";
 import { getArticles } from "~/providers/pages/articles";
 import { getBlog } from "~/providers/pages/blog";
 import { classNames } from "~/shared/utils/classNames";
-import { getImageAspectRatio } from "~/shared/utils/getImageAspectRatio";
 import type { RootContext } from "~/types";
 
 type LoaderData = {

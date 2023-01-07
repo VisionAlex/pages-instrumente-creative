@@ -14,6 +14,7 @@ import {
   useTransition,
 } from "@remix-run/react";
 import { useMemo } from "react";
+import { SImage } from "~/components/shared/image/SImage";
 import { Spinner } from "~/components/shared/Spinner";
 import { getCartInfo } from "~/components/ShoppingCart/utils";
 import { config } from "~/config";
@@ -113,9 +114,9 @@ const CartPage: React.FC = () => {
           cartItems.map((item) => (
             <li key={item.id} className="flex py-6 sm:py-10">
               <div className="flex-shrink-0">
-                <img
-                  src={item.thumbnail?.url}
-                  alt={item.thumbnail?.altText ?? ""}
+                <SImage
+                  image={item.thumbnail}
+                  width={256}
                   className="h-24 w-24 rounded-lg object-cover object-center sm:h-32 sm:w-32"
                 />
               </div>

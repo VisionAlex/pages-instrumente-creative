@@ -27,7 +27,7 @@ export const getCartInfo = (cart: Cart, products: Product[]) => {
           productID: product.id,
           productTitle: product.title,
           handle: product.handle,
-          thumbnail: product.thumbnail,
+          thumbnail: product.images.edges[0].node,
           quantity:
             cart.find((item) => item.variantId === variant.id)?.quantity || 0,
         });
