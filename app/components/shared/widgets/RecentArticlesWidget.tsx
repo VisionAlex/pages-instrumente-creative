@@ -3,6 +3,7 @@ import React from "react";
 import type { GetRecentArticlesQuery } from "~/generated/graphql";
 import { classNames } from "~/shared/utils/classNames";
 import { formatDate } from "~/shared/utils/formatDate";
+import { SImage } from "../image/SImage";
 import { WidgetTitle } from "./WidgetTitle";
 
 interface Props {
@@ -25,12 +26,11 @@ export const RecentArticlesWidget: React.FC<Props> = ({
               key={article.id}
               className="flex gap-4 border-b border-secondaryBackground py-4"
             >
-              <img
+              <SImage
+                image={article.image}
                 className="object-cover object-center"
                 width={80}
                 height={80}
-                src={article.thumbnail?.url}
-                alt={article.thumbnail?.altText ?? ""}
               />
               <div>
                 <Link

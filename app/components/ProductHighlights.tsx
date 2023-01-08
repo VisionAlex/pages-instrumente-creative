@@ -29,22 +29,18 @@ export const ProductsHighlights: React.FC<Props> = ({
         wishlist={wishlist}
         onClose={closeModal}
       />
-      <div className="mx-auto mt-10 max-w-3xl py-4 px-5">
+      <div className="mx-auto mt-10 max-w-screen-2xl py-4 px-5 lg:px-8 xl:px-20">
         <h3 className="mb-7 text-center text-3xl leading-tight text-primary">
           Dezvoltă competențele copilului tău
         </h3>
-        <div className="grid grid-cols-2 justify-items-center gap-3 md:grid-cols-3">
-          {products.map((product, index) => {
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:justify-items-center">
+          {products.map((product) => {
             const price = product.priceRange.minVariantPrice.amount;
             const compareAtPrice =
               product.compareAtPriceRange.minVariantPrice.amount;
 
-            let additionalClasses = "";
-            if (products.length % 2 !== 0 && index === products.length - 1) {
-              additionalClasses = "col-span-2 md:col-span-1 mx-auto";
-            }
             return (
-              <div key={product.id} className={`${additionalClasses}`}>
+              <div key={product.id} className="mx-auto">
                 <Link
                   className="relative"
                   to={`${config.pages.produse.path}/${product.handle}`}

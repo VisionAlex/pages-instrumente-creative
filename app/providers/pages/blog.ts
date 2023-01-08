@@ -32,9 +32,6 @@ gql`
             publishedAt
             tags
             title
-            thumbnail: image {
-              url(transform: { maxWidth: 210 })
-            }
             blog {
               handle
             }
@@ -63,8 +60,8 @@ gql`
             id
             publishedAt
             title
-            thumbnail: image {
-              url(transform: { maxWidth: 210 })
+            image {
+              url
               width
               height
               altText

@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react";
 import React from "react";
+import { SImage } from "~/components/shared/image/SImage";
 import { getImageAspectRatio } from "~/components/shared/image/utils";
 import { Link as CustomLink } from "~/components/shared/Link";
 import type { GetArticlesQuery } from "~/generated/graphql";
@@ -28,12 +29,10 @@ export const ArticlesSection: React.FC<Props> = ({ articles }) => {
               className="mb-5"
             >
               <div className={getImageAspectRatio(article.image)}>
-                <img
-                  src={article.medium?.url}
-                  alt={
-                    article.image?.altText ??
-                    "cursor-pointer object-cover object-center"
-                  }
+                <SImage
+                  image={article.image}
+                  width={430}
+                  className="cursor-pointer object-cover object-center"
                 />
               </div>
               <h4 className="mt-4 px-5 text-center text-xl leading-tight text-primary">

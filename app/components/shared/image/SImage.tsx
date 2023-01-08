@@ -6,11 +6,12 @@ interface Props
     React.ImgHTMLAttributes<HTMLImageElement>,
     HTMLImageElement
   > {
-  image: ShopifyImage;
+  image?: ShopifyImage | null;
   width?: number;
 }
 
 export const SImage: React.FC<Props> = ({ image, width, ...rest }) => {
+  if (!image) return null;
   return (
     <img
       src={getShopifyImageUrl(image.url, width ?? image.width)}

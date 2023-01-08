@@ -6906,7 +6906,7 @@ export type GetArticlesQueryVariables = Exact<{
 }>;
 
 
-export type GetArticlesQuery = { __typename?: 'QueryRoot', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, publishedAt: string, tags: Array<string>, handle: string, title: string, excerptHtml?: string | null, thumbnail?: { __typename?: 'Image', url: string } | null, small?: { __typename?: 'Image', url: string } | null, medium?: { __typename?: 'Image', url: string } | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: string } | null, blog: { __typename?: 'Blog', handle: string } } }> } };
+export type GetArticlesQuery = { __typename?: 'QueryRoot', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', id: string, publishedAt: string, tags: Array<string>, handle: string, title: string, excerptHtml?: string | null, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: string } | null, blog: { __typename?: 'Blog', handle: string } } }> } };
 
 export type GetBlogArticleQueryVariables = Exact<{
   handle: Scalars['String'];
@@ -6922,7 +6922,7 @@ export type GetBlogQueryVariables = Exact<{
 }>;
 
 
-export type GetBlogQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', title: string, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, publishedAt: string, tags: Array<string>, title: string, excerptHtml?: string | null, thumbnail?: { __typename?: 'Image', url: string } | null, blog: { __typename?: 'Blog', handle: string }, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: string } | null } }> } } | null };
+export type GetBlogQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', title: string, seo?: { __typename?: 'SEO', title?: string | null, description?: string | null } | null, articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, publishedAt: string, tags: Array<string>, title: string, excerptHtml?: string | null, blog: { __typename?: 'Blog', handle: string }, image?: { __typename?: 'Image', altText?: string | null, height?: number | null, width?: number | null, id?: string | null, url: string } | null } }> } } | null };
 
 export type GetRecentArticlesQueryVariables = Exact<{
   handle?: InputMaybe<Scalars['String']>;
@@ -6930,7 +6930,7 @@ export type GetRecentArticlesQueryVariables = Exact<{
 }>;
 
 
-export type GetRecentArticlesQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, publishedAt: string, title: string, thumbnail?: { __typename?: 'Image', url: string, width?: number | null, height?: number | null, altText?: string | null } | null, blog: { __typename?: 'Blog', handle: string } } }> } } | null };
+export type GetRecentArticlesQuery = { __typename?: 'QueryRoot', blog?: { __typename?: 'Blog', articles: { __typename?: 'ArticleConnection', edges: Array<{ __typename?: 'ArticleEdge', node: { __typename?: 'Article', handle: string, id: string, publishedAt: string, title: string, image?: { __typename?: 'Image', url: string, width?: number | null, height?: number | null, altText?: string | null } | null, blog: { __typename?: 'Blog', handle: string } } }> } } | null };
 
 export type GetPageQueryVariables = Exact<{
   handle?: InputMaybe<Scalars['String']>;
@@ -7335,15 +7335,6 @@ export const GetArticlesDocument = gql`
         id
         publishedAt
         tags
-        thumbnail: image {
-          url(transform: {maxWidth: 210})
-        }
-        small: image {
-          url(transform: {maxWidth: 430})
-        }
-        medium: image {
-          url(transform: {maxWidth: 860})
-        }
         image {
           altText
           height
@@ -7404,9 +7395,6 @@ export const GetBlogDocument = gql`
           publishedAt
           tags
           title
-          thumbnail: image {
-            url(transform: {maxWidth: 210})
-          }
           blog {
             handle
           }
@@ -7434,8 +7422,8 @@ export const GetRecentArticlesDocument = gql`
           id
           publishedAt
           title
-          thumbnail: image {
-            url(transform: {maxWidth: 210})
+          image {
+            url
             width
             height
             altText

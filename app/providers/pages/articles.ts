@@ -41,16 +41,6 @@ gql`
           id
           publishedAt
           tags
-          thumbnail: image {
-            url(transform: { maxWidth: 210 })
-          }
-          small: image {
-            url(transform: { maxWidth: 430 })
-          }
-          medium: image {
-            url(transform: { maxWidth: 860 })
-          }
-
           image {
             altText
             height
