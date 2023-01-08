@@ -615,6 +615,26 @@ input[type="number"] {
   }
 }
 
+.aspect-w-3 {
+  position: relative;
+  padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
+  --tw-aspect-w: 3;
+}
+
+.aspect-w-3 > * {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.aspect-h-2 {
+  --tw-aspect-h: 2;
+}
+
 .aspect-w-4 {
   position: relative;
   padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
@@ -653,26 +673,6 @@ input[type="number"] {
 
 .aspect-h-1 {
   --tw-aspect-h: 1;
-}
-
-.aspect-w-3 {
-  position: relative;
-  padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
-  --tw-aspect-w: 3;
-}
-
-.aspect-w-3 > * {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-.aspect-h-2 {
-  --tw-aspect-h: 2;
 }
 
 .aspect-w-2 {
@@ -1191,10 +1191,6 @@ input[type="number"] {
   height: 0.25rem;
 }
 
-.h-\[80px\] {
-  height: 80px;
-}
-
 .max-h-\[600px\] {
   max-height: 600px;
 }
@@ -1281,10 +1277,6 @@ input[type="number"] {
 
 .w-0 {
   width: 0px;
-}
-
-.w-\[80px\] {
-  width: 80px;
 }
 
 .min-w-\[16px\] {
@@ -2430,12 +2422,12 @@ input[type="number"] {
   transition-duration: 300ms;
 }
 
-.duration-400 {
-  transition-duration: 400ms;
-}
-
 .duration-150 {
   transition-duration: 150ms;
+}
+
+.duration-400 {
+  transition-duration: 400ms;
 }
 
 .ease-in-out {
@@ -2649,12 +2641,6 @@ input[type="number"] {
 
 .first\:pt-0:first-child {
   padding-top: 0px;
-}
-
-.hover\:scale-110:hover {
-  --tw-scale-x: 1.1;
-  --tw-scale-y: 1.1;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 .hover\:border-primary:hover {

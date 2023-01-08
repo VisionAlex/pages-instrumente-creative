@@ -63,6 +63,7 @@ gql`
           images(first: 20) {
             edges {
               node {
+                id
                 url
                 altText
                 width

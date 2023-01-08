@@ -38,20 +38,19 @@ export const ProductsHighlights: React.FC<Props> = ({
             const price = product.priceRange.minVariantPrice.amount;
             const compareAtPrice =
               product.compareAtPriceRange.minVariantPrice.amount;
-
+            const image = product.images.edges[0].node;
             return (
-              <div key={product.id} className="mx-auto">
+              <div key={product.id} className="w-full">
                 <Link
                   className="relative"
                   to={`${config.pages.produse.path}/${product.handle}`}
                   prefetch="intent"
                 >
-                  <div className="overflow-hidden">
+                  <div className="aspect-w-3 aspect-h-2 overflow-hidden">
                     <SImage
-                      image={product.images.edges[0].node}
-                      className="mx-auto cursor-pointer transition duration-400 hover:scale-110"
-                      loading="lazy"
+                      image={image}
                       width={720}
+                      className="cursor-pointer"
                     />
                   </div>
                   <SaleTag amount={price} compareAtPrice={compareAtPrice} />
