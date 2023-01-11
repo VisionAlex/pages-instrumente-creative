@@ -1,4 +1,4 @@
-# Welcome to Instrumente Creative Frontend Repo!
+# Welcome to Instrumente Creative Repository!
 
 <img src="https://imagedelivery.net/_Qvu0ID0pPyVjDxZnl16ng/e1e83cec-f941-4f10-6eaa-192b7e88c700/small"/>
 
