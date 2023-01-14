@@ -26,17 +26,39 @@ import { getBlog } from "~/providers/pages/blog";
 import { classNames } from "~/shared/utils/classNames";
 import type { RootContext } from "~/types";
 
+type InstagramMedia = {
+  id: string;
+  timestamp: string;
+  caption: string;
+  media_url: string;
+  media_type: string;
+  permalink: string;
+  is_shared_to_feed: boolean;
+  thumbnail_url: "string";
+};
+
 type LoaderData = {
   blog: NonNullable<GetBlogQuery["blog"]>;
   articles: GetArticlesQuery["articles"]["edges"];
   tags: string[];
+  drawings: InstagramMedia[];
 };
 
 export const loader: LoaderFunction = async ({ params, context }) => {
   if (!params.handle) {
     throw new Response("Not found", { status: 404 });
   }
-
+  const drawings =
+    params.handle === PAGE_HANDLE.BLOG_RESOURCES
+      ? context.ENV === "development"
+        ? await fetch("https://drawings.adm-alexandru1.workers.dev/").then(
+            (res) => res.json()
+          )
+        : JSON.parse(
+            (await (context.INSTAGRAM_MEDIA as KVNamespace).get("drawings")) ??
+              "[]"
+          )
+      : null;
   const sdk = createSdk(context);
   const blogQuery = await getBlog(sdk, params.handle);
   if (!blogQuery.blog) {
@@ -68,7 +90,7 @@ export const loader: LoaderFunction = async ({ params, context }) => {
   });
 
   return json(
-    { blog: blogQuery.blog, articles, tags: tags.slice(0, 8) },
+    { blog: blogQuery.blog, articles, tags: tags.slice(0, 8), drawings },
     {
       headers: {
         "Cache-Control": "public, max-age=3600",
@@ -167,6 +189,18 @@ const BlogIndex: React.FC = () => {
                         </CustomLink>
                       </div>
                     </div>
+                  </li>
+                );
+              })}
+              {data.drawings?.map((drawing) => {
+                return (
+                  <li
+                    key={drawing.id}
+                    className="flex flex-col border border-secondaryBackground"
+                  >
+                    <a href={drawing.permalink}>
+                      <img src={drawing.thumbnail_url} alt={drawing.caption} />
+                    </a>
                   </li>
                 );
               })}

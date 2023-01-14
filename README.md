@@ -1,8 +1,9 @@
-# Welcome to Instrumente Creative Frontend Repo!
+# Welcome to Instrumente Creative Repository!
 
 <img src="https://imagedelivery.net/_Qvu0ID0pPyVjDxZnl16ng/e1e83cec-f941-4f10-6eaa-192b7e88c700/small"/>
 
 You can view the web app at: https://instrumente-creative.ro
+
 ## Development
 
 In order to run the development you need to have the required env variables in a file .dev.vars.
@@ -13,6 +14,7 @@ Before starting the project you need to generate the sdk and types from the grap
 # Generate sdk and types
 npm run codegen
 ```
+
 Then you can run the development server.
 
 ```sh
@@ -23,5 +25,5 @@ Open up [http://127.0.0.1:8788](http://127.0.0.1:8788) and you should be ready t
 
 ## Deployment
 
-Pushing to main branch would trigger a deploy to cloudflare pages.
-Pushing to develop would trigger a deploy to a preview page.
+Pushing to main branch would trigger a deploy to production.
+Pushing to develop would trigger a deploy to staging.

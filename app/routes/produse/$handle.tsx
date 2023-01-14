@@ -49,6 +49,8 @@ export const loader: LoaderFunction = async ({ params, request, context }) => {
   return json(loaderData);
 };
 
+const IMG_SIZE = 1336;
+
 const SingleProduct: React.FC = () => {
   const { product, wishlist } = useLoaderData<ProductLoaderData>();
   const [selectedVariant, setSelectedVariant] = useState(0);
@@ -59,13 +61,12 @@ const SingleProduct: React.FC = () => {
   const price = variants[selectedVariant].price.amount;
   const compareAtPrice = variants[selectedVariant].compareAtPrice?.amount;
   const isGiftCard = product.productType === "Gift Cards";
-
   const hasMultipleVariants = variants.length > 1;
 
   useSSRLayoutEffect(() => {
     Promise.all(
       images.map((image) =>
-        preloadImage(getShopifyImageUrl(image.url, 1336) as string)
+        preloadImage(getShopifyImageUrl(image.url, IMG_SIZE) as string)
       )
     );
   }, [images]);
@@ -76,7 +77,7 @@ const SingleProduct: React.FC = () => {
     <FadeIn className="mx-auto px-5 lg:max-w-7xl lg:px-8">
       <div className="mt-8 lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-8">
         <div className="relative rounded-md lg:col-span-4">
-          <ImageGallery images={images} />
+          <ImageGallery images={images} imgSize={IMG_SIZE} />
         </div>
         <div className="mt-8 lg:col-span-3 lg:mt-0">
           <div className="flex flex-col ">

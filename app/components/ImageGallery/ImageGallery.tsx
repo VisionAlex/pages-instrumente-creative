@@ -33,9 +33,10 @@ const swipePower = (offset: number, velocity: number) => {
 
 interface Props {
   images: DetailedProduct["images"]["edges"][number]["node"][];
+  imgSize: number;
 }
 
-export const ImageGallery: React.FC<Props> = ({ images }) => {
+export const ImageGallery: React.FC<Props> = ({ images, imgSize }) => {
   const [[page, direction], setPage] = useState([0, 0]);
   const imageIndex = wrap(0, images.length, page);
 
@@ -49,7 +50,7 @@ export const ImageGallery: React.FC<Props> = ({ images }) => {
         <AnimatePresence initial={false} custom={direction}>
           <motion.img
             key={imageIndex}
-            src={getShopifyImageUrl(images[imageIndex].url, 1336)}
+            src={getShopifyImageUrl(images[imageIndex].url, imgSize)}
             alt={images[imageIndex].altText ?? ""}
             custom={direction}
             variants={variants}
