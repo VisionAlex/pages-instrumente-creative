@@ -4,6 +4,7 @@ interface Props {
   name: string;
   label: string;
   defaultValue?: string;
+  children: React.ReactNode;
 }
 
 export const FormSelect: React.FC<Props> = ({

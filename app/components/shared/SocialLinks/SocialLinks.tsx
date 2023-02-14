@@ -31,6 +31,7 @@ export const SocialLinks: React.FC = () => {
 interface SocialLinkProp {
   href: string;
   className?: string;
+  children: React.ReactNode;
 }
 export const SocialLink: React.FC<SocialLinkProp> = ({
   children,
