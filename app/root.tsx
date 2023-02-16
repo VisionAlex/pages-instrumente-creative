@@ -1,6 +1,6 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/cloudflare";
 import { json } from "@remix-run/cloudflare";
-import type { ShouldRevalidateFunction } from "@remix-run/react";
+import type { ShouldReloadFunction } from "@remix-run/react";
 import {
   Links,
   LiveReload,
@@ -165,10 +165,10 @@ export default function App() {
   );
 }
 
-export const shouldRevalidate: ShouldRevalidateFunction = ({ currentUrl }) => {
-  if (currentUrl.pathname === "/wishlist") return true;
-  if (currentUrl.pathname.includes("account")) return true;
-  if (currentUrl.pathname.includes("cart")) return true;
+export const unstable_ShouldReload: ShouldReloadFunction = ({ prevUrl }) => {
+  if (prevUrl.pathname === "/wishlist") return true;
+  if (prevUrl.pathname.includes("account")) return true;
+  if (prevUrl.pathname.includes("cart")) return true;
   return false;
 };
 
@@ -209,7 +209,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
           <h1 className="mb-4 text-center text-xl text-red-700">
             Eroare de aplicatie!
           </h1>
-          <pre>{error.message}</pre>
+          <pre>{error}</pre>
         </div>
       </body>
     </html>

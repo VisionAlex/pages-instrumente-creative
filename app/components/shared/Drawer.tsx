@@ -6,7 +6,6 @@ interface Props {
   title: React.ReactNode;
   open: boolean;
   onClose: () => void;
-  children: React.ReactNode;
 }
 
 export const Drawer: React.FC<Props> = ({ title, open, onClose, children }) => {

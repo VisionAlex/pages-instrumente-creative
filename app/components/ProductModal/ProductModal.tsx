@@ -72,7 +72,7 @@ export const ProductModal: React.FC<Props> = ({
                 </button>
               </div>
               <div>
-                <ImageGallery images={images} imgSize={1440} />
+                <ImageGallery images={images} />
                 <div>
                   <h3 className="text-2xl">{product.title}</h3>
                 </div>

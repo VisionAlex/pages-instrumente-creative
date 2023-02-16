@@ -4,7 +4,6 @@ interface Props {
   count?: number;
   hideOnLg?: boolean;
   onClick?: () => void;
-  children: React.ReactNode;
 }
 
 export const Counter: React.FC<Props> = ({

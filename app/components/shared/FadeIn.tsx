@@ -3,7 +3,6 @@ import React from "react";
 
 interface Props {
   className?: string;
-  children: React.ReactNode;
 }
 
 export const FadeIn: React.FC<Props> = ({ children, className }) => {
