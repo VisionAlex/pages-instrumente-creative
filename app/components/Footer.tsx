@@ -35,7 +35,10 @@ export const Footer: React.FC<Props> = ({ user }) => {
       </div>
       <div className="flex flex-col items-center justify-center gap-3 text-center text-subtitle xs2:flex-row">
         <TruckIcon width={20} fill="#707070" />
-        <p>Livrare gratuită pentru comenzi mai mari de 200 de lei</p>
+        <p>
+          Livrare gratuită pentru comenzi mai mari de{" "}
+          {config.cart.minimumValueForFreeTransport} de lei
+        </p>
       </div>
       <div className="my-4 flex justify-center">
         <Logo />

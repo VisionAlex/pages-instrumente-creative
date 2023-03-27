@@ -8,7 +8,7 @@ export const PAGE_HANDLE = {
   PRIVACY_POLICY: "politica-de-confidențialitate",
   CUSTOMER_SERVICE: "intrebari-frecvente",
 } as const;
-export type PageHandle = typeof PAGE_HANDLE[keyof typeof PAGE_HANDLE];
+export type PageHandle = (typeof PAGE_HANDLE)[keyof typeof PAGE_HANDLE];
 
 export type Config = {
   pages: {
@@ -71,6 +71,6 @@ export const config = {
   email: "contact@instrumente-creative.ro",
   cart: {
     transport: 10,
-    minimumValueForFreeTransport: 193,
+    minimumValueForFreeTransport: 150,
   },
 } satisfies Config;
