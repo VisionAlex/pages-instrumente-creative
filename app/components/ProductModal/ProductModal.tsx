@@ -10,6 +10,8 @@ import type { Product } from "~/types";
 import { ImageGallery } from "../ImageGallery";
 import { Price } from "../shared/Price";
 
+const IMG_SIZE = 1336;
+
 interface Props {
   open: boolean;
   onClose: () => void;
@@ -72,7 +74,7 @@ export const ProductModal: React.FC<Props> = ({
                 </button>
               </div>
               <div>
-                <ImageGallery images={images} />
+                <ImageGallery images={images} imgSize={IMG_SIZE} />
                 <div>
                   <h3 className="text-2xl">{product.title}</h3>
                 </div>

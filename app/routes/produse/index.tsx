@@ -57,7 +57,7 @@ const AllProducts: React.FC = () => {
                   to={`${config.pages.produse.path}/${product.handle}`}
                   className=" relative cursor-pointer"
                 >
-                  <div className="aspect-w-4 aspect-h-3 object-contain object-center">
+                  <div className="aspect-w-3 aspect-h-4 object-contain object-center">
                     <SImage
                       image={product.images.edges[0].node}
                       loading="lazy"

@@ -691,6 +691,10 @@ input[type="number"] {
   left: 0;
 }
 
+.aspect-h-4 {
+  --tw-aspect-h: 4;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

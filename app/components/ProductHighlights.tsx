@@ -46,7 +46,7 @@ export const ProductsHighlights: React.FC<Props> = ({
                   to={`${config.pages.produse.path}/${product.handle}`}
                   prefetch="intent"
                 >
-                  <div className="aspect-w-3 aspect-h-2 overflow-hidden">
+                  <div className="aspect-w-3 aspect-h-4 overflow-hidden">
                     <SImage
                       image={image}
                       width={720}

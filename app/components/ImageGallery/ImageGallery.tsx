@@ -46,7 +46,7 @@ export const ImageGallery: React.FC<Props> = ({ images, imgSize }) => {
 
   return (
     <>
-      <div className="aspect-w-4 aspect-h-3 overflow-hidden rounded-md">
+      <div className="aspect-w-3 aspect-h-4 overflow-hidden rounded-md">
         <AnimatePresence initial={false} custom={direction}>
           <motion.img
             key={imageIndex}
