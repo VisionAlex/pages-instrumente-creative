@@ -55,6 +55,7 @@ const BuyButton: React.FC<BuyButtonProps> = ({ disabled, asText, onClick }) => {
     <button
       onClick={onClick}
       disabled={disabled}
+      data-testId="add-to-cart"
       aria-label="Adaugă în coș"
       className={classNames(
         "flex h-[44px]  items-center justify-center border border-primary  transition-colors duration-500",

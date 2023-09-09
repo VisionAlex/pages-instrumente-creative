@@ -19,11 +19,11 @@ import { Logo } from "./components/Logo";
 import { Menu } from "./components/Menu";
 import { Navbar } from "./components/Navbar";
 import { ScrollToTop } from "./components/ScrollToTop";
-import { Notifications } from "./components/shared/Notification/Notifications";
 import { ShoppingCart } from "./components/ShoppingCart/ShoppingCart";
 import { getCartSize } from "./components/ShoppingCart/utils";
 import { Toolbar } from "./components/Toolbar";
 import { Wishlist } from "./components/Wishlist";
+import { Notifications } from "./components/shared/Notification/Notifications";
 import type { GetUserQuery } from "./generated/graphql";
 import { createSdk } from "./graphqlWrapper";
 import type { Cart } from "./providers/cart/cart";
@@ -71,6 +71,10 @@ export const loader: LoaderFunction = async ({ request, context }) => {
   const user = await getUser(request, sdk);
   const productsQuery = await getProducts(sdk, { first: 20 });
   const products = productsQuery.products.edges.map((edge) => edge.node);
+  const upsellProductId = "gid://shopify/Product/8526027718995";
+  products.sort((a, b) =>
+    a.id === upsellProductId ? -1 : b.id === upsellProductId ? 1 : 0
+  );
   const wishlist = await getWishlist(request);
   const cart = await getCart(request);
 

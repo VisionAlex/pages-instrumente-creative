@@ -46,12 +46,13 @@ const AllProducts: React.FC = () => {
       />
       <div>
         <div className="mx-auto grid max-w-screen-2xl grid-cols-1 gap-6 px-5 md:grid-cols-2 lg:grid-cols-3 lg:px-8 xl:px-20 2xl:grid-cols-4">
-          {products.map((product) => {
+          {products.map((product, index) => {
             const isFavorite = wishlist.some((item) => item === product.id);
             return (
               <div
                 key={product.id}
                 className="max-2xl grid grid-cols-1 overflow-hidden border border-secondaryBackground "
+                data-testId={`product-${index}`}
               >
                 <Link
                   to={`${config.pages.produse.path}/${product.handle}`}
