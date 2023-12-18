@@ -867,6 +867,10 @@ input[type="number"] {
   margin: auto;
 }
 
+.m-20 {
+  margin: 5rem;
+}
+
 .my-4 {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -905,6 +909,11 @@ input[type="number"] {
 .my-8 {
   margin-top: 2rem;
   margin-bottom: 2rem;
+}
+
+.mx-20 {
+  margin-left: 5rem;
+  margin-right: 5rem;
 }
 
 .-ml-\[30px\] {
@@ -2915,6 +2924,46 @@ input[type="number"] {
 }
 
 @media (min-width: 768px) {
+  .md\:aspect-w-4 {
+    position: relative;
+    padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
+    --tw-aspect-w: 4;
+  }
+
+  .md\:aspect-w-4 > * {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .md\:aspect-h-3 {
+    --tw-aspect-h: 3;
+  }
+
+  .md\:aspect-w-3 {
+    position: relative;
+    padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
+    --tw-aspect-w: 3;
+  }
+
+  .md\:aspect-w-3 > * {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .md\:aspect-h-2 {
+    --tw-aspect-h: 2;
+  }
+
   .md\:bottom-0 {
     bottom: 0px;
   }
@@ -3249,6 +3298,30 @@ input[type="number"] {
 }
 
 @media (min-width: 550px) {
+  .xs\:aspect-h-2 {
+    --tw-aspect-h: 2;
+  }
+
+  .xs\:aspect-w-2 {
+    position: relative;
+    padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
+    --tw-aspect-w: 2;
+  }
+
+  .xs\:aspect-w-2 > * {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .xs\:aspect-h-3 {
+    --tw-aspect-h: 3;
+  }
+
   .xs\:my-8 {
     margin-top: 2rem;
     margin-bottom: 2rem;

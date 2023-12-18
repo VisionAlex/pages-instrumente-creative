@@ -1,9 +1,10 @@
 {
-  "hero_mobile": {
-    "src": "hero_mobile.jpg",
-    "alt": "",
-    "width": 800,
-    "height": 960,
-    "blurDataUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAAECAIAAADETxJQAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAK0lEQVR4nGN49eQ+BDGAqKcPPrx+zvD57cvTR/YunzOFoa680M/VRpyBAQBenRle3jfoLQAAAABJRU5ErkJggg=="
+  "hero2": {
+    "src": "hero2.jpg",
+    "alt": ""
+  },
+  "hero_mobile2": {
+    "src": "hero_mobile2.jpg",
+    "alt": ""
   }
 }
