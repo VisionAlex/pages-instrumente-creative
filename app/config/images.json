@@ -6,5 +6,9 @@
   "hero_mobile2": {
     "src": "hero_mobile2.jpg",
     "alt": ""
+  },
+  "about": {
+    "src": "about.jpeg",
+    "alt": "Jocuri educative pentru copii"
   }
 }
