@@ -13,6 +13,7 @@ import {
 } from "@remix-run/react";
 import { useMemo, useState } from "react";
 import AccountModal from "./components/AccountModal";
+import { Banner } from "./components/Banner";
 import { Footer } from "./components/Footer";
 import { FooterMenu } from "./components/FooterMenu";
 import { Logo } from "./components/Logo";
@@ -94,6 +95,7 @@ export default function App() {
   const [showWishlist, setShowWishlist] = useState(false);
   const [showAccountModal, setShowAccountModal] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+  const [showBanner, setShowBanner] = useState(true);
   const cartSize = useMemo(() => getCartSize(cart), [cart]);
   return (
     <html lang="ro">
@@ -118,7 +120,11 @@ export default function App() {
           open={showAccountModal}
           onClose={() => setShowAccountModal(false)}
         />
-        <Navbar>
+        <Banner
+          showBanner={showBanner}
+          closeBanner={() => setShowBanner(false)}
+        />
+        <Navbar isBannerShowing={showBanner}>
           <Logo className="-ml-[30px] lg:ml-0" />
           <Menu />
           <Toolbar
@@ -131,7 +137,12 @@ export default function App() {
           />
         </Navbar>
         <ScrollToTop />
-        <div className={`pt-[123px] pb-[50px] lg:pb-0`}>
+        <div
+          className={`linear pt-[80px] pb-[50px] transition-transform duration-300 lg:pb-0`}
+          style={{
+            transform: showBanner ? "translateY(36px)" : "translateY(0)",
+          }}
+        >
           <main>
             <Outlet
               context={{

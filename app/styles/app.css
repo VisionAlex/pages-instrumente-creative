@@ -655,6 +655,10 @@ input[type="number"] {
   --tw-aspect-h: 4;
 }
 
+.aspect-h-2 {
+  --tw-aspect-h: 2;
+}
+
 .aspect-w-1 {
   position: relative;
   padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
@@ -689,10 +693,6 @@ input[type="number"] {
   right: 0;
   bottom: 0;
   left: 0;
-}
-
-.aspect-h-2 {
-  --tw-aspect-h: 2;
 }
 
 .sr-only {
@@ -1178,6 +1178,10 @@ input[type="number"] {
   height: 0.25rem;
 }
 
+.h-9 {
+  height: 2.25rem;
+}
+
 .max-h-fit {
   max-height: -webkit-fit-content;
   max-height: -moz-fit-content;
@@ -1572,6 +1576,10 @@ input[type="number"] {
 
 .self-start {
   align-self: flex-start;
+}
+
+.self-end {
+  align-self: flex-end;
 }
 
 .self-center {
@@ -2011,6 +2019,18 @@ input[type="number"] {
 
 .pt-0 {
   padding-top: 0px;
+}
+
+.pt-1 {
+  padding-top: 0.25rem;
+}
+
+.pt-8 {
+  padding-top: 2rem;
+}
+
+.pt-\[80px\] {
+  padding-top: 80px;
 }
 
 .text-left {
