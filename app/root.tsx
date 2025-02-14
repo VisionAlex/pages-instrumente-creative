@@ -95,7 +95,7 @@ export default function App() {
   const [showWishlist, setShowWishlist] = useState(false);
   const [showAccountModal, setShowAccountModal] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
-  const [showBanner, setShowBanner] = useState(true);
+  const [showBanner, setShowBanner] = useState(false);
   const cartSize = useMemo(() => getCartSize(cart), [cart]);
   return (
     <html lang="ro">

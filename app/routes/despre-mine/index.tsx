@@ -48,8 +48,9 @@ export const headers: HeadersFunction = () => {
 const About: React.FC = () => {
   const { page } = useLoaderData<LoaderData>();
   return (
-    <FadeIn>
+    <FadeIn className=" mx-auto mt-4 max-w-7xl px-5 lg:px-8 xl:px-20">
       <PageHeader />
+
       <div className="aspect-w-3 aspect-h-2 w-full overflow-hidden">
         <picture className="object-cover object-center transition">
           <source srcSet={`${about}/w=1980`} media="(min-width: 1536px)" />
@@ -60,10 +61,7 @@ const About: React.FC = () => {
           <img src={`${about}/w=500`} alt="Instrumente Creative" />
         </picture>
       </div>
-      <div
-        className="page mx-auto mt-4 max-w-7xl px-5 lg:px-8 xl:px-20"
-        dangerouslySetInnerHTML={{ __html: page.body }}
-      />
+      <div className="page" dangerouslySetInnerHTML={{ __html: page.body }} />
     </FadeIn>
   );
 };

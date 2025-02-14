@@ -13,7 +13,7 @@ interface Props {
 export const Footer: React.FC<Props> = ({ user }) => {
   return (
     <footer className="mt-20  w-full bg-background py-20 px-5">
-      <div className="mb-4 grid w-full grid-cols-3 place-items-center gap-5 text-center text-primary xs2:mx-auto xs2:flex xs2:justify-center">
+      <div className="container mx-auto mb-4 grid max-w-screen-md grid-cols-2 place-items-center gap-5 px-4 text-center text-primary xs2:flex xs2:flex-wrap xs2:justify-center">
         <Link
           to={config.pages["intrebari-frecvente"].path}
           className="place-self-start text-left xs2:place-self-auto"
@@ -22,18 +22,24 @@ export const Footer: React.FC<Props> = ({ user }) => {
         </Link>
         <Link
           to={config.pages["politica-de-confidențialitate"].path}
-          className="place-self-center xs2:place-self-auto"
+          className="place-self-start text-left xs2:place-self-auto"
         >
           Politica de confidențialitate
         </Link>
         <Link
+          to={config.pages.recenzii.path}
+          className="place-self-start text-left xs2:place-self-auto"
+        >
+          Recenzii
+        </Link>
+        <Link
           to={config.pages.contact.path}
-          className="place-self-end xs2:place-self-auto"
+          className="place-self-start text-left xs2:place-self-auto"
         >
           Contact
         </Link>
       </div>
-      <div className="flex flex-col items-center justify-center gap-3 text-center text-subtitle xs2:flex-row">
+      <div className="flex  items-center justify-center gap-2 text-center text-subtitle xs2:flex-row">
         <TruckIcon width={20} fill="#707070" />
         <p>Livrare gratuită pentru toate comenzile</p>
       </div>

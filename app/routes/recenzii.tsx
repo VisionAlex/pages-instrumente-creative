@@ -5,7 +5,6 @@ import React from "react";
 import { FadeIn } from "~/components/shared/FadeIn";
 import { PageHeader } from "~/components/shared/PageHeader";
 import { ReviewRating } from "~/components/shared/ReviewRating";
-import { formatDate } from "~/shared/utils/formatDate";
 import pageStyles from "~/styles/page.css";
 
 type Review = {
@@ -96,12 +95,6 @@ const Reviews: React.FC = () => {
                     {review.author}{" "}
                     <span className="text-subtitle"> @{review.handle}</span>
                   </a>
-                  <time
-                    dateTime={new Date(review.date).toString()}
-                    className="ml-4 border-l border-gray-200 pl-4 text-gray-500 lg:ml-0 lg:mt-2 lg:border-0 lg:pl-0"
-                  >
-                    {formatDate(new Date(review.date).toString())}
-                  </time>
                 </div>
               </li>
             );

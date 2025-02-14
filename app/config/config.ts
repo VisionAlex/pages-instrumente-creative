@@ -8,7 +8,7 @@ export const PAGE_HANDLE = {
   PRIVACY_POLICY: "politica-de-confidențialitate",
   CUSTOMER_SERVICE: "intrebari-frecvente",
 } as const;
-export type PageHandle = (typeof PAGE_HANDLE)[keyof typeof PAGE_HANDLE];
+export type PageHandle = typeof PAGE_HANDLE[keyof typeof PAGE_HANDLE];
 
 export type Config = {
   pages: {
@@ -45,7 +45,7 @@ export const config = {
     recenzii: {
       name: "Recenzii",
       path: "/recenzii",
-      type: "menu",
+      type: "other",
     },
     contact: {
       name: "Contact",
@@ -53,8 +53,8 @@ export const config = {
       type: "other",
     },
     "despre-noi": {
-      name: "Despre noi",
-      path: "/despre-noi",
+      name: "Despre mine",
+      path: "/despre-mine",
       type: "menu",
     },
     "politica-de-confidențialitate": {
