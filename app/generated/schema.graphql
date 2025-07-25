@@ -13,6 +13,9 @@ directive @accessRestricted(
 Contextualizes data based on the additional information provided by the directive. For example, you can use the `@inContext(country: CA)` directive to [query a product's price](https://shopify.dev/custom-storefronts/internationalization/international-pricing) in a storefront within the context of Canada.
 """
 directive @inContext(
+  """The buyer's identity."""
+  buyer: BuyerInput
+
   """The country code for context. For example, `CA`."""
   country: CountryCode
 
@@ -22,6 +25,11 @@ directive @inContext(
   """The identifier of the customer's preferred location."""
   preferredLocationId: ID
 ) on MUTATION | QUERY
+
+"""
+Requires that exactly one field must be supplied and that field must not be `null`.
+"""
+directive @oneOf on INPUT_OBJECT
 
 "A version of the API, as defined by [Shopify API versioning](https://shopify.dev/api/usage/versioning).\nVersions are commonly referred to by their handle (for example, `2021-10`).\n"
 type ApiVersion {
@@ -39,6 +47,42 @@ type ApiVersion {
   supported: Boolean!
 }
 
+"The input fields for submitting Apple Pay payment method information for checkout.\n"
+input ApplePayWalletContentInput {
+  """The customer's billing address."""
+  billingAddress: MailingAddressInput!
+
+  """The data for the Apple Pay wallet."""
+  data: String!
+
+  """The header data for the Apple Pay wallet."""
+  header: ApplePayWalletHeaderInput!
+
+  """The last digits of the card used to create the payment."""
+  lastDigits: String
+
+  """The signature for the Apple Pay wallet."""
+  signature: String!
+
+  """The version for the Apple Pay wallet."""
+  version: String!
+}
+
+"The input fields for submitting wallet payment method information for checkout.\n"
+input ApplePayWalletHeaderInput {
+  """The application data for the Apple Pay wallet."""
+  applicationData: String
+
+  """The ephemeral public key for the Apple Pay wallet."""
+  ephemeralPublicKey: String!
+
+  """The public key hash for the Apple Pay wallet."""
+  publicKeyHash: String!
+
+  """The transaction ID for the Apple Pay wallet."""
+  transactionId: String!
+}
+
 """Details about the gift card used on the checkout."""
 type AppliedGiftCard implements Node {
   """The amount that was taken from the gift card by applying it."""
@@ -53,7 +97,7 @@ type AppliedGiftCard implements Node {
   """The amount left on the gift card."""
   balanceV2: MoneyV2! @deprecated(reason: "Use `balance` instead.")
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """The last characters of the gift card."""
@@ -64,7 +108,7 @@ type AppliedGiftCard implements Node {
 }
 
 """An article in an online store blog."""
-type Article implements HasMetafields & Node & OnlineStorePublishable {
+type Article implements HasMetafields & Node & OnlineStorePublishable & Trackable {
   """The article's author."""
   author: ArticleAuthor! @deprecated(reason: "Use `authorV2` instead.")
 
@@ -94,7 +138,7 @@ type Article implements HasMetafields & Node & OnlineStorePublishable {
 
   """Stripped content of the article, single line with HTML tags removed."""
   content(
-    """Truncates string after the given length."""
+    """Truncates a string after the given length."""
     truncateAt: Int
   ): String!
 
@@ -103,34 +147,46 @@ type Article implements HasMetafields & Node & OnlineStorePublishable {
 
   """Stripped excerpt of the article, single line with HTML tags removed."""
   excerpt(
-    """Truncates string after the given length."""
+    """Truncates a string after the given length."""
     truncateAt: Int
   ): String
 
   """The excerpt of the article, complete with HTML formatting."""
   excerptHtml: HTML
 
-  "A human-friendly unique string for the Article automatically generated from its title.\n"
+  """
+  A human-friendly unique string for the Article automatically generated from its title.
+  """
   handle: String!
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """The image associated with the article."""
   image: Image
 
-  """Returns a metafield found by namespace and key."""
+  """
+  A [custom field](https://shopify.dev/docs/apps/build/custom-data), including its `namespace` and `key`, that's associated with a Shopify resource for the purposes of adding and storing additional information.
+  """
   metafield(
     """The identifier for the metafield."""
     key: String!
 
-    """A container for a set of metafields."""
-    namespace: String!
+    """
+    The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+    """
+    namespace: String
   ): Metafield
 
-  "The metafields associated with the resource matching the supplied list of namespaces and keys.\n"
+  """
+  A list of [custom fields](/docs/apps/build/custom-data) that a merchant associates with a Shopify resource.
+  """
   metafields(
-    """The list of metafields to retrieve by namespace and key."""
+    """
+    The list of metafields to retrieve by namespace and key.
+    
+    The input must not contain more than `250` values.
+    """
     identifiers: [HasMetafieldsIdentifier!]!
   ): [Metafield]!
 
@@ -145,11 +201,16 @@ type Article implements HasMetafields & Node & OnlineStorePublishable {
   """The article’s SEO information."""
   seo: SEO
 
-  """A categorization that a article can be tagged with."""
+  "A categorization that a article can be tagged with.\n"
   tags: [String!]!
 
   """The article’s name."""
   title: String!
+
+  """
+  URL parameters to be added to a page URL to track the origin of on-site search traffic for [analytics reporting](https://help.shopify.com/manual/reports-and-analytics/shopify-reports/report-types/default-reports/behaviour-reports). Returns a result when accessed through the [search](https://shopify.dev/docs/api/storefront/current/queries/search) or [predictiveSearch](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries, otherwise returns null.
+  """
+  trackingParameters: String
 }
 
 """The author of an article."""
@@ -215,16 +276,18 @@ enum ArticleSortKeys {
   UPDATED_AT
 }
 
-"""Represents a generic custom attribute."""
+"""
+Represents a generic custom attribute, such as whether an order is a customer's first.
+"""
 type Attribute {
-  """Key or name of the attribute."""
+  "The key or name of the attribute. For example, `\"customersFirstOrder\"`.\n"
   key: String!
 
-  """Value of the attribute."""
+  "The value of the attribute. For example, `\"true\"`.\n"
   value: String
 }
 
-"""Specifies the input fields required for an attribute."""
+"""The input fields for an attribute."""
 input AttributeInput {
   """Key or name of the attribute."""
   key: String!
@@ -262,6 +325,68 @@ type AvailableShippingRates {
   shippingRates: [ShippingRate!]
 }
 
+"""Represents a cart line common fields."""
+interface BaseCartLine implements Node {
+  """An attribute associated with the cart line."""
+  attribute(
+    """The key of the attribute."""
+    key: String!
+  ): Attribute
+
+  """
+  The attributes associated with the cart line. Attributes are represented as key-value pairs.
+  """
+  attributes: [Attribute!]!
+
+  """
+  The cost of the merchandise that the buyer will pay for at checkout. The costs are subject to change and changes will be reflected at checkout.
+  """
+  cost: CartLineCost!
+
+  """The discounts that have been applied to the cart line."""
+  discountAllocations: [CartDiscountAllocation!]!
+
+  """
+  The estimated cost of the merchandise that the buyer will pay for at checkout. The estimated costs are subject to change and changes will be reflected at checkout.
+  """
+  estimatedCost: CartLineEstimatedCost! @deprecated(reason: "Use `cost` instead.")
+
+  """A globally-unique ID."""
+  id: ID!
+
+  """The merchandise that the buyer intends to purchase."""
+  merchandise: Merchandise!
+
+  """The quantity of the merchandise that the customer intends to purchase."""
+  quantity: Int!
+
+  """
+  The selling plan associated with the cart line and the effect that each selling plan has on variants when they're purchased.
+  """
+  sellingPlanAllocation: SellingPlanAllocation
+}
+
+"An auto-generated type for paginating through multiple BaseCartLines.\n"
+type BaseCartLineConnection {
+  """A list of edges."""
+  edges: [BaseCartLineEdge!]!
+
+  """A list of the nodes contained in BaseCartLineEdge."""
+  nodes: [BaseCartLine!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"An auto-generated type which holds one BaseCartLine and a cursor during pagination.\n"
+type BaseCartLineEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of BaseCartLineEdge."""
+  node: BaseCartLine!
+}
+
 """An online store blog."""
 type Blog implements HasMetafields & Node & OnlineStorePublishable {
   """Find an article by its handle."""
@@ -284,7 +409,7 @@ type Blog implements HasMetafields & Node & OnlineStorePublishable {
     """Returns up to the last `n` elements from the list."""
     last: Int
 
-    "Supported filter parameters:\n - `author`\n - `blog_title`\n - `created_at`\n - `tag`\n - `tag_not`\n - `updated_at`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
+    "Apply one or multiple filters to the query.\n| name | description | acceptable_values | default_value | example_use |\n| ---- | ---- | ---- | ---- | ---- |\n| author |\n| blog_title |\n| created_at |\n| tag |\n| tag_not |\n| updated_at |\nRefer to the detailed [search syntax](https://shopify.dev/api/usage/search-syntax) for more information about using filters.\n"
     query: String
 
     """Reverse the order of the underlying list."""
@@ -300,21 +425,31 @@ type Blog implements HasMetafields & Node & OnlineStorePublishable {
   "A human-friendly unique string for the Blog automatically generated from its title.\n"
   handle: String!
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
-  """Returns a metafield found by namespace and key."""
+  """
+  A [custom field](https://shopify.dev/docs/apps/build/custom-data), including its `namespace` and `key`, that's associated with a Shopify resource for the purposes of adding and storing additional information.
+  """
   metafield(
     """The identifier for the metafield."""
     key: String!
 
-    """A container for a set of metafields."""
-    namespace: String!
+    """
+    The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+    """
+    namespace: String
   ): Metafield
 
-  "The metafields associated with the resource matching the supplied list of namespaces and keys.\n"
+  """
+  A list of [custom fields](/docs/apps/build/custom-data) that a merchant associates with a Shopify resource.
+  """
   metafields(
-    """The list of metafields to retrieve by namespace and key."""
+    """
+    The list of metafields to retrieve by namespace and key.
+    
+    The input must not contain more than `250` values.
+    """
     identifiers: [HasMetafieldsIdentifier!]!
   ): [Metafield]!
 
@@ -366,7 +501,7 @@ enum BlogSortKeys {
   TITLE
 }
 
-"The store's branding configuration.\n"
+"The store's [branding configuration](https://help.shopify.com/en/manual/promoting-marketing/managing-brand-assets).\n"
 type Brand {
   """The colors of the store's brand."""
   colors: BrandColors!
@@ -405,6 +540,17 @@ type BrandColors {
   secondary: [BrandColorGroup!]!
 }
 
+"The input fields for obtaining the buyer's identity.\n"
+input BuyerInput {
+  """The identifier of the company location."""
+  companyLocationId: ID
+
+  """
+  The customer access token retrieved from the [Customer Accounts API](https://shopify.dev/docs/api/customer#step-obtain-access-token).
+  """
+  customerAccessToken: String!
+}
+
 """
 Card brand, such as Visa or Mastercard, which can be used for payments.
 """
@@ -429,7 +575,7 @@ enum CardBrand {
 }
 
 "A cart represents the merchandise that a buyer intends to purchase,\nand the estimated cost associated with the cart. Learn how to\n[interact with a cart](https://shopify.dev/custom-storefronts/internationalization/international-pricing)\nduring a customer's session.\n"
-type Cart implements Node {
+type Cart implements HasMetafields & Node {
   """An attribute associated with the cart."""
   attribute(
     """The key of the attribute."""
@@ -441,7 +587,7 @@ type Cart implements Node {
   """
   attributes: [Attribute!]!
 
-  """Information about the buyer that is interacting with the cart."""
+  """Information about the buyer that's interacting with the cart."""
   buyerIdentity: CartBuyerIdentity!
 
   """The URL of the checkout for the cart."""
@@ -476,13 +622,17 @@ type Cart implements Node {
   """The discounts that have been applied to the entire cart."""
   discountAllocations: [CartDiscountAllocation!]!
 
-  "The case-insensitive discount codes that the customer added at checkout.\n"
+  """
+  The case-insensitive discount codes that the customer added at checkout.
+  """
   discountCodes: [CartDiscountCode!]!
 
-  "The estimated costs that the buyer will pay at checkout.\nThe estimated costs are subject to change and changes will be reflected at checkout.\nThe `estimatedCost` field uses the `buyerIdentity` field to determine\n[international pricing](https://shopify.dev/custom-storefronts/internationalization/international-pricing).\n"
+  """
+  The estimated costs that the buyer will pay at checkout. The estimated costs are subject to change and changes will be reflected at checkout. The `estimatedCost` field uses the `buyerIdentity` field to determine [international pricing](https://shopify.dev/custom-storefronts/internationalization/international-pricing).
+  """
   estimatedCost: CartEstimatedCost! @deprecated(reason: "Use `cost` instead.")
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """
@@ -503,10 +653,35 @@ type Cart implements Node {
 
     """Reverse the order of the underlying list."""
     reverse: Boolean = false
-  ): CartLineConnection!
+  ): BaseCartLineConnection!
 
   """
-  A note that is associated with the cart. For example, the note can be a personalized message to the buyer.
+  A [custom field](https://shopify.dev/docs/apps/build/custom-data), including its `namespace` and `key`, that's associated with a Shopify resource for the purposes of adding and storing additional information.
+  """
+  metafield(
+    """The identifier for the metafield."""
+    key: String!
+
+    """
+    The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+    """
+    namespace: String
+  ): Metafield
+
+  """
+  A list of [custom fields](/docs/apps/build/custom-data) that a merchant associates with a Shopify resource.
+  """
+  metafields(
+    """
+    The list of metafields to retrieve by namespace and key.
+    
+    The input must not contain more than `250` values.
+    """
+    identifiers: [HasMetafieldsIdentifier!]!
+  ): [Metafield]!
+
+  """
+  A note that's associated with the cart. For example, the note can be a personalized message to the buyer.
   """
   note: String
 
@@ -547,18 +722,30 @@ type CartBuyerIdentity {
   """The customer account associated with the cart."""
   customer: Customer
 
-  "An ordered set of delivery addresses tied to the buyer that is interacting with the cart.\nThe rank of the preferences is determined by the order of the addresses in the array. Preferences\ncan be used to populate relevant fields in the checkout flow.\n"
-  deliveryAddressPreferences: [DeliveryAddress!]!
+  "An ordered set of delivery addresses tied to the buyer that is interacting with the cart.\nThe rank of the preferences is determined by the order of the addresses in the array. Preferences\ncan be used to populate relevant fields in the checkout flow.\n\nAs of the `2025-01` release, `buyerIdentity.deliveryAddressPreferences` is deprecated.\nDelivery addresses are now part of the `CartDelivery` object and managed with three new mutations:\n- `cartDeliveryAddressAdd`\n- `cartDeliveryAddressUpdate`\n- `cartDeliveryAddressDelete`\n"
+  deliveryAddressPreferences: [DeliveryAddress!]! @deprecated(reason: "Use `cart.delivery` instead.")
 
-  """The email address of the buyer that is interacting with the cart."""
+  """The email address of the buyer that's interacting with the cart."""
   email: String
 
-  """The phone number of the buyer that is interacting with the cart."""
+  """The phone number of the buyer that's interacting with the cart."""
   phone: String
+
+  "A set of preferences tied to the buyer interacting with the cart. Preferences are used to prefill fields in at checkout to streamline information collection.\nPreferences are not synced back to the cart if they are overwritten.\n"
+  preferences: CartPreferences
+
+  """The purchasing company associated with the cart."""
+  purchasingCompany: PurchasingCompany
+
+  "A set of wallet preferences tied to the buyer that is interacting with the cart.\nPreferences can be used to populate relevant payment fields in the checkout flow.\n"
+  walletPreferences: [String!]! @deprecated(reason: "Use `preferences` instead.")
 }
 
 "Specifies the input fields to update the buyer information associated with a cart.\nBuyer identity is used to determine\n[international pricing](https://shopify.dev/custom-storefronts/internationalization/international-pricing)\nand should match the customer's shipping address.\n"
 input CartBuyerIdentityInput {
+  """The company location of the buyer that is interacting with the cart."""
+  companyLocationId: ID
+
   """The country where the buyer is located."""
   countryCode: CountryCode
 
@@ -567,14 +754,14 @@ input CartBuyerIdentityInput {
   """
   customerAccessToken: String
 
-  "An ordered set of delivery addresses tied to the buyer that is interacting with the cart.\nThe rank of the preferences is determined by the order of the addresses in the array. Preferences\ncan be used to populate relevant fields in the checkout flow.\n"
-  deliveryAddressPreferences: [DeliveryAddressInput!]
-
   """The email address of the buyer that is interacting with the cart."""
   email: String
 
   """The phone number of the buyer that is interacting with the cart."""
   phone: String
+
+  "A set of preferences tied to the buyer interacting with the cart. Preferences are used to prefill fields in at checkout to streamline information collection.\nPreferences are not synced back to the cart if they are overwritten.\n"
+  preferences: CartPreferencesInput
 }
 
 """Return type for `cartBuyerIdentityUpdate` mutation."""
@@ -586,6 +773,12 @@ type CartBuyerIdentityUpdatePayload {
   userErrors: [CartUserError!]!
 }
 
+"Represents how credit card details are provided for a direct payment.\n"
+enum CartCardSource {
+  "The credit card was provided by a third party and vaulted on their system.\nUsing this value requires a separate permission from Shopify.\n"
+  SAVED_CREDIT_CARD
+}
+
 """
 The discount that has been applied to the cart line using a discount code.
 """
@@ -595,6 +788,54 @@ type CartCodeDiscountAllocation implements CartDiscountAllocation {
 
   """The discounted amount that has been applied to the cart line."""
   discountedAmount: MoneyV2!
+}
+
+"""The completion action to checkout a cart."""
+union CartCompletionAction = CompletePaymentChallenge
+
+"""The required completion action to checkout a cart."""
+type CartCompletionActionRequired {
+  """The action required to complete the cart completion attempt."""
+  action: CartCompletionAction
+
+  """The ID of the cart completion attempt."""
+  id: String!
+}
+
+"""The result of a cart completion attempt."""
+union CartCompletionAttemptResult = CartCompletionActionRequired | CartCompletionFailed | CartCompletionProcessing | CartCompletionSuccess
+
+"""A failed completion to checkout a cart."""
+type CartCompletionFailed {
+  """The errors that caused the checkout to fail."""
+  errors: [CompletionError!]!
+
+  """The ID of the cart completion attempt."""
+  id: String!
+}
+
+"""A cart checkout completion that's still processing."""
+type CartCompletionProcessing {
+  """The ID of the cart completion attempt."""
+  id: String!
+
+  """The number of milliseconds to wait before polling again."""
+  pollDelay: Int!
+}
+
+"""A successful completion to checkout a cart and a created order."""
+type CartCompletionSuccess {
+  """The date and time when the job completed."""
+  completedAt: DateTime
+
+  """The ID of the cart completion attempt."""
+  id: String!
+
+  """The ID of the order that's created in Shopify."""
+  orderId: ID!
+
+  """The URL of the order confirmation in Shopify."""
+  orderUrl: URL!
 }
 
 "The costs that the buyer will pay at checkout.\nThe cart cost uses [`CartBuyerIdentity`](https://shopify.dev/api/storefront/reference/cart/cartbuyeridentity) to determine\n[international pricing](https://shopify.dev/custom-storefronts/internationalization/international-pricing).\n"
@@ -619,16 +860,16 @@ type CartCost {
   totalAmountEstimated: Boolean!
 
   """The duty amount for the customer to pay at checkout."""
-  totalDutyAmount: MoneyV2
+  totalDutyAmount: MoneyV2 @deprecated(reason: "Tax and duty amounts are no longer available and will be removed in a future version.\nPlease see [the changelog](https://shopify.dev/changelog/tax-and-duties-are-deprecated-in-storefront-cart-api)\nfor more information.\n")
 
   """Whether the total duty amount is estimated."""
-  totalDutyAmountEstimated: Boolean!
+  totalDutyAmountEstimated: Boolean! @deprecated(reason: "Tax and duty amounts are no longer available and will be removed in a future version.\nPlease see [the changelog](https://shopify.dev/changelog/tax-and-duties-are-deprecated-in-storefront-cart-api)\nfor more information.\n")
 
   """The tax amount for the customer to pay at checkout."""
-  totalTaxAmount: MoneyV2
+  totalTaxAmount: MoneyV2 @deprecated(reason: "Tax and duty amounts are no longer available and will be removed in a future version.\nPlease see [the changelog](https://shopify.dev/changelog/tax-and-duties-are-deprecated-in-storefront-cart-api)\nfor more information.\n")
 
   """Whether the total tax amount is estimated."""
-  totalTaxAmountEstimated: Boolean!
+  totalTaxAmountEstimated: Boolean! @deprecated(reason: "Tax and duty amounts are no longer available and will be removed in a future version.\nPlease see [the changelog](https://shopify.dev/changelog/tax-and-duties-are-deprecated-in-storefront-cart-api)\nfor more information.\n")
 }
 
 """Return type for `cartCreate` mutation."""
@@ -652,6 +893,42 @@ type CartCustomDiscountAllocation implements CartDiscountAllocation {
 }
 
 """
+Preferred location used to find the closest pick up point based on coordinates.
+"""
+type CartDeliveryCoordinatesPreference {
+  "The two-letter code for the country of the preferred location.\n\nFor example, US.\n"
+  countryCode: CountryCode!
+
+  """
+  The geographic latitude for a given location. Coordinates are required in order to set pickUpHandle for pickup points.
+  """
+  latitude: Float!
+
+  """
+  The geographic longitude for a given location. Coordinates are required in order to set pickUpHandle for pickup points.
+  """
+  longitude: Float!
+}
+
+"""
+Preferred location used to find the closest pick up point based on coordinates.
+"""
+input CartDeliveryCoordinatesPreferenceInput {
+  "The two-letter code for the country of the preferred location.\n\nFor example, US.\n"
+  countryCode: CountryCode!
+
+  """
+  The geographic latitude for a given location. Coordinates are required in order to set pickUpHandle for pickup points.
+  """
+  latitude: Float!
+
+  """
+  The geographic longitude for a given location. Coordinates are required in order to set pickUpHandle for pickup points.
+  """
+  longitude: Float!
+}
+
+"""
 Information about the options available for one or more line items to be delivered to a specific address.
 """
 type CartDeliveryGroup {
@@ -671,13 +948,16 @@ type CartDeliveryGroup {
 
     """Reverse the order of the underlying list."""
     reverse: Boolean = false
-  ): CartLineConnection!
+  ): BaseCartLineConnection!
 
   """The destination address for the delivery group."""
   deliveryAddress: MailingAddress!
 
   """The delivery options available for the delivery group."""
   deliveryOptions: [CartDeliveryOption!]!
+
+  """The type of merchandise in the delivery group."""
+  groupType: CartDeliveryGroupType!
 
   """The ID for the delivery group."""
   id: ID!
@@ -707,6 +987,15 @@ type CartDeliveryGroupEdge {
   node: CartDeliveryGroup!
 }
 
+"Defines what type of merchandise is in the delivery group.\n"
+enum CartDeliveryGroupType {
+  "The delivery group only contains merchandise that is either a one time purchase or a first delivery of\nsubscription merchandise.\n"
+  ONE_TIME_PURCHASE
+
+  """The delivery group only contains subscription merchandise."""
+  SUBSCRIPTION
+}
+
 """Information about a delivery option."""
 type CartDeliveryOption {
   """The code of the delivery option."""
@@ -726,6 +1015,59 @@ type CartDeliveryOption {
 
   """The title of the delivery option."""
   title: String
+}
+
+"A set of preferences tied to the buyer interacting with the cart. Preferences are used to prefill fields in at checkout to streamline information collection. \nPreferences are not synced back to the cart if they are overwritten.\n"
+type CartDeliveryPreference {
+  """
+  Preferred location used to find the closest pick up point based on coordinates.
+  """
+  coordinates: CartDeliveryCoordinatesPreference
+
+  """
+  The preferred delivery methods such as shipping, local pickup or through pickup points.
+  """
+  deliveryMethod: [PreferenceDeliveryMethodType!]!
+
+  "The pickup handle prefills checkout fields with the location for either local pickup or pickup points delivery methods.\nIt accepts both location ID for local pickup and external IDs for pickup points.\n"
+  pickupHandle: [String!]!
+}
+
+"""
+Delivery preferences can be used to prefill the delivery section at checkout.
+"""
+input CartDeliveryPreferenceInput {
+  """The coordinates of a delivery location in order of preference."""
+  coordinates: CartDeliveryCoordinatesPreferenceInput
+
+  """
+  The preferred delivery methods such as shipping, local pickup or through pickup points.
+  
+  The input must not contain more than `250` values.
+  """
+  deliveryMethod: [PreferenceDeliveryMethodType!]
+
+  """
+  The pickup handle prefills checkout fields with the location for either local pickup or pickup points delivery methods.
+  It accepts both location ID for local pickup and external IDs for pickup points.
+  
+  The input must not contain more than `250` values.
+  """
+  pickupHandle: [String!]
+}
+
+"The input fields for submitting direct payment method information for checkout.\n"
+input CartDirectPaymentMethodInput {
+  """The customer's billing address."""
+  billingAddress: MailingAddressInput!
+
+  """The source of the credit card payment."""
+  cardSource: CartCardSource
+
+  """
+  The session ID for the direct payment method used to create the payment.
+  """
+  sessionId: String!
 }
 
 """The discounts that have been applied to the cart line."""
@@ -756,23 +1098,94 @@ type CartDiscountCodesUpdatePayload {
 
 """Possible error codes that can be returned by `CartUserError`."""
 enum CartErrorCode {
+  """The specified address field contains emojis."""
+  ADDRESS_FIELD_CONTAINS_EMOJIS
+
+  """The specified address field contains HTML tags."""
+  ADDRESS_FIELD_CONTAINS_HTML_TAGS
+
+  """The specified address field contains a URL."""
+  ADDRESS_FIELD_CONTAINS_URL
+
+  """The specified address field does not match the expected pattern."""
+  ADDRESS_FIELD_DOES_NOT_MATCH_EXPECTED_PATTERN
+
+  """The specified address field is required."""
+  ADDRESS_FIELD_IS_REQUIRED
+
+  """The specified address field is too long."""
+  ADDRESS_FIELD_IS_TOO_LONG
+
   """The input value is invalid."""
   INVALID
+
+  """Company location not found or not allowed."""
+  INVALID_COMPANY_LOCATION
+
+  """Delivery group was not found in cart."""
+  INVALID_DELIVERY_GROUP
+
+  """Delivery option was not valid."""
+  INVALID_DELIVERY_OPTION
+
+  """The quantity must be a multiple of the specified increment."""
+  INVALID_INCREMENT
 
   """Merchandise line was not found in cart."""
   INVALID_MERCHANDISE_LINE
 
+  """The metafields were not valid."""
+  INVALID_METAFIELDS
+
+  """The payment wasn't valid."""
+  INVALID_PAYMENT
+
+  """Cannot update payment on an empty cart"""
+  INVALID_PAYMENT_EMPTY_CART
+
+  """The given zip code is invalid for the provided country."""
+  INVALID_ZIP_CODE_FOR_COUNTRY
+
+  """The given zip code is invalid for the provided province."""
+  INVALID_ZIP_CODE_FOR_PROVINCE
+
   """The input value should be less than the maximum value allowed."""
   LESS_THAN
+
+  """The quantity must be below the specified maximum for the item."""
+  MAXIMUM_EXCEEDED
+
+  """The quantity must be above the specified minimum for the item."""
+  MINIMUM_NOT_MET
+
+  """The customer access token is required when setting a company location."""
+  MISSING_CUSTOMER_ACCESS_TOKEN
 
   """Missing discount code."""
   MISSING_DISCOUNT_CODE
 
   """Missing note."""
   MISSING_NOTE
+
+  """The payment method is not supported."""
+  PAYMENT_METHOD_NOT_SUPPORTED
+
+  """The given province cannot be found."""
+  PROVINCE_NOT_FOUND
+
+  """A general error occurred during address validation."""
+  UNSPECIFIED_ADDRESS_ERROR
+
+  """Validation failed."""
+  VALIDATION_CUSTOM
+
+  """The given zip code is unsupported."""
+  ZIP_CODE_NOT_SUPPORTED
 }
 
-"The estimated costs that the buyer will pay at checkout.\nThe estimated cost uses\n[`CartBuyerIdentity`](https://shopify.dev/api/storefront/reference/cart/cartbuyeridentity)\nto determine\n[international pricing](https://shopify.dev/custom-storefronts/internationalization/international-pricing).\n"
+"""
+The estimated costs that the buyer will pay at checkout. The estimated cost uses [`CartBuyerIdentity`](https://shopify.dev/api/storefront/reference/cart/cartbuyeridentity) to determine [international pricing](https://shopify.dev/custom-storefronts/internationalization/international-pricing).
+"""
 type CartEstimatedCost {
   """
   The estimated amount, before taxes and discounts, for the customer to pay at checkout. The checkout charge amount doesn't include any deferred payments that'll be paid at a later date. If the cart has no deferred payments, then the checkout charge amount is equivalent to`subtotal_amount`.
@@ -794,30 +1207,63 @@ type CartEstimatedCost {
   totalTaxAmount: MoneyV2
 }
 
-"""Specifies the input fields to create a cart."""
+"The input fields for submitting a billing address without a selected payment method.\n"
+input CartFreePaymentMethodInput {
+  """The customer's billing address."""
+  billingAddress: MailingAddressInput!
+}
+
+"""The input fields to create a cart."""
 input CartInput {
   """
   An array of key-value pairs that contains additional information about the cart.
+  
+  The input must not contain more than `250` values.
   """
   attributes: [AttributeInput!]
 
   "The customer associated with the cart. Used to determine [international pricing]\n(https://shopify.dev/custom-storefronts/internationalization/international-pricing).\nBuyer identity should match the customer's shipping address.\n"
   buyerIdentity: CartBuyerIdentityInput
 
-  "The case-insensitive discount codes that the customer added at checkout.\n"
+  """
+  The case-insensitive discount codes that the customer added at checkout.
+  
+  The input must not contain more than `250` values.
+  """
   discountCodes: [String!]
 
-  """A list of merchandise lines to add to the cart."""
+  """
+  A list of merchandise lines to add to the cart.
+  
+  The input must not contain more than `250` values.
+  """
   lines: [CartLineInput!]
 
   """
-  A note that is associated with the cart. For example, the note can be a personalized message to the buyer.
+  The metafields to associate with this cart.
+  
+  The input must not contain more than `250` values.
   """
+  metafields: [CartInputMetafieldInput!]
+
+  "A note that's associated with the cart. For example, the note can be a personalized message to the buyer.\n"
   note: String
 }
 
+"""The input fields for a cart metafield value to set."""
+input CartInputMetafieldInput {
+  """The key name of the metafield."""
+  key: String!
+
+  "The type of data that the cart metafield stores.\nThe type of data must be a [supported type](https://shopify.dev/apps/metafields/types).\n"
+  type: String!
+
+  "The data to store in the cart metafield. The data is always stored as a string, regardless of the metafield's type.\n"
+  value: String!
+}
+
 """Represents information about the merchandise in the cart."""
-type CartLine implements Node {
+type CartLine implements BaseCartLine & Node {
   """An attribute associated with the cart line."""
   attribute(
     """The key of the attribute."""
@@ -842,7 +1288,7 @@ type CartLine implements Node {
   """
   estimatedCost: CartLineEstimatedCost! @deprecated(reason: "Use `cost` instead.")
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """The merchandise that the buyer intends to purchase."""
@@ -855,18 +1301,6 @@ type CartLine implements Node {
   The selling plan associated with the cart line and the effect that each selling plan has on variants when they're purchased.
   """
   sellingPlanAllocation: SellingPlanAllocation
-}
-
-"An auto-generated type for paginating through multiple CartLines.\n"
-type CartLineConnection {
-  """A list of edges."""
-  edges: [CartLineEdge!]!
-
-  """A list of the nodes contained in CartLineEdge."""
-  nodes: [CartLine!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
 }
 
 """The cost of the merchandise line that the buyer will pay at checkout."""
@@ -884,18 +1318,7 @@ type CartLineCost {
   totalAmount: MoneyV2!
 }
 
-"An auto-generated type which holds one CartLine and a cursor during pagination.\n"
-type CartLineEdge {
-  """A cursor for use in pagination."""
-  cursor: String!
-
-  """The item at the end of CartLineEdge."""
-  node: CartLine!
-}
-
-"""
-The estimated cost of the merchandise line that the buyer will pay at checkout.
-"""
+"The estimated cost of the merchandise line that the buyer will pay at checkout.\n"
 type CartLineEstimatedCost {
   """The amount of the merchandise line."""
   amount: MoneyV2!
@@ -910,43 +1333,47 @@ type CartLineEstimatedCost {
   totalAmount: MoneyV2!
 }
 
-"""Specifies the input fields to create a merchandise line on a cart."""
+"""The input fields to create a merchandise line on a cart."""
 input CartLineInput {
   """
   An array of key-value pairs that contains additional information about the merchandise line.
+  
+  The input must not contain more than `250` values.
   """
   attributes: [AttributeInput!]
 
-  """The identifier of the merchandise that the buyer intends to purchase."""
+  """The ID of the merchandise that the buyer intends to purchase."""
   merchandiseId: ID!
 
   """The quantity of the merchandise."""
   quantity: Int = 1
 
   """
-  The identifier of the selling plan that the merchandise is being purchased with.
+  The ID of the selling plan that the merchandise is being purchased with.
   """
   sellingPlanId: ID
 }
 
-"""Specifies the input fields to update a line item on a cart."""
+"""The input fields to update a line item on a cart."""
 input CartLineUpdateInput {
   """
   An array of key-value pairs that contains additional information about the merchandise line.
+  
+  The input must not contain more than `250` values.
   """
   attributes: [AttributeInput!]
 
-  """The identifier of the merchandise line."""
+  """The ID of the merchandise line."""
   id: ID!
 
-  """The identifier of the merchandise for the line item."""
+  """The ID of the merchandise for the line item."""
   merchandiseId: ID
 
   """The quantity of the line item."""
   quantity: Int
 
   """
-  The identifier of the selling plan that the merchandise is being purchased with.
+  The ID of the selling plan that the merchandise is being purchased with.
   """
   sellingPlanId: ID
 }
@@ -978,6 +1405,48 @@ type CartLinesUpdatePayload {
   userErrors: [CartUserError!]!
 }
 
+"""The input fields to delete a cart metafield."""
+input CartMetafieldDeleteInput {
+  "The key name of the cart metafield. Can either be a composite key (`namespace.key`) or a simple key\n that relies on the default app-reserved namespace.\n"
+  key: String!
+
+  """The ID of the cart resource."""
+  ownerId: ID!
+}
+
+"""Return type for `cartMetafieldDelete` mutation."""
+type CartMetafieldDeletePayload {
+  """The ID of the deleted cart metafield."""
+  deletedId: ID
+
+  """The list of errors that occurred from executing the mutation."""
+  userErrors: [MetafieldDeleteUserError!]!
+}
+
+"""The input fields for a cart metafield value to set."""
+input CartMetafieldsSetInput {
+  """The key name of the cart metafield."""
+  key: String!
+
+  """The ID of the cart resource."""
+  ownerId: ID!
+
+  "The type of data that the cart metafield stores.\nThe type of data must be a [supported type](https://shopify.dev/apps/metafields/types).\n"
+  type: String!
+
+  "The data to store in the cart metafield. The data is always stored as a string, regardless of the metafield's type.\n"
+  value: String!
+}
+
+"""Return type for `cartMetafieldsSet` mutation."""
+type CartMetafieldsSetPayload {
+  """The list of cart metafields that were set."""
+  metafields: [Metafield!]
+
+  """The list of errors that occurred from executing the mutation."""
+  userErrors: [MetafieldsSetUserError!]!
+}
+
 """Return type for `cartNoteUpdate` mutation."""
 type CartNoteUpdatePayload {
   """The updated cart."""
@@ -985,6 +1454,62 @@ type CartNoteUpdatePayload {
 
   """The list of errors that occurred from executing the mutation."""
   userErrors: [CartUserError!]!
+}
+
+"The input fields for updating the payment method that will be used to checkout.\n"
+input CartPaymentInput {
+  """The amount that the customer will be charged at checkout."""
+  amount: MoneyInput!
+
+  "The input fields to use when checking out a cart with a direct payment method (like a credit card).\n"
+  directPaymentMethod: CartDirectPaymentMethodInput
+
+  "The input fields to use to checkout a cart without providing a payment method.\nUse this payment method input if the total cost of the cart is 0.\n"
+  freePaymentMethod: CartFreePaymentMethodInput
+
+  "An ID of the order placed on the originating platform.\nNote that this value doesn't correspond to the Shopify Order ID.\n"
+  sourceIdentifier: String
+
+  "The input fields to use when checking out a cart with a wallet payment method (like Shop Pay or Apple Pay).\n"
+  walletPaymentMethod: CartWalletPaymentMethodInput
+}
+
+"""Return type for `cartPaymentUpdate` mutation."""
+type CartPaymentUpdatePayload {
+  """The updated cart."""
+  cart: Cart
+
+  """The list of errors that occurred from executing the mutation."""
+  userErrors: [CartUserError!]!
+}
+
+"A set of preferences tied to the buyer interacting with the cart. Preferences are used to prefill fields in at checkout to streamline information collection. \nPreferences are not synced back to the cart if they are overwritten.\n"
+type CartPreferences {
+  """
+  Delivery preferences can be used to prefill the delivery section in at checkout.
+  """
+  delivery: CartDeliveryPreference
+
+  "Wallet preferences are used to populate relevant payment fields in the checkout flow.\nAccepted value: `[\"shop_pay\"]`.\n"
+  wallet: [String!]
+}
+
+"""
+The input fields represent preferences for the buyer that is interacting with the cart.
+"""
+input CartPreferencesInput {
+  """
+  Delivery preferences can be used to prefill the delivery section in at checkout.
+  """
+  delivery: CartDeliveryPreferenceInput
+
+  """
+  Wallet preferences are used to populate relevant payment fields in the checkout flow.
+  Accepted value: `["shop_pay"]`.
+  
+  The input must not contain more than `250` values.
+  """
+  wallet: [String!]
 }
 
 "The input fields for updating the selected delivery options for a delivery group.\n"
@@ -1005,6 +1530,18 @@ type CartSelectedDeliveryOptionsUpdatePayload {
   userErrors: [CartUserError!]!
 }
 
+"""Return type for `cartSubmitForCompletion` mutation."""
+type CartSubmitForCompletionPayload {
+  """The result of cart submission for completion."""
+  result: CartSubmitForCompletionResult
+
+  """The list of errors that occurred from executing the mutation."""
+  userErrors: [CartUserError!]!
+}
+
+"""The result of cart submit completion."""
+union CartSubmitForCompletionResult = SubmitAlreadyAccepted | SubmitFailed | SubmitSuccess | SubmitThrottled
+
 """Represents an error that happens during execution of a cart mutation."""
 type CartUserError implements DisplayableError {
   """The error code."""
@@ -1017,9 +1554,16 @@ type CartUserError implements DisplayableError {
   message: String!
 }
 
-"""
-A container for all the information required to checkout items and pay.
-"""
+"The input fields for submitting wallet payment method information for checkout.\n"
+input CartWalletPaymentMethodInput {
+  """The payment method information for the Apple Pay wallet."""
+  applePayWalletContent: ApplePayWalletContentInput
+
+  """The payment method information for the Shop Pay wallet."""
+  shopPayWalletContent: ShopPayWalletContentInput
+}
+
+"A container for all the information required to checkout items and pay.\n\nThe Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.\n"
 type Checkout implements Node {
   """The gift cards used on the checkout."""
   appliedGiftCards: [AppliedGiftCard!]!
@@ -1039,7 +1583,7 @@ type Checkout implements Node {
   """The currency code for the checkout."""
   currencyCode: CurrencyCode!
 
-  """A list of extra information that is added to the checkout."""
+  """A list of extra information that's added to the checkout."""
   customAttributes: [Attribute!]!
 
   """Discounts that have been applied on the checkout."""
@@ -1063,7 +1607,7 @@ type Checkout implements Node {
   """The email attached to this checkout."""
   email: String
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """
@@ -1098,7 +1642,7 @@ type Checkout implements Node {
   order: Order
 
   """
-  The Order Status Page for this Checkout, null when checkout is not completed.
+  The <b>Order status</b> page for this Checkout, null when checkout isn't completed.
   """
   orderStatusUrl: URL
 
@@ -1125,7 +1669,7 @@ type Checkout implements Node {
   shippingDiscountAllocations: [DiscountAllocation!]!
 
   """
-  Once a shipping rate is selected by the customer it is transitioned to a `shipping_line` object.
+  Once a shipping rate is selected by the customer it's transitioned to a `shipping_line` object.
   """
   shippingLine: ShippingRate
 
@@ -1171,12 +1715,16 @@ type Checkout implements Node {
   webUrl: URL!
 }
 
-"""Specifies the fields required to update a checkout's attributes."""
+"""The input fields required to update a checkout's attributes."""
 input CheckoutAttributesUpdateV2Input {
   "Allows setting partial addresses on a Checkout, skipping the full validation of attributes.\nThe required attributes are city, province, and country.\nFull validation of the addresses is still done at completion time. Defaults to `false` with \neach operation.\n"
   allowPartialAddresses: Boolean = false
 
-  """A list of extra information that is added to the checkout."""
+  """
+  A list of extra information that's added to the checkout.
+  
+  The input must not contain more than `250` values.
+  """
   customAttributes: [AttributeInput!]
 
   """
@@ -1203,7 +1751,9 @@ type CheckoutBuyerIdentity {
   countryCode: CountryCode
 }
 
-"""Specifies the identity of the customer associated with the checkout."""
+"""
+The input fields for the identity of the customer associated with the checkout.
+"""
 input CheckoutBuyerIdentityInput {
   "The country code of one of the shop's\n[enabled countries](https://help.shopify.com/en/manual/payments/shopify-payments/multi-currency/setup).\nFor example, `CA`. Including this field creates a checkout in the specified country's currency.\n"
   countryCode: CountryCode!
@@ -1251,7 +1801,7 @@ type CheckoutCompleteWithTokenizedPaymentV3Payload {
   userErrors: [UserError!]! @deprecated(reason: "Use `checkoutUserErrors` instead.")
 }
 
-"""Specifies the fields required to create a checkout."""
+"""The input fields required to create a checkout."""
 input CheckoutCreateInput {
   "Allows setting partial addresses on a Checkout, skipping the full validation of attributes.\nThe required attributes are city, province, and country.\nFull validation of addresses is still done at completion time. Defaults to `null`.\n"
   allowPartialAddresses: Boolean
@@ -1259,7 +1809,11 @@ input CheckoutCreateInput {
   """The identity of the customer associated with the checkout."""
   buyerIdentity: CheckoutBuyerIdentityInput
 
-  """A list of extra information that is added to the checkout."""
+  """
+  A list of extra information that's added to the checkout.
+  
+  The input must not contain more than `250` values.
+  """
   customAttributes: [AttributeInput!]
 
   """The email with which the customer wants to checkout."""
@@ -1267,6 +1821,8 @@ input CheckoutCreateInput {
 
   """
   A list of line item objects, each one containing information about an item in the checkout.
+  
+  The input must not contain more than `250` values.
   """
   lineItems: [CheckoutLineItemInput!]
 
@@ -1483,6 +2039,9 @@ enum CheckoutErrorCode {
   """The input value needs to be blank."""
   PRESENT
 
+  """Product is not published for this customer."""
+  PRODUCT_NOT_AVAILABLE
+
   """Shipping rate expired."""
   SHIPPING_RATE_EXPIRED
 
@@ -1535,7 +2094,7 @@ type CheckoutLineItem implements Node {
   """
   discountAllocations: [DiscountAllocation!]!
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """The quantity of the line item."""
@@ -1572,34 +2131,38 @@ type CheckoutLineItemEdge {
   node: CheckoutLineItem!
 }
 
-"""Specifies the input fields to create a line item on a checkout."""
+"""The input fields to create a line item on a checkout."""
 input CheckoutLineItemInput {
   """
   Extra information in the form of an array of Key-Value pairs about the line item.
+  
+  The input must not contain more than `250` values.
   """
   customAttributes: [AttributeInput!]
 
   """The quantity of the line item."""
   quantity: Int!
 
-  """The identifier of the product variant for the line item."""
+  """The ID of the product variant for the line item."""
   variantId: ID!
 }
 
-"""Specifies the input fields to update a line item on the checkout."""
+"""The input fields to update a line item on the checkout."""
 input CheckoutLineItemUpdateInput {
   """
   Extra information in the form of an array of Key-Value pairs about the line item.
+  
+  The input must not contain more than `250` values.
   """
   customAttributes: [AttributeInput!]
 
-  """The identifier of the line item."""
+  """The ID of the line item."""
   id: ID
 
   """The quantity of the line item."""
   quantity: Int
 
-  """The variant identifier of the line item."""
+  """The variant ID of the line item."""
   variantId: ID
 }
 
@@ -1686,15 +2249,13 @@ type CheckoutUserError implements DisplayableError {
   message: String!
 }
 
-"""
-A collection represents a grouping of products that a shop owner can create to organize them or make their shops easier to browse.
-"""
-type Collection implements HasMetafields & Node & OnlineStorePublishable {
+"A collection represents a grouping of products that a shop owner can create to\norganize them or make their shops easier to browse.\n"
+type Collection implements HasMetafields & Node & OnlineStorePublishable & Trackable {
   """
   Stripped description of the collection, single line with HTML tags removed.
   """
   description(
-    """Truncates string after the given length."""
+    """Truncates a string after the given length."""
     truncateAt: Int
   ): String!
 
@@ -1704,24 +2265,34 @@ type Collection implements HasMetafields & Node & OnlineStorePublishable {
   "A human-friendly unique string for the collection automatically generated from its title.\nLimit of 255 characters.\n"
   handle: String!
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """Image associated with the collection."""
   image: Image
 
-  """Returns a metafield found by namespace and key."""
+  """
+  A [custom field](https://shopify.dev/docs/apps/build/custom-data), including its `namespace` and `key`, that's associated with a Shopify resource for the purposes of adding and storing additional information.
+  """
   metafield(
     """The identifier for the metafield."""
     key: String!
 
-    """A container for a set of metafields."""
-    namespace: String!
+    """
+    The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+    """
+    namespace: String
   ): Metafield
 
-  "The metafields associated with the resource matching the supplied list of namespaces and keys.\n"
+  """
+  A list of [custom fields](/docs/apps/build/custom-data) that a merchant associates with a Shopify resource.
+  """
   metafields(
-    """The list of metafields to retrieve by namespace and key."""
+    """
+    The list of metafields to retrieve by namespace and key.
+    
+    The input must not contain more than `250` values.
+    """
     identifiers: [HasMetafieldsIdentifier!]!
   ): [Metafield]!
 
@@ -1738,7 +2309,11 @@ type Collection implements HasMetafields & Node & OnlineStorePublishable {
     """Returns the elements that come before the specified cursor."""
     before: String
 
-    """Returns a subset of products matching all product filters."""
+    """
+    Returns a subset of products matching all product filters.
+    
+    The input must not contain more than `250` values.
+    """
     filters: [ProductFilter!]
 
     """Returns up to the first `n` elements from the list."""
@@ -1760,6 +2335,11 @@ type Collection implements HasMetafields & Node & OnlineStorePublishable {
   """The collection’s name. Limit of 255 characters."""
   title: String!
 
+  """
+  URL parameters to be added to a page URL to track the origin of on-site search traffic for [analytics reporting](https://help.shopify.com/manual/reports-and-analytics/shopify-reports/report-types/default-reports/behaviour-reports). Returns a result when accessed through the [search](https://shopify.dev/docs/api/storefront/current/queries/search) or [predictiveSearch](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries, otherwise returns null.
+  """
+  trackingParameters: String
+
   """The date and time when the collection was last modified."""
   updatedAt: DateTime!
 }
@@ -1774,6 +2354,9 @@ type CollectionConnection {
 
   """Information to aid in pagination."""
   pageInfo: PageInfo!
+
+  """The total count of Collections."""
+  totalCount: UnsignedInt64!
 }
 
 "An auto-generated type which holds one Collection and a cursor during pagination.\n"
@@ -1810,14 +2393,14 @@ type Comment implements Node {
 
   """Stripped content of the comment, single line with HTML tags removed."""
   content(
-    """Truncates string after the given length."""
+    """Truncates a string after the given length."""
     truncateAt: Int
   ): String!
 
   """The content of the comment, complete with HTML formatting."""
   contentHtml: HTML!
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 }
 
@@ -1851,6 +2434,203 @@ type CommentEdge {
   node: Comment!
 }
 
+"""
+Represents information about a company which is also a customer of the shop.
+"""
+type Company implements HasMetafields & Node {
+  """
+  The date and time ([ISO 8601 format](http://en.wikipedia.org/wiki/ISO_8601)) at which the company was created in Shopify.
+  """
+  createdAt: DateTime!
+
+  """A unique externally-supplied ID for the company."""
+  externalId: String
+
+  """A globally-unique ID."""
+  id: ID!
+
+  """
+  A [custom field](https://shopify.dev/docs/apps/build/custom-data), including its `namespace` and `key`, that's associated with a Shopify resource for the purposes of adding and storing additional information.
+  """
+  metafield(
+    """The identifier for the metafield."""
+    key: String!
+
+    """
+    The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+    """
+    namespace: String
+  ): Metafield
+
+  """
+  A list of [custom fields](/docs/apps/build/custom-data) that a merchant associates with a Shopify resource.
+  """
+  metafields(
+    """
+    The list of metafields to retrieve by namespace and key.
+    
+    The input must not contain more than `250` values.
+    """
+    identifiers: [HasMetafieldsIdentifier!]!
+  ): [Metafield]!
+
+  """The name of the company."""
+  name: String!
+
+  """
+  The date and time ([ISO 8601 format](http://en.wikipedia.org/wiki/ISO_8601)) at which the company was last modified.
+  """
+  updatedAt: DateTime!
+}
+
+"""A company's main point of contact."""
+type CompanyContact implements Node {
+  """
+  The date and time ([ISO 8601 format](http://en.wikipedia.org/wiki/ISO_8601)) at which the company contact was created in Shopify.
+  """
+  createdAt: DateTime!
+
+  """A globally-unique ID."""
+  id: ID!
+
+  """The company contact's locale (language)."""
+  locale: String
+
+  """The company contact's job title."""
+  title: String
+
+  """
+  The date and time ([ISO 8601 format](http://en.wikipedia.org/wiki/ISO_8601)) at which the company contact was last modified.
+  """
+  updatedAt: DateTime!
+}
+
+"""A company's location."""
+type CompanyLocation implements HasMetafields & Node {
+  """
+  The date and time ([ISO 8601 format](http://en.wikipedia.org/wiki/ISO_8601)) at which the company location was created in Shopify.
+  """
+  createdAt: DateTime!
+
+  """A unique externally-supplied ID for the company."""
+  externalId: String
+
+  """A globally-unique ID."""
+  id: ID!
+
+  """The preferred locale of the company location."""
+  locale: String
+
+  """
+  A [custom field](https://shopify.dev/docs/apps/build/custom-data), including its `namespace` and `key`, that's associated with a Shopify resource for the purposes of adding and storing additional information.
+  """
+  metafield(
+    """The identifier for the metafield."""
+    key: String!
+
+    """
+    The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+    """
+    namespace: String
+  ): Metafield
+
+  """
+  A list of [custom fields](/docs/apps/build/custom-data) that a merchant associates with a Shopify resource.
+  """
+  metafields(
+    """
+    The list of metafields to retrieve by namespace and key.
+    
+    The input must not contain more than `250` values.
+    """
+    identifiers: [HasMetafieldsIdentifier!]!
+  ): [Metafield]!
+
+  """The name of the company location."""
+  name: String!
+
+  """
+  The date and time ([ISO 8601 format](http://en.wikipedia.org/wiki/ISO_8601)) at which the company location was last modified.
+  """
+  updatedAt: DateTime!
+}
+
+"""The action for the 3DS payment redirect."""
+type CompletePaymentChallenge {
+  """The URL for the 3DS payment redirect."""
+  redirectUrl: URL
+}
+
+"""An error that occurred during a cart completion attempt."""
+type CompletionError {
+  """The error code."""
+  code: CompletionErrorCode!
+
+  """The error message."""
+  message: String
+}
+
+"""The code of the error that occurred during a cart completion attempt."""
+enum CompletionErrorCode {
+  ERROR
+  INVENTORY_RESERVATION_ERROR
+  PAYMENT_AMOUNT_TOO_SMALL
+  PAYMENT_CALL_ISSUER
+  PAYMENT_CARD_DECLINED
+  PAYMENT_ERROR
+  PAYMENT_GATEWAY_NOT_ENABLED_ERROR
+  PAYMENT_INSUFFICIENT_FUNDS
+  PAYMENT_INVALID_BILLING_ADDRESS
+  PAYMENT_INVALID_CREDIT_CARD
+  PAYMENT_INVALID_CURRENCY
+  PAYMENT_INVALID_PAYMENT_METHOD
+  PAYMENT_TRANSIENT_ERROR
+}
+
+"""Represents information about the grouped merchandise in the cart."""
+type ComponentizableCartLine implements BaseCartLine & Node {
+  """An attribute associated with the cart line."""
+  attribute(
+    """The key of the attribute."""
+    key: String!
+  ): Attribute
+
+  """
+  The attributes associated with the cart line. Attributes are represented as key-value pairs.
+  """
+  attributes: [Attribute!]!
+
+  """
+  The cost of the merchandise that the buyer will pay for at checkout. The costs are subject to change and changes will be reflected at checkout.
+  """
+  cost: CartLineCost!
+
+  """The discounts that have been applied to the cart line."""
+  discountAllocations: [CartDiscountAllocation!]!
+
+  """
+  The estimated cost of the merchandise that the buyer will pay for at checkout. The estimated costs are subject to change and changes will be reflected at checkout.
+  """
+  estimatedCost: CartLineEstimatedCost! @deprecated(reason: "Use `cost` instead.")
+
+  """A globally-unique ID."""
+  id: ID!
+
+  """The components of the line item."""
+  lineComponents: [CartLine!]!
+
+  """The merchandise that the buyer intends to purchase."""
+  merchandise: Merchandise!
+
+  """The quantity of the merchandise that the customer intends to purchase."""
+  quantity: Int!
+
+  """
+  The selling plan associated with the cart line and the effect that each selling plan has on variants when they're purchased.
+  """
+  sellingPlanAllocation: SellingPlanAllocation
+}
+
 """A country."""
 type Country {
   """The languages available for the country."""
@@ -1861,6 +2641,9 @@ type Country {
 
   """The ISO code of the country."""
   isoCode: CountryCode!
+
+  """The market that includes this country."""
+  market: Market
 
   """The name of the country."""
   name: String!
@@ -2528,7 +3311,7 @@ enum CountryCode {
   """Tonga."""
   TO
 
-  """Turkey."""
+  """Türkiye."""
   TR
 
   """Trinidad & Tobago."""
@@ -2684,7 +3467,7 @@ type Currency {
   symbol: String!
 }
 
-"The three-letter currency codes that represent the world currencies used in stores. These include standard ISO 4217 codes, legacy codes,\nand non-standard codes.\n"
+"The three-letter currency codes that represent the world currencies used in\nstores. These include standard ISO 4217 codes, legacy codes,\nand non-standard codes.\n"
 enum CurrencyCode {
   """United Arab Emirates Dirham (AED)."""
   AED
@@ -3133,7 +3916,7 @@ enum CurrencyCode {
   """Venezuelan Bolivares (VEF)."""
   VEF @deprecated(reason: "`VEF` is deprecated. Use `VES` available from version `2020-10` onwards instead.")
 
-  """Venezuelan Bolivares (VES)."""
+  """Venezuelan Bolivares Soberanos (VES)."""
   VES
 
   """Vietnamese đồng (VND)."""
@@ -3212,27 +3995,37 @@ type Customer implements HasMetafields {
   """The customer’s first name."""
   firstName: String
 
-  """A unique identifier for the customer."""
+  """A unique ID for the customer."""
   id: ID!
 
   """The customer's most recently updated, incomplete checkout."""
-  lastIncompleteCheckout: Checkout
+  lastIncompleteCheckout: Checkout @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """The customer’s last name."""
   lastName: String
 
-  """Returns a metafield found by namespace and key."""
+  """
+  A [custom field](https://shopify.dev/docs/apps/build/custom-data), including its `namespace` and `key`, that's associated with a Shopify resource for the purposes of adding and storing additional information.
+  """
   metafield(
     """The identifier for the metafield."""
     key: String!
 
-    """A container for a set of metafields."""
-    namespace: String!
+    """
+    The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+    """
+    namespace: String
   ): Metafield
 
-  "The metafields associated with the resource matching the supplied list of namespaces and keys.\n"
+  """
+  A list of [custom fields](/docs/apps/build/custom-data) that a merchant associates with a Shopify resource.
+  """
   metafields(
-    """The list of metafields to retrieve by namespace and key."""
+    """
+    The list of metafields to retrieve by namespace and key.
+    
+    The input must not contain more than `250` values.
+    """
     identifiers: [HasMetafieldsIdentifier!]!
   ): [Metafield]!
 
@@ -3255,7 +4048,7 @@ type Customer implements HasMetafields {
     """Returns up to the last `n` elements from the list."""
     last: Int
 
-    "Supported filter parameters:\n - `processed_at`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
+    "Apply one or multiple filters to the query.\n| name | description | acceptable_values | default_value | example_use |\n| ---- | ---- | ---- | ---- | ---- |\n| processed_at |\nRefer to the detailed [search syntax](https://shopify.dev/api/usage/search-syntax) for more information about using filters.\n"
     query: String
 
     """Reverse the order of the underlying list."""
@@ -3286,7 +4079,7 @@ type CustomerAccessToken {
   expiresAt: DateTime!
 }
 
-"""Specifies the input fields required to create a customer access token."""
+"""The input fields required to create a customer access token."""
 input CustomerAccessTokenCreateInput {
   """The email associated to the customer."""
   email: String!
@@ -3349,7 +4142,7 @@ type CustomerActivateByUrlPayload {
   customerUserErrors: [CustomerUserError!]!
 }
 
-"""Specifies the input fields required to activate a customer."""
+"""The input fields to activate a customer."""
 input CustomerActivateInput {
   """The activation token required to activate the customer."""
   activationToken: String!
@@ -3409,7 +4202,7 @@ type CustomerAddressUpdatePayload {
   userErrors: [UserError!]! @deprecated(reason: "Use `customerUserErrors` instead.")
 }
 
-"""The fields required to create a new customer."""
+"""The input fields to create a new customer."""
 input CustomerCreateInput {
   """
   Indicates whether the customer has consented to be sent marketing material via email.
@@ -3528,7 +4321,7 @@ type CustomerResetByUrlPayload {
   userErrors: [UserError!]! @deprecated(reason: "Use `customerUserErrors` instead.")
 }
 
-"""Specifies the fields required to reset a customer’s password."""
+"""The input fields to reset a customer's password."""
 input CustomerResetInput {
   """New password that will be set as part of the reset password process."""
   password: String!
@@ -3552,7 +4345,7 @@ type CustomerResetPayload {
   userErrors: [UserError!]! @deprecated(reason: "Use `customerUserErrors` instead.")
 }
 
-"""Specifies the fields required to update the Customer information."""
+"""The input fields to update the Customer information."""
 input CustomerUpdateInput {
   """
   Indicates whether the customer has consented to be sent marketing material via email.
@@ -3615,10 +4408,25 @@ union DeliveryAddress = MailingAddress
 
 "The input fields for delivery address preferences.\n"
 input DeliveryAddressInput {
+  "The ID of a customer address that is associated with the buyer that is interacting with the cart.\n"
+  customerAddressId: ID
+
   """
   A delivery address preference of a buyer that is interacting with the cart.
   """
   deliveryAddress: MailingAddressInput
+
+  """Defines what kind of address validation is requested."""
+  deliveryAddressValidationStrategy: DeliveryAddressValidationStrategy = COUNTRY_CODE_ONLY
+}
+
+"Defines the types of available validation strategies for delivery addresses.\n"
+enum DeliveryAddressValidationStrategy {
+  """Only the country code is validated."""
+  COUNTRY_CODE_ONLY
+
+  "Strict validation is performed, i.e. all fields in the address are validated\naccording to Shopify's checkout rules. If the address fails validation, the cart will not be updated.\n"
+  STRICT
 }
 
 """List of different delivery method types."""
@@ -3801,7 +4609,7 @@ type ExternalVideo implements Media & Node {
   """The host of the external video."""
   host: MediaHost!
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """The media content type."""
@@ -3809,6 +4617,9 @@ type ExternalVideo implements Media & Node {
 
   """The origin URL of the video on the respective host."""
   originUrl: URL!
+
+  """The presentation for a media."""
+  presentation: MediaPresentation
 
   """The preview image for the media."""
   previewImage: Image
@@ -3822,11 +4633,26 @@ type Filter {
   """A human-friendly string for this filter."""
   label: String!
 
+  "Describes how to present the filter values.\nReturns a value only for filters of type `LIST`. Returns null for other types.\n"
+  presentation: FilterPresentation
+
   """An enumeration that denotes the type of data this filter represents."""
   type: FilterType!
 
   """The list of values for this filter."""
   values: [FilterValue!]!
+}
+
+"Defines how to present the filter values, specifies the presentation of the filter.\n"
+enum FilterPresentation {
+  """Image presentation, filter values display an image."""
+  IMAGE
+
+  """Swatch presentation, filter values display color or image patterns."""
+  SWATCH
+
+  """Text presentation, no additional visual display for filter values."""
+  TEXT
 }
 
 "The type of data that the filter group represents.\n\nFor more information, refer to [Filter products in a collection with the Storefront API]\n(https://shopify.dev/custom-storefronts/products-collections/filter-products).\n"
@@ -3849,11 +4675,17 @@ type FilterValue {
   """A unique identifier."""
   id: String!
 
-  "An input object that can be used to filter by this value on the parent field.\n\nThe value is provided as a helper for building dynamic filtering UI. For example, if you have a list of selected `FilterValue` objects, you can combine their respective `input` values to use in a subsequent query.\n"
+  """The visual representation when the filter's presentation is `IMAGE`."""
+  image: MediaImage
+
+  "An input object that can be used to filter by this value on the parent field.\n\nThe value is provided as a helper for building dynamic filtering UI. For\nexample, if you have a list of selected `FilterValue` objects, you can combine\ntheir respective `input` values to use in a subsequent query.\n"
   input: JSON!
 
   """A human-friendly string for this filter value."""
   label: String!
+
+  """The visual representation when the filter's presentation is `SWATCH`."""
+  swatch: Swatch
 }
 
 """Represents a single fulfillment in an order."""
@@ -3934,7 +4766,7 @@ type GenericFile implements Node {
   """A word or phrase to indicate the contents of a file."""
   alt: String
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """The MIME type of the file."""
@@ -3950,7 +4782,7 @@ type GenericFile implements Node {
   url: URL
 }
 
-"""Used to specify a geographical location."""
+"""The input fields used to specify a geographical location."""
 input GeoCoordinateInput {
   """The coordinate's latitude value."""
   latitude: Float!
@@ -3966,29 +4798,43 @@ scalar HTML
 Represents information about the metafields associated to the specified resource.
 """
 interface HasMetafields {
-  """Returns a metafield found by namespace and key."""
+  """
+  A [custom field](https://shopify.dev/docs/apps/build/custom-data), including its `namespace` and `key`, that's associated with a Shopify resource for the purposes of adding and storing additional information.
+  """
   metafield(
     """The identifier for the metafield."""
     key: String!
 
-    """A container for a set of metafields."""
-    namespace: String!
+    """
+    The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+    """
+    namespace: String
   ): Metafield
 
-  "The metafields associated with the resource matching the supplied list of namespaces and keys.\n"
+  """
+  A list of [custom fields](/docs/apps/build/custom-data) that a merchant associates with a Shopify resource.
+  """
   metafields(
-    """The list of metafields to retrieve by namespace and key."""
+    """
+    The list of metafields to retrieve by namespace and key.
+    
+    The input must not contain more than `250` values.
+    """
     identifiers: [HasMetafieldsIdentifier!]!
   ): [Metafield]!
 }
 
-"""Identifies a metafield on an owner resource by namespace and key."""
+"""
+The input fields to identify a metafield on an owner resource by namespace and key.
+"""
 input HasMetafieldsIdentifier {
   """The identifier for the metafield."""
   key: String!
 
-  """A container for a set of metafields."""
-  namespace: String!
+  """
+  The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+  """
+  namespace: String
 }
 
 """Represents an image resource."""
@@ -3997,11 +4843,11 @@ type Image {
   altText: String
 
   """
-  The original height of the image in pixels. Returns `null` if the image is not hosted by Shopify.
+  The original height of the image in pixels. Returns `null` if the image isn't hosted by Shopify.
   """
   height: Int
 
-  """A unique identifier for the image."""
+  """A unique ID for the image."""
   id: ID
 
   "The location of the original image as a URL.\n\nIf there are any existing transformations in the original source URL, they will remain and not be stripped.\n"
@@ -4010,7 +4856,7 @@ type Image {
   """The location of the image as a URL."""
   src: URL! @deprecated(reason: "Use `url` instead.")
 
-  "The location of the transformed image as a URL.\n\nAll transformation arguments are considered \"best-effort\". If they can be applied to an image, they will be.\nOtherwise any transformations which an image type does not support will be ignored.\n"
+  "The location of the transformed image as a URL.\n\nAll transformation arguments are considered \"best-effort\". If they can be applied to an image, they will be.\nOtherwise any transformations which an image type doesn't support will be ignored.\n"
   transformedSrc(
     """Crops the image according to the specified region."""
     crop: CropRegion
@@ -4039,7 +4885,7 @@ type Image {
   ): URL!
 
   """
-  The original width of the image in pixels. Returns `null` if the image is not hosted by Shopify.
+  The original width of the image in pixels. Returns `null` if the image isn't hosted by Shopify.
   """
   width: Int
 }
@@ -4077,9 +4923,9 @@ type ImageEdge {
   node: Image!
 }
 
-"The available options for transforming an image.\n\nAll transformation options are considered best effort. Any transformation that the original image type doesn't support will be ignored.\n"
+"The available options for transforming an image.\n\nAll transformation options are considered best effort. Any transformation that\nthe original image type doesn't support will be ignored.\n"
 input ImageTransformInput {
-  "The region of the image to remain after cropping.\nMust be used in conjunction with the `maxWidth` and/or `maxHeight` fields, where the `maxWidth` and `maxHeight` aren't equal.\nThe `crop` argument should coincide with the smaller value. A smaller `maxWidth` indicates a `LEFT` or `RIGHT` crop, while\na smaller `maxHeight` indicates a `TOP` or `BOTTOM` crop. For example, `{ maxWidth: 5, maxHeight: 10, crop: LEFT }` will result\nin an image with a width of 5 and height of 10, where the right side of the image is removed.\n"
+  "The region of the image to remain after cropping.\nMust be used in conjunction with the `maxWidth` and/or `maxHeight` fields,\nwhere the `maxWidth` and `maxHeight` aren't equal.\nThe `crop` argument should coincide with the smaller value. A smaller `maxWidth` indicates a `LEFT` or `RIGHT` crop, while\na smaller `maxHeight` indicates a `TOP` or `BOTTOM` crop. For example, `{\nmaxWidth: 5, maxHeight: 10, crop: LEFT }` will result\nin an image with a width of 5 and height of 10, where the right side of the image is removed.\n"
   crop: CropRegion
 
   "Image height in pixels between 1 and 5760.\n"
@@ -4093,6 +4939,22 @@ input ImageTransformInput {
 
   "Image size multiplier for high-resolution retina displays. Must be within 1..3.\n"
   scale: Int = 1
+}
+
+"""
+Provide details about the contexts influenced by the @inContext directive on a field.
+"""
+type InContextAnnotation {
+  description: String!
+  type: InContextAnnotationType!
+}
+
+"""
+This gives information about the type of context that impacts a field. For example, for a query with @inContext(language: "EN"), the type would point to the name: LanguageCode and kind: ENUM.
+"""
+type InContextAnnotationType {
+  kind: String!
+  name: String!
 }
 
 "A [JSON](https://www.json.org/json-en.html) object.\n\nExample value:\n`{\n  \"product\": {\n    \"id\": \"gid://shopify/Product/1346443542550\",\n    \"title\": \"White T-shirt\",\n    \"options\": [{\n      \"name\": \"Size\",\n      \"values\": [\"M\", \"L\"]\n    }]\n  }\n}`\n"
@@ -4112,7 +4974,7 @@ type Language {
   name: String!
 }
 
-"""ISO 639-1 language codes supported by Shopify."""
+"""Language codes supported by Shopify."""
 enum LanguageCode {
   """Afrikaans."""
   AF
@@ -4158,6 +5020,9 @@ enum LanguageCode {
 
   """Chechen."""
   CE
+
+  """Central Kurdish."""
+  CKB
 
   """Czech."""
   CS
@@ -4206,6 +5071,9 @@ enum LanguageCode {
 
   """Finnish."""
   FI
+
+  """Filipino."""
+  FIL
 
   """Faroese."""
   FO
@@ -4306,6 +5174,9 @@ enum LanguageCode {
   """Kyrgyz."""
   KY
 
+  """Latin."""
+  LA
+
   """Luxembourgish."""
   LB
 
@@ -4341,6 +5212,9 @@ enum LanguageCode {
 
   """Mongolian."""
   MN
+
+  """Moldavian."""
+  MO
 
   """Marathi."""
   MR
@@ -4417,6 +5291,12 @@ enum LanguageCode {
   """Kinyarwanda."""
   RW
 
+  """Sanskrit."""
+  SA
+
+  """Sardinian."""
+  SC
+
   """Sindhi."""
   SD
 
@@ -4425,6 +5305,9 @@ enum LanguageCode {
 
   """Sango."""
   SG
+
+  """Serbo-Croatian."""
+  SH
 
   """Sinhala."""
   SI
@@ -4543,15 +5426,45 @@ type Localization {
   The language of the active localized experience. Use the `@inContext` directive to change this value.
   """
   language: Language!
+
+  """
+  The market including the country of the active localized experience. Use the `@inContext` directive to change this value.
+  """
+  market: Market!
 }
 
 """Represents a location where product inventory is held."""
-type Location implements Node {
+type Location implements HasMetafields & Node {
   """The address of the location."""
   address: LocationAddress!
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
+
+  """
+  A [custom field](https://shopify.dev/docs/apps/build/custom-data), including its `namespace` and `key`, that's associated with a Shopify resource for the purposes of adding and storing additional information.
+  """
+  metafield(
+    """The identifier for the metafield."""
+    key: String!
+
+    """
+    The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+    """
+    namespace: String
+  ): Metafield
+
+  """
+  A list of [custom fields](/docs/apps/build/custom-data) that a merchant associates with a Shopify resource.
+  """
+  metafields(
+    """
+    The list of metafields to retrieve by namespace and key.
+    
+    The input must not contain more than `250` values.
+    """
+    identifiers: [HasMetafieldsIdentifier!]!
+  ): [Metafield]!
 
   """The name of the location."""
   name: String!
@@ -4642,13 +5555,13 @@ type MailingAddress implements Node {
   "The second line of the address. Typically the number of the apartment, suite, or unit.\n"
   address2: String
 
-  "The name of the city, district, village, or town.\n"
+  """The name of the city, district, village, or town."""
   city: String
 
-  "The name of the customer's company or organization.\n"
+  """The name of the customer's company or organization."""
   company: String
 
-  "The name of the country.\n"
+  """The name of the country."""
   country: String
 
   "The two-letter code for the country of the address.\n\nFor example, US.\n"
@@ -4674,7 +5587,7 @@ type MailingAddress implements Node {
   """A comma-separated list of the values for city, province, and country."""
   formattedArea: String
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """The last name of the customer."""
@@ -4686,7 +5599,7 @@ type MailingAddress implements Node {
   """The longitude coordinate of the customer address."""
   longitude: Float
 
-  "The full name of the customer, based on firstName and lastName.\n"
+  """The full name of the customer, based on firstName and lastName."""
   name: String
 
   "A unique phone number for the customer.\n\nFormatted using E.164 standard. For example, _+16135551111_.\n"
@@ -4695,7 +5608,7 @@ type MailingAddress implements Node {
   """The region of the address, such as the province, state, or district."""
   province: String
 
-  "The two-letter code for the region.\n\nFor example, ON.\n"
+  "The alphanumeric code for the region.\n\nFor example, ON.\n"
   provinceCode: String
 
   """The zip or postal code of the address."""
@@ -4723,7 +5636,7 @@ type MailingAddressEdge {
   node: MailingAddress!
 }
 
-"""Specifies the fields accepted to create or update a mailing address."""
+"""The input fields to create or update a mailing address."""
 input MailingAddressInput {
   "The first line of the address. Typically the street address or PO Box number.\n"
   address1: String
@@ -4779,13 +5692,55 @@ type ManualDiscountApplication implements DiscountApplication {
   value: PricingValue!
 }
 
+"""
+A group of one or more regions of the world that a merchant is targeting for sales. To learn more about markets, refer to [the Shopify Markets conceptual overview](/docs/apps/markets).
+"""
+type Market implements HasMetafields & Node {
+  "A human-readable unique string for the market automatically generated from its title.\n"
+  handle: String!
+
+  """A globally-unique ID."""
+  id: ID!
+
+  """
+  A [custom field](https://shopify.dev/docs/apps/build/custom-data), including its `namespace` and `key`, that's associated with a Shopify resource for the purposes of adding and storing additional information.
+  """
+  metafield(
+    """The identifier for the metafield."""
+    key: String!
+
+    """
+    The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+    """
+    namespace: String
+  ): Metafield
+
+  """
+  A list of [custom fields](/docs/apps/build/custom-data) that a merchant associates with a Shopify resource.
+  """
+  metafields(
+    """
+    The list of metafields to retrieve by namespace and key.
+    
+    The input must not contain more than `250` values.
+    """
+    identifiers: [HasMetafieldsIdentifier!]!
+  ): [Metafield]!
+}
+
 """Represents a media interface."""
 interface Media {
   """A word or phrase to share the nature or contents of a media."""
   alt: String
 
+  """A globally-unique ID."""
+  id: ID!
+
   """The media content type."""
   mediaContentType: MediaContentType!
+
+  """The presentation for a media."""
+  presentation: MediaPresentation
 
   """The preview image for the media."""
   previewImage: Image
@@ -4841,7 +5796,7 @@ type MediaImage implements Media & Node {
   """A word or phrase to share the nature or contents of a media."""
   alt: String
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """The image for the media."""
@@ -4850,16 +5805,40 @@ type MediaImage implements Media & Node {
   """The media content type."""
   mediaContentType: MediaContentType!
 
+  """The presentation for a media."""
+  presentation: MediaPresentation
+
   """The preview image for the media."""
   previewImage: Image
 }
 
-"A menu used for navigation within a storefront.\n"
+"""A media presentation."""
+type MediaPresentation implements Node {
+  """A JSON object representing a presentation view."""
+  asJson(
+    """The format to transform the settings."""
+    format: MediaPresentationFormat!
+  ): JSON
+
+  """A globally-unique ID."""
+  id: ID!
+}
+
+"""The possible formats for a media presentation."""
+enum MediaPresentationFormat {
+  """A media image presentation."""
+  IMAGE
+
+  """A model viewer presentation."""
+  MODEL_VIEWER
+}
+
+"A [navigation menu](https://help.shopify.com/manual/online-store/menus-and-links) representing a hierarchy\nof hyperlinks (items).\n"
 type Menu implements Node {
   """The menu's handle."""
   handle: String!
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """The menu's child items."""
@@ -4872,13 +5851,16 @@ type Menu implements Node {
   title: String!
 }
 
-"A menu item within a parent menu.\n"
+"""A menu item within a parent menu."""
 type MenuItem implements Node {
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """The menu item's child items."""
   items: [MenuItem!]!
+
+  """The linked resource."""
+  resource: MenuItemResource
 
   """The ID of the linked resource."""
   resourceId: ID
@@ -4895,6 +5877,9 @@ type MenuItem implements Node {
   """The menu item's URL."""
   url: URL
 }
+
+"The list of possible resources a `MenuItem` can reference.\n"
+union MenuItemResource = Article | Blog | Collection | Metaobject | Page | Product | ShopPolicy
 
 """A menu item type."""
 enum MenuItemType {
@@ -4913,11 +5898,17 @@ enum MenuItemType {
   """A collection link."""
   COLLECTIONS
 
+  """A customer account page link."""
+  CUSTOMER_ACCOUNT_PAGE
+
   """A frontpage link."""
   FRONTPAGE
 
   """An http link."""
   HTTP
+
+  """A metaobject page link."""
+  METAOBJECT
 
   """A page link."""
   PAGE
@@ -4943,20 +5934,22 @@ type Metafield implements Node {
   """The description of a metafield."""
   description: String
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
-  """The key name for a metafield."""
+  """The unique identifier for the metafield within its namespace."""
   key: String!
 
-  """The namespace for a metafield."""
+  """
+  The container for a group of metafields that the metafield is associated with.
+  """
   namespace: String!
 
-  """The parent object that the metafield belongs to."""
+  """The type of resource that the metafield is attached to."""
   parentResource: MetafieldParentResource!
 
   """
-  Returns a reference object if the metafield definition's type is a resource reference.
+  Returns a reference object if the metafield's type is a resource reference.
   """
   reference: MetafieldReference
 
@@ -4977,14 +5970,39 @@ type Metafield implements Node {
     last: Int
   ): MetafieldReferenceConnection
 
-  "The type name of the metafield.\nSee the list of [supported types](https://shopify.dev/apps/metafields/definitions/types).\n"
+  "The type name of the metafield.\nRefer to the list of [supported types](https://shopify.dev/apps/metafields/definitions/types).\n"
   type: String!
 
-  """The date and time when the storefront metafield was updated."""
+  """The date and time when the metafield was last updated."""
   updatedAt: DateTime!
 
-  """The value of a metafield."""
+  """
+  The data stored in the metafield. Always stored as a string, regardless of the metafield's type.
+  """
   value: String!
+}
+
+"""
+Possible error codes that can be returned by `MetafieldDeleteUserError`.
+"""
+enum MetafieldDeleteErrorCode {
+  """The owner ID is invalid."""
+  INVALID_OWNER
+
+  """Metafield not found."""
+  METAFIELD_DOES_NOT_EXIST
+}
+
+"""An error that occurs during the execution of cart metafield deletion."""
+type MetafieldDeleteUserError implements DisplayableError {
+  """The error code."""
+  code: MetafieldDeleteErrorCode
+
+  """The path to the input field that caused the error."""
+  field: [String!]
+
+  """The error message."""
+  message: String!
 }
 
 "A filter used to view a subset of products in a collection matching a specific metafield value.\n\nOnly the following metafield types are currently supported:\n- `number_integer`\n- `number_decimal`\n- `single_line_text_field`\n- `boolean` as of 2022-04.\n"
@@ -5000,10 +6018,10 @@ input MetafieldFilter {
 }
 
 """A resource that the metafield belongs to."""
-union MetafieldParentResource = Article | Blog | Collection | Customer | Order | Page | Product | ProductVariant | Shop
+union MetafieldParentResource = Article | Blog | Cart | Collection | Company | CompanyLocation | Customer | Location | Market | Order | Page | Product | ProductVariant | Shop
 
 "Returns the resource which is being referred to by a metafield.\n"
-union MetafieldReference = Collection | GenericFile | MediaImage | Page | Product | ProductVariant | Video
+union MetafieldReference = Collection | GenericFile | MediaImage | Metaobject | Model3d | Page | Product | ProductVariant | Video
 
 "An auto-generated type for paginating through multiple MetafieldReferences.\n"
 type MetafieldReferenceConnection {
@@ -5026,16 +6044,171 @@ type MetafieldReferenceEdge {
   node: MetafieldReference!
 }
 
+"""An error that occurs during the execution of `MetafieldsSet`."""
+type MetafieldsSetUserError implements DisplayableError {
+  """The error code."""
+  code: MetafieldsSetUserErrorCode
+
+  """The index of the array element that's causing the error."""
+  elementIndex: Int
+
+  """The path to the input field that caused the error."""
+  field: [String!]
+
+  """The error message."""
+  message: String!
+}
+
+"""Possible error codes that can be returned by `MetafieldsSetUserError`."""
+enum MetafieldsSetUserErrorCode {
+  """The input value is blank."""
+  BLANK
+
+  """The input value isn't included in the list."""
+  INCLUSION
+
+  """The owner ID is invalid."""
+  INVALID_OWNER
+
+  """The type is invalid."""
+  INVALID_TYPE
+
+  """The value is invalid for metafield type or for definition options."""
+  INVALID_VALUE
+
+  """
+  The input value should be less than or equal to the maximum value allowed.
+  """
+  LESS_THAN_OR_EQUAL_TO
+
+  """The input value needs to be blank."""
+  PRESENT
+
+  """The input value is too long."""
+  TOO_LONG
+
+  """The input value is too short."""
+  TOO_SHORT
+}
+
+"""An instance of a user-defined model based on a MetaobjectDefinition."""
+type Metaobject implements Node & OnlineStorePublishable {
+  """Accesses a field of the object by key."""
+  field(
+    """The key of the field."""
+    key: String!
+  ): MetaobjectField
+
+  "All object fields with defined values.\nOmitted object keys can be assumed null, and no guarantees are made about field order.\n"
+  fields: [MetaobjectField!]!
+
+  """The unique handle of the metaobject. Useful as a custom ID."""
+  handle: String!
+
+  """A globally-unique ID."""
+  id: ID!
+
+  """
+  The URL used for viewing the metaobject on the shop's Online Store. Returns `null` if the metaobject definition doesn't have the `online_store` capability.
+  """
+  onlineStoreUrl: URL
+
+  "The metaobject's SEO information. Returns `null` if the metaobject definition\ndoesn't have the `renderable` capability.\n"
+  seo: MetaobjectSEO
+
+  """
+  The type of the metaobject. Defines the namespace of its associated metafields.
+  """
+  type: String!
+
+  """The date and time when the metaobject was last updated."""
+  updatedAt: DateTime!
+}
+
+"An auto-generated type for paginating through multiple Metaobjects.\n"
+type MetaobjectConnection {
+  """A list of edges."""
+  edges: [MetaobjectEdge!]!
+
+  """A list of the nodes contained in MetaobjectEdge."""
+  nodes: [Metaobject!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"An auto-generated type which holds one Metaobject and a cursor during pagination.\n"
+type MetaobjectEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of MetaobjectEdge."""
+  node: Metaobject!
+}
+
+"""Provides the value of a Metaobject field."""
+type MetaobjectField {
+  """The field key."""
+  key: String!
+
+  """A referenced object if the field type is a resource reference."""
+  reference: MetafieldReference
+
+  """
+  A list of referenced objects if the field type is a resource reference list.
+  """
+  references(
+    """Returns the elements that come after the specified cursor."""
+    after: String
+
+    """Returns the elements that come before the specified cursor."""
+    before: String
+
+    """Returns up to the first `n` elements from the list."""
+    first: Int
+
+    """Returns up to the last `n` elements from the list."""
+    last: Int
+  ): MetafieldReferenceConnection
+
+  "The type name of the field.\nSee the list of [supported types](https://shopify.dev/apps/metafields/definitions/types).\n"
+  type: String!
+
+  """The field value."""
+  value: String
+}
+
+"""The input fields used to retrieve a metaobject by handle."""
+input MetaobjectHandleInput {
+  """The handle of the metaobject."""
+  handle: String!
+
+  """The type of the metaobject."""
+  type: String!
+}
+
+"""SEO information for a metaobject."""
+type MetaobjectSEO {
+  """The meta description."""
+  description: MetaobjectField
+
+  """The SEO title."""
+  title: MetaobjectField
+}
+
 """Represents a Shopify hosted 3D model."""
 type Model3d implements Media & Node {
   """A word or phrase to share the nature or contents of a media."""
   alt: String
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """The media content type."""
   mediaContentType: MediaContentType!
+
+  """The presentation for a media."""
+  presentation: MediaPresentation
 
   """The preview image for the media."""
   previewImage: Image
@@ -5059,7 +6232,7 @@ type Model3dSource {
   url: String!
 }
 
-"""Specifies the fields for a monetary value with currency."""
+"""The input fields for a monetary value with currency."""
 input MoneyInput {
   """Decimal money amount."""
   amount: Decimal!
@@ -5085,6 +6258,8 @@ type Mutation {
   cartAttributesUpdate(
     """
     An array of key-value pairs that contains additional information about the cart.
+    
+    The input must not contain more than `250` values.
     """
     attributes: [AttributeInput!]!
 
@@ -5112,7 +6287,11 @@ type Mutation {
     """The ID of the cart."""
     cartId: ID!
 
-    "The case-insensitive discount codes that the customer added at checkout.\n"
+    """
+    The case-insensitive discount codes that the customer added at checkout.
+    
+    The input must not contain more than `250` values.
+    """
     discountCodes: [String!]
   ): CartDiscountCodesUpdatePayload
 
@@ -5121,7 +6300,11 @@ type Mutation {
     """The ID of the cart."""
     cartId: ID!
 
-    """A list of merchandise lines to add to the cart."""
+    """
+    A list of merchandise lines to add to the cart.
+    
+    The input must not contain more than `250` values.
+    """
     lines: [CartLineInput!]!
   ): CartLinesAddPayload
 
@@ -5130,7 +6313,11 @@ type Mutation {
     """The ID of the cart."""
     cartId: ID!
 
-    """The merchandise line IDs to remove."""
+    """
+    The merchandise line IDs to remove.
+    
+    The input must not contain more than `250` values.
+    """
     lineIds: [ID!]!
   ): CartLinesRemovePayload
 
@@ -5139,9 +6326,29 @@ type Mutation {
     """The ID of the cart."""
     cartId: ID!
 
-    """The merchandise lines to update."""
+    """
+    The merchandise lines to update.
+    
+    The input must not contain more than `250` values.
+    """
     lines: [CartLineUpdateInput!]!
   ): CartLinesUpdatePayload
+
+  """Deletes a cart metafield."""
+  cartMetafieldDelete(
+    """The input fields used to delete a cart metafield."""
+    input: CartMetafieldDeleteInput!
+  ): CartMetafieldDeletePayload
+
+  "Sets cart metafield values. Cart metafield values will be set regardless if they were previously created or not.\n\nAllows a maximum of 25 cart metafields to be set at a time.\n"
+  cartMetafieldsSet(
+    """
+    The list of Cart metafield values to set. Maximum of 25.
+    
+    The input must not contain more than `250` values.
+    """
+    metafields: [CartMetafieldsSetInput!]!
+  ): CartMetafieldsSetPayload
 
   """Updates the note on the cart."""
   cartNoteUpdate(
@@ -5149,17 +6356,39 @@ type Mutation {
     cartId: ID!
 
     """The note on the cart."""
-    note: String
+    note: String!
   ): CartNoteUpdatePayload
+
+  """Update the customer's payment method that will be used to checkout."""
+  cartPaymentUpdate(
+    """The ID of the cart."""
+    cartId: ID!
+
+    """The payment information for the cart that will be used at checkout."""
+    payment: CartPaymentInput!
+  ): CartPaymentUpdatePayload
 
   """Update the selected delivery options for a delivery group."""
   cartSelectedDeliveryOptionsUpdate(
     """The ID of the cart."""
     cartId: ID!
 
-    """The selected delivery options."""
+    """
+    The selected delivery options.
+    
+    The input must not contain more than `250` values.
+    """
     selectedDeliveryOptions: [CartSelectedDeliveryOptionInput!]!
   ): CartSelectedDeliveryOptionsUpdatePayload
+
+  """Submit the cart for checkout completion."""
+  cartSubmitForCompletion(
+    "The attemptToken is used to guarantee an idempotent result.\nIf more than one call uses the same attemptToken within a short period of time, only one will be accepted.\n"
+    attemptToken: String!
+
+    """The ID of the cart."""
+    cartId: ID!
+  ): CartSubmitForCompletionPayload
 
   """
   Updates the attributes of a checkout if `allowPartialAddresses` is `true`.
@@ -5170,7 +6399,7 @@ type Mutation {
 
     """The checkout attributes to update."""
     input: CheckoutAttributesUpdateV2Input!
-  ): CheckoutAttributesUpdateV2Payload
+  ): CheckoutAttributesUpdateV2Payload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """
   Completes a checkout without providing payment information. You can use this mutation for free items or items whose purchase price is covered by a gift card.
@@ -5178,7 +6407,7 @@ type Mutation {
   checkoutCompleteFree(
     """The ID of the checkout."""
     checkoutId: ID!
-  ): CheckoutCompleteFreePayload
+  ): CheckoutCompleteFreePayload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """
   Completes a checkout using a credit card token from Shopify's card vault. Before you can complete checkouts using CheckoutCompleteWithCreditCardV2, you need to  [_request payment processing_](https://shopify.dev/apps/channels/getting-started#request-payment-processing).
@@ -5189,7 +6418,7 @@ type Mutation {
 
     """The credit card info to apply as a payment."""
     payment: CreditCardPaymentInputV2!
-  ): CheckoutCompleteWithCreditCardV2Payload
+  ): CheckoutCompleteWithCreditCardV2Payload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """Completes a checkout with a tokenized payment."""
   checkoutCompleteWithTokenizedPaymentV3(
@@ -5198,7 +6427,7 @@ type Mutation {
 
     """The info to apply as a tokenized payment."""
     payment: TokenizedPaymentInputV3!
-  ): CheckoutCompleteWithTokenizedPaymentV3Payload
+  ): CheckoutCompleteWithTokenizedPaymentV3Payload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """Creates a new checkout."""
   checkoutCreate(
@@ -5207,7 +6436,7 @@ type Mutation {
 
     """The checkout queue token. Available only to selected stores."""
     queueToken: String
-  ): CheckoutCreatePayload
+  ): CheckoutCreatePayload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """Associates a customer to the checkout."""
   checkoutCustomerAssociateV2(
@@ -5216,13 +6445,13 @@ type Mutation {
 
     """The customer access token of the customer to associate."""
     customerAccessToken: String!
-  ): CheckoutCustomerAssociateV2Payload
+  ): CheckoutCustomerAssociateV2Payload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """Disassociates the current checkout customer from the checkout."""
   checkoutCustomerDisassociateV2(
     """The ID of the checkout."""
     checkoutId: ID!
-  ): CheckoutCustomerDisassociateV2Payload
+  ): CheckoutCustomerDisassociateV2Payload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """Applies a discount to an existing checkout using a discount code."""
   checkoutDiscountCodeApplyV2(
@@ -5231,13 +6460,13 @@ type Mutation {
 
     """The discount code to apply to the checkout."""
     discountCode: String!
-  ): CheckoutDiscountCodeApplyV2Payload
+  ): CheckoutDiscountCodeApplyV2Payload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """Removes the applied discounts from an existing checkout."""
   checkoutDiscountCodeRemove(
     """The ID of the checkout."""
     checkoutId: ID!
-  ): CheckoutDiscountCodeRemovePayload
+  ): CheckoutDiscountCodeRemovePayload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """Updates the email on an existing checkout."""
   checkoutEmailUpdateV2(
@@ -5246,7 +6475,7 @@ type Mutation {
 
     """The email to update the checkout with."""
     email: String!
-  ): CheckoutEmailUpdateV2Payload
+  ): CheckoutEmailUpdateV2Payload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """Removes an applied gift card from the checkout."""
   checkoutGiftCardRemoveV2(
@@ -5255,52 +6484,72 @@ type Mutation {
 
     """The ID of the checkout."""
     checkoutId: ID!
-  ): CheckoutGiftCardRemoveV2Payload
+  ): CheckoutGiftCardRemoveV2Payload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """Appends gift cards to an existing checkout."""
   checkoutGiftCardsAppend(
     """The ID of the checkout."""
     checkoutId: ID!
 
-    """A list of gift card codes to append to the checkout."""
+    """
+    A list of gift card codes to append to the checkout.
+    
+    The input must not contain more than `250` values.
+    """
     giftCardCodes: [String!]!
-  ): CheckoutGiftCardsAppendPayload
+  ): CheckoutGiftCardsAppendPayload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """Adds a list of line items to a checkout."""
   checkoutLineItemsAdd(
     """The ID of the checkout."""
     checkoutId: ID!
 
-    """A list of line item objects to add to the checkout."""
+    """
+    A list of line item objects to add to the checkout.
+    
+    The input must not contain more than `250` values.
+    """
     lineItems: [CheckoutLineItemInput!]!
-  ): CheckoutLineItemsAddPayload
+  ): CheckoutLineItemsAddPayload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """Removes line items from an existing checkout."""
   checkoutLineItemsRemove(
     """The checkout on which to remove line items."""
     checkoutId: ID!
 
-    """Line item ids to remove."""
+    """
+    Line item ids to remove.
+    
+    The input must not contain more than `250` values.
+    """
     lineItemIds: [ID!]!
-  ): CheckoutLineItemsRemovePayload
+  ): CheckoutLineItemsRemovePayload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """Sets a list of line items to a checkout."""
   checkoutLineItemsReplace(
     """The ID of the checkout."""
     checkoutId: ID!
 
-    """A list of line item objects to set on the checkout."""
+    """
+    A list of line item objects to set on the checkout.
+    
+    The input must not contain more than `250` values.
+    """
     lineItems: [CheckoutLineItemInput!]!
-  ): CheckoutLineItemsReplacePayload
+  ): CheckoutLineItemsReplacePayload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """Updates line items on a checkout."""
   checkoutLineItemsUpdate(
     """The checkout on which to update line items."""
     checkoutId: ID!
 
-    """Line items to update."""
+    """
+    Line items to update.
+    
+    The input must not contain more than `250` values.
+    """
     lineItems: [CheckoutLineItemUpdateInput!]!
-  ): CheckoutLineItemsUpdatePayload
+  ): CheckoutLineItemsUpdatePayload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """Updates the shipping address of an existing checkout."""
   checkoutShippingAddressUpdateV2(
@@ -5309,7 +6558,7 @@ type Mutation {
 
     """The shipping address to where the line items will be shipped."""
     shippingAddress: MailingAddressInput!
-  ): CheckoutShippingAddressUpdateV2Payload
+  ): CheckoutShippingAddressUpdateV2Payload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   """Updates the shipping lines on an existing checkout."""
   checkoutShippingLineUpdate(
@@ -5320,7 +6569,7 @@ type Mutation {
     A unique identifier to a Checkout’s shipping provider, price, and title combination, enabling the customer to select the availableShippingRates.
     """
     shippingRateHandle: String!
-  ): CheckoutShippingLineUpdatePayload
+  ): CheckoutShippingLineUpdatePayload @deprecated(reason: "The Storefront GraphQL Checkout API is deprecated and will be removed in a future version. Please see https://shopify.dev/changelog/deprecation-of-checkout-apis for more information.")
 
   "Creates a customer access token.\nThe customer access token is required to modify the customer object in any way.\n"
   customerAccessTokenCreate(
@@ -5413,7 +6662,7 @@ type Mutation {
     customerAccessToken: String!
   ): CustomerDefaultAddressUpdatePayload
 
-  "Sends a reset password email to the customer. The reset password\nemail contains a reset password URL and token that you can pass to\nthe [`customerResetByUrl`](https://shopify.dev/api/storefront/latest/mutations/customerResetByUrl) or\n[`customerReset`](https://shopify.dev/api/storefront/latest/mutations/customerReset) mutation to reset the\ncustomer password.\n\nThis mutation is throttled by IP. With authenticated access,\nyou can provide a [`Shopify-Storefront-Buyer-IP`](https://shopify.dev/api/usage/authentication#optional-ip-header) instead of the request IP.\n\nMake sure that the value provided to `Shopify-Storefront-Buyer-IP` is trusted. Unthrottled access to this\nmutation presents a security risk.\n"
+  "Sends a reset password email to the customer. The reset password\nemail contains a reset password URL and token that you can pass to\nthe [`customerResetByUrl`](https://shopify.dev/api/storefront/latest/mutations/customerResetByUrl) or\n[`customerReset`](https://shopify.dev/api/storefront/latest/mutations/customerReset) mutation to reset the\ncustomer password.\n\nThis mutation is throttled by IP. With private access,\nyou can provide a [`Shopify-Storefront-Buyer-IP`](https://shopify.dev/api/usage/authentication#optional-ip-header) instead of the request IP.\nThe header is case-sensitive and must be sent as `Shopify-Storefront-Buyer-IP`.\n\nMake sure that the value provided to `Shopify-Storefront-Buyer-IP` is trusted. Unthrottled access to this\nmutation presents a security risk.\n"
   customerRecover(
     """The email address of the customer to recover."""
     email: String!
@@ -5447,9 +6696,9 @@ type Mutation {
   ): CustomerUpdatePayload
 }
 
-"An object with an ID field to support global identification, in accordance with the\n[Relay specification](https://relay.dev/graphql/objectidentification.htm#sec-Node-Interface).\nThis interface is used by the [node](https://shopify.dev/api/admin-graphql/unstable/queries/node)\nand [nodes](https://shopify.dev/api/admin-graphql/unstable/queries/nodes) queries.\n"
+"An object with an ID field to support global identification, in accordance with the\n[Relay specification](https://relay.dev/graphql/objectidentification.htm#sec-Node-Interface).\nThis interface is used by the [node](/docs/api/storefront/latest/queries/node)\nand [nodes](/docs/api/storefront/latest/queries/nodes) queries.\n"
 interface Node {
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 }
 
@@ -5467,6 +6716,9 @@ interface OnlineStorePublishable {
 An order is a customer’s completed request to purchase one or more products from a shop. An order is created when a customer completes the checkout process, during which time they provides an email address, billing address and payment information.
 """
 type Order implements HasMetafields & Node {
+  """The address associated with the payment method."""
+  billingAddress: MailingAddress
+
   """
   The reason for the order's cancellation. Returns `null` if the order wasn't canceled.
   """
@@ -5481,7 +6733,7 @@ type Order implements HasMetafields & Node {
   currencyCode: CurrencyCode!
 
   """
-  The subtotal of line items and their discounts, excluding line items that have been removed. Does not contain order-level discounts, duties, shipping costs, or shipping discounts. Taxes are not included unless the order is a taxes-included order.
+  The subtotal of line items and their discounts, excluding line items that have been removed. Does not contain order-level discounts, duties, shipping costs, or shipping discounts. Taxes aren't included unless the order is a taxes-included order.
   """
   currentSubtotalPrice: MoneyV2!
 
@@ -5497,6 +6749,11 @@ type Order implements HasMetafields & Node {
   The total of all taxes applied to the order, excluding taxes for returned line items.
   """
   currentTotalTax: MoneyV2!
+
+  """
+  A list of the custom attributes added to the order. For example, whether an order is a customer's first.
+  """
+  customAttributes: [Attribute!]!
 
   """The locale code in which this specific order happened."""
   customerLocale: String
@@ -5534,7 +6791,7 @@ type Order implements HasMetafields & Node {
   """The fulfillment status for the order."""
   fulfillmentStatus: OrderFulfillmentStatus!
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """List of the order’s line items."""
@@ -5555,18 +6812,28 @@ type Order implements HasMetafields & Node {
     reverse: Boolean = false
   ): OrderLineItemConnection!
 
-  """Returns a metafield found by namespace and key."""
+  """
+  A [custom field](https://shopify.dev/docs/apps/build/custom-data), including its `namespace` and `key`, that's associated with a Shopify resource for the purposes of adding and storing additional information.
+  """
   metafield(
     """The identifier for the metafield."""
     key: String!
 
-    """A container for a set of metafields."""
-    namespace: String!
+    """
+    The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+    """
+    namespace: String
   ): Metafield
 
-  "The metafields associated with the resource matching the supplied list of namespaces and keys.\n"
+  """
+  A list of [custom fields](/docs/apps/build/custom-data) that a merchant associates with a Shopify resource.
+  """
   metafields(
-    """The list of metafields to retrieve by namespace and key."""
+    """
+    The list of metafields to retrieve by namespace and key.
+    
+    The input must not contain more than `250` values.
+    """
     identifiers: [HasMetafieldsIdentifier!]!
   ): [Metafield]!
 
@@ -5656,6 +6923,9 @@ enum OrderCancelReason {
 
   """The order was canceled for an unlisted reason."""
   OTHER
+
+  """Staff made an error."""
+  STAFF
 }
 
 "An auto-generated type for paginating through multiple Orders.\n"
@@ -5779,7 +7049,7 @@ type OrderLineItem {
   discountedTotalPrice: MoneyV2!
 
   """
-  The total price of the line item, not including any discounts. The total price is calculated using the original unit price multiplied by the quantity, and it is displayed in the presentment currency.
+  The total price of the line item, not including any discounts. The total price is calculated using the original unit price multiplied by the quantity, and it's displayed in the presentment currency.
   """
   originalTotalPrice: MoneyV2!
 
@@ -5832,7 +7102,7 @@ enum OrderSortKeys {
 """
 Shopify merchants can create pages to hold static HTML content. Each Page object represents a custom page on the online store.
 """
-type Page implements HasMetafields & Node & OnlineStorePublishable {
+type Page implements HasMetafields & Node & OnlineStorePublishable & Trackable {
   """The description of the page, complete with HTML formatting."""
   body: HTML!
 
@@ -5847,21 +7117,31 @@ type Page implements HasMetafields & Node & OnlineStorePublishable {
   """
   handle: String!
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
-  """Returns a metafield found by namespace and key."""
+  """
+  A [custom field](https://shopify.dev/docs/apps/build/custom-data), including its `namespace` and `key`, that's associated with a Shopify resource for the purposes of adding and storing additional information.
+  """
   metafield(
     """The identifier for the metafield."""
     key: String!
 
-    """A container for a set of metafields."""
-    namespace: String!
+    """
+    The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+    """
+    namespace: String
   ): Metafield
 
-  "The metafields associated with the resource matching the supplied list of namespaces and keys.\n"
+  """
+  A list of [custom fields](/docs/apps/build/custom-data) that a merchant associates with a Shopify resource.
+  """
   metafields(
-    """The list of metafields to retrieve by namespace and key."""
+    """
+    The list of metafields to retrieve by namespace and key.
+    
+    The input must not contain more than `250` values.
+    """
     identifiers: [HasMetafieldsIdentifier!]!
   ): [Metafield]!
 
@@ -5875,6 +7155,11 @@ type Page implements HasMetafields & Node & OnlineStorePublishable {
 
   """The title of the page."""
   title: String!
+
+  """
+  URL parameters to be added to a page URL to track the origin of on-site search traffic for [analytics reporting](https://help.shopify.com/manual/reports-and-analytics/shopify-reports/report-types/default-reports/behaviour-reports). Returns a result when accessed through the [search](https://shopify.dev/docs/api/storefront/current/queries/search) or [predictiveSearch](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries, otherwise returns null.
+  """
+  trackingParameters: String
 
   """The timestamp of the latest page update."""
   updatedAt: DateTime!
@@ -5901,7 +7186,7 @@ type PageEdge {
   node: Page!
 }
 
-"Returns information about pagination in a connection, in accordance with the\n[Relay specification](https://relay.dev/graphql/connections.htm#sec-undefined.PageInfo).\n"
+"Returns information about pagination in a connection, in accordance with the\n[Relay specification](https://relay.dev/graphql/connections.htm#sec-undefined.PageInfo).\nFor more information, please read our [GraphQL Pagination Usage Guide](https://shopify.dev/api/usage/pagination-graphql).\n"
 type PageInfo {
   """The cursor corresponding to the last node in edges."""
   endCursor: String
@@ -5953,7 +7238,7 @@ type Payment implements Node {
   """
   errorMessage: String
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   "A client-side generated token to identify a payment and perform idempotent operations.\nFor more information, refer to\n[Idempotent requests](https://shopify.dev/api/usage/idempotent-requests).\n"
@@ -5992,12 +7277,10 @@ type PaymentSettings {
   """The three-letter code for the shop's primary currency."""
   currencyCode: CurrencyCode!
 
-  """
-  A list of enabled currencies (ISO 4217 format) that the shop accepts. Merchants can enable currencies from their Shopify Payments settings in the Shopify admin.
-  """
+  "A list of enabled currencies (ISO 4217 format) that the shop accepts.\nMerchants can enable currencies from their Shopify Payments settings in the Shopify admin.\n"
   enabledPresentmentCurrencies: [CurrencyCode!]!
 
-  """The shop’s Shopify Payments account id."""
+  """The shop’s Shopify Payments account ID."""
   shopifyPaymentsAccountId: String
 
   """List of the digital wallets which the shop supports."""
@@ -6022,9 +7305,72 @@ enum PaymentTokenType {
   VAULT
 }
 
+"""Decides the distribution of results."""
+enum PredictiveSearchLimitScope {
+  """Return results up to limit across all types."""
+  ALL
+
+  """Return results up to limit per type."""
+  EACH
+}
+
+"A predictive search result represents a list of products, collections, pages, articles, and query suggestions\nthat matches the predictive search query.\n"
+type PredictiveSearchResult {
+  """The articles that match the search query."""
+  articles: [Article!]!
+
+  """The articles that match the search query."""
+  collections: [Collection!]!
+
+  """The pages that match the search query."""
+  pages: [Page!]!
+
+  """The products that match the search query."""
+  products: [Product!]!
+
+  """The query suggestions that are relevant to the search query."""
+  queries: [SearchQuerySuggestion!]!
+}
+
+"""The types of search items to perform predictive search on."""
+enum PredictiveSearchType {
+  """Returns matching articles."""
+  ARTICLE
+
+  """Returns matching collections."""
+  COLLECTION
+
+  """Returns matching pages."""
+  PAGE
+
+  """Returns matching products."""
+  PRODUCT
+
+  """Returns matching query strings."""
+  QUERY
+}
+
 """
-A filter used to view a subset of products in a collection matching a specific price range.
+The preferred delivery methods such as shipping, local pickup or through pickup points.
 """
+enum PreferenceDeliveryMethodType {
+  """
+  A delivery method used to let buyers collect purchases at designated locations like parcel lockers.
+  """
+  PICKUP_POINT
+
+  """
+  A delivery method used to let buyers receive items directly from a specific location within an area.
+  """
+  PICK_UP
+
+  """
+  A delivery method used to send items directly to a buyer’s specified address.
+  """
+  SHIPPING
+}
+
+"The input fields for a filter used to view a subset of products in a collection matching a specific price range.\n"
 input PriceRangeFilter {
   """The maximum price in the range. Empty indicates no max price."""
   max: Float
@@ -6042,15 +7388,14 @@ type PricingPercentageValue {
 """The price value (fixed or percentage) for a discount application."""
 union PricingValue = MoneyV2 | PricingPercentageValue
 
-"""
-A product represents an individual item for sale in a Shopify store. Products are often physical, but they don't have to be.
-For example, a digital download (such as a movie, music or ebook file) also qualifies as a product, as do services (such as equipment rental, work for hire, customization of another product or an extended warranty).
-"""
-type Product implements HasMetafields & Node & OnlineStorePublishable {
+"The `Product` object lets you manage products in a merchant’s store.\n\nProducts are the goods and services that merchants offer to customers.\nThey can include various details such as title, description, price, images, and options such as size or color.\nYou can use [product variants](/docs/api/storefront/latest/objects/ProductVariant)\nto create or update different versions of the same product.\nYou can also add or update product [media](/docs/api/storefront/latest/interfaces/Media).\nProducts can be organized by grouping them into a [collection](/docs/api/storefront/latest/objects/Collection).\n\nLearn more about working with [products and collections](/docs/storefronts/headless/building-with-the-storefront-api/products-collections).\n"
+type Product implements HasMetafields & Node & OnlineStorePublishable & Trackable {
   """Indicates if at least one product variant is available for sale."""
   availableForSale: Boolean!
 
-  """List of collections a product belongs to."""
+  """
+  A list of [collections](/docs/api/storefront/latest/objects/Collection) that include the product.
+  """
   collections(
     """Returns the elements that come after the specified cursor."""
     after: String
@@ -6068,30 +7413,32 @@ type Product implements HasMetafields & Node & OnlineStorePublishable {
     reverse: Boolean = false
   ): CollectionConnection!
 
-  """The compare at price of the product across all variants."""
+  """
+  The [compare-at price range](https://help.shopify.com/manual/products/details/product-pricing/sale-pricing) of the product in the shop's default currency.
+  """
   compareAtPriceRange: ProductPriceRange!
 
   """The date and time when the product was created."""
   createdAt: DateTime!
 
   """
-  Stripped description of the product, single line with HTML tags removed.
+  A single-line description of the product, with [HTML tags](https://developer.mozilla.org/en-US/docs/Web/HTML) removed.
   """
   description(
-    """Truncates string after the given length."""
+    """Truncates a string after the given length."""
     truncateAt: Int
   ): String!
 
-  """The description of the product, complete with HTML formatting."""
+  "The description of the product, with\nHTML tags. For example, the description might include\nbold `<strong></strong>` and italic `<i></i>` text.\n"
   descriptionHtml: HTML!
 
   "The featured image for the product.\n\nThis field is functionally equivalent to `images(first: 1)`.\n"
   featuredImage: Image
 
-  "A human-friendly unique string for the Product automatically generated from its title.\nThey are used by the Liquid templating language to refer to objects.\n"
+  "A unique, human-readable string of the product's title.\nA handle can contain letters, hyphens (`-`), and numbers, but no spaces.\nThe handle is used in the online store URL for the product.\n"
   handle: String!
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """List of images associated with the product."""
@@ -6118,7 +7465,9 @@ type Product implements HasMetafields & Node & OnlineStorePublishable {
   """Whether the product is a gift card."""
   isGiftCard: Boolean!
 
-  """The media associated with the product."""
+  """
+  The [media](/docs/apps/build/online-store/product-media) that are associated with the product. Valid media are images, 3D models, videos.
+  """
   media(
     """Returns the elements that come after the specified cursor."""
     after: String
@@ -6139,48 +7488,58 @@ type Product implements HasMetafields & Node & OnlineStorePublishable {
     sortKey: ProductMediaSortKeys = POSITION
   ): MediaConnection!
 
-  """Returns a metafield found by namespace and key."""
+  """
+  A [custom field](https://shopify.dev/docs/apps/build/custom-data), including its `namespace` and `key`, that's associated with a Shopify resource for the purposes of adding and storing additional information.
+  """
   metafield(
     """The identifier for the metafield."""
     key: String!
 
-    """A container for a set of metafields."""
-    namespace: String!
+    """
+    The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+    """
+    namespace: String
   ): Metafield
 
-  "The metafields associated with the resource matching the supplied list of namespaces and keys.\n"
+  """
+  A list of [custom fields](/docs/apps/build/custom-data) that a merchant associates with a Shopify resource.
+  """
   metafields(
-    """The list of metafields to retrieve by namespace and key."""
+    """
+    The list of metafields to retrieve by namespace and key.
+    
+    The input must not contain more than `250` values.
+    """
     identifiers: [HasMetafieldsIdentifier!]!
   ): [Metafield]!
 
-  """
-  The URL used for viewing the resource on the shop's Online Store. Returns `null` if the resource is currently not published to the Online Store sales channel.
-  """
+  "The product's URL on the online store.\nIf `null`, then the product isn't published to the online store sales channel.\n"
   onlineStoreUrl: URL
 
-  """List of product options."""
+  """
+  A list of product options. The limit is defined by the [shop's resource limits for product options](/docs/api/admin-graphql/latest/objects/Shop#field-resourcelimits) (`Shop.resourceLimits.maxProductOptions`).
+  """
   options(
     """Truncate the array result to this size."""
     first: Int
   ): [ProductOption!]!
 
-  """The price range."""
+  "The minimum and maximum prices of a product, expressed in decimal numbers.\nFor example, if the product is priced between $10.00 and $50.00,\nthen the price range is $10.00 - $50.00.\n"
   priceRange: ProductPriceRange!
 
-  """
-  A categorization that a product can be tagged with, commonly used for filtering and searching.
-  """
+  "The [product type](https://help.shopify.com/manual/products/details/product-type)\nthat merchants define.\n"
   productType: String!
 
   """The date and time when the product was published to the channel."""
   publishedAt: DateTime!
 
-  """Whether the product can only be purchased with a selling plan."""
+  """
+  Whether the product can only be purchased with a [selling plan](/docs/apps/build/purchase-options/subscriptions/selling-plans). Products that are sold on subscription (`requiresSellingPlan: true`) can be updated only for online stores. If you update a product to be subscription-only (`requiresSellingPlan:false`), then the product is unpublished from all channels, except the online store.
+  """
   requiresSellingPlan: Boolean!
 
   """
-  A list of a product's available selling plan groups. A selling plan group represents a selling method. For example, 'Subscribe and save' is a selling method where customers pay for goods or services per delivery. A selling plan group contains individual selling plans.
+  A list of all [selling plan groups](/docs/apps/build/purchase-options/subscriptions/selling-plans/build-a-selling-plan) that are associated with the product either directly, or through the product's variants.
   """
   sellingPlanGroups(
     """Returns the elements that come after the specified cursor."""
@@ -6199,28 +7558,45 @@ type Product implements HasMetafields & Node & OnlineStorePublishable {
     reverse: Boolean = false
   ): SellingPlanGroupConnection!
 
-  """The product's SEO information."""
+  "The [SEO title and description](https://help.shopify.com/manual/promoting-marketing/seo/adding-keywords)\nthat are associated with a product.\n"
   seo: SEO!
 
-  "A comma separated list of tags that have been added to the product.\nAdditional access scope required for private apps: unauthenticated_read_product_tags.\n"
+  "A comma-separated list of searchable keywords that are\nassociated with the product. For example, a merchant might apply the `sports`\nand `summer` tags to products that are associated with sportwear for summer.\nUpdating `tags` overwrites any existing tags that were previously added to the product.\nTo add new tags without overwriting existing tags,\nuse the GraphQL Admin API's [`tagsAdd`](/docs/api/admin-graphql/latest/mutations/tagsadd)\nmutation.\n"
   tags: [String!]!
 
-  """The product’s title."""
+  "The name for the product that displays to customers. The title is used to construct the product's handle.\nFor example, if a product is titled \"Black Sunglasses\", then the handle is `black-sunglasses`.\n"
   title: String!
 
-  """The total quantity of inventory in stock for this Product."""
+  """The quantity of inventory that's in stock."""
   totalInventory: Int
+
+  """
+  URL parameters to be added to a page URL to track the origin of on-site search traffic for [analytics reporting](https://help.shopify.com/manual/reports-and-analytics/shopify-reports/report-types/default-reports/behaviour-reports). Returns a result when accessed through the [search](https://shopify.dev/docs/api/storefront/current/queries/search) or [predictiveSearch](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries, otherwise returns null.
+  """
+  trackingParameters: String
 
   "The date and time when the product was last modified.\nA product's `updatedAt` value can change for different reasons. For example, if an order\nis placed for a product that has inventory tracking set up, then the inventory adjustment\nis counted as an update.\n"
   updatedAt: DateTime!
 
   "Find a product’s variant based on its selected options.\nThis is useful for converting a user’s selection of product options into a single matching variant.\nIf there is not a variant for the selected options, `null` will be returned.\n"
   variantBySelectedOptions(
-    """The input fields used for a selected option."""
+    """Whether to perform case insensitive match on option names and values."""
+    caseInsensitiveMatch: Boolean = false
+
+    """Whether to ignore unknown product options."""
+    ignoreUnknownOptions: Boolean = false
+
+    """
+    The input fields used for a selected option.
+    
+    The input must not contain more than `250` values.
+    """
     selectedOptions: [SelectedOptionInput!]!
   ): ProductVariant
 
-  """List of the product’s variants."""
+  """
+  A list of [variants](/docs/api/storefront/latest/objects/ProductVariant) that are associated with the product.
+  """
   variants(
     """Returns the elements that come after the specified cursor."""
     after: String
@@ -6241,7 +7617,7 @@ type Product implements HasMetafields & Node & OnlineStorePublishable {
     sortKey: ProductVariantSortKeys = POSITION
   ): ProductVariantConnection!
 
-  """The product’s vendor name."""
+  """The name of the product's vendor."""
   vendor: String!
 }
 
@@ -6296,7 +7672,7 @@ type ProductEdge {
   node: Product!
 }
 
-"""A filter used to view a subset of products in a collection."""
+"The input fields for a filter used to view a subset of products in a collection.\nBy default, the `available` and `price` filters are enabled. Filters are customized with the Shopify Search & Discovery app.\nLearn more about [customizing storefront filtering](https://help.shopify.com/manual/online-store/themes/customizing-themes/storefront-filters).\n"
 input ProductFilter {
   """Filter on if the product is available for sale."""
   available: Boolean
@@ -6312,6 +7688,9 @@ input ProductFilter {
 
   """The product vendor to filter on."""
   productVendor: String
+
+  """A product tag to filter on."""
+  tag: String
 
   """A variant metafield to filter on."""
   variantMetafield: MetafieldFilter
@@ -6349,14 +7728,14 @@ enum ProductMediaSortKeys {
 
 "Product property names like \"Size\", \"Color\", and \"Material\" that the customers can select.\nVariants are selected based on permutations of these options.\n255 characters limit each.\n"
 type ProductOption implements Node {
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """The product option’s name."""
   name: String!
 
   """The corresponding value to the product option name."""
-  values: [String!]!
+  values: [String!]! @deprecated(reason: "Use `optionValues` instead.")
 }
 
 """The price range of the product."""
@@ -6366,6 +7745,19 @@ type ProductPriceRange {
 
   """The lowest variant's price."""
   minVariantPrice: MoneyV2!
+}
+
+"The recommendation intent that is used to generate product recommendations.\nYou can use intent to generate product recommendations according to different strategies.\n"
+enum ProductRecommendationIntent {
+  """
+  Offer customers products that are complementary to a product for which recommendations are to be fetched. An example is add-on products that display in a Pair it with section.
+  """
+  COMPLEMENTARY
+
+  """
+  Offer customers a mix of products that are similar or complementary to a product for which recommendations are to be fetched. An example is substitutable products that display in a You may also like section.
+  """
+  RELATED
 }
 
 """The set of valid sort keys for the Product query."""
@@ -6398,9 +7790,7 @@ enum ProductSortKeys {
   VENDOR
 }
 
-"""
-A product variant represents a different version of a product, such as differing sizes or differing colors.
-"""
+"A product variant represents a different version of a product, such as differing sizes or differing colors.\n"
 type ProductVariant implements HasMetafields & Node {
   """Indicates if the product variant is available for sale."""
   availableForSale: Boolean!
@@ -6425,24 +7815,36 @@ type ProductVariant implements HasMetafields & Node {
   """
   currentlyNotInStock: Boolean!
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
-  "Image associated with the product variant. This field falls back to the product image if no image is available.\n"
+  """
+  Image associated with the product variant. This field falls back to the product image if no image is available.
+  """
   image: Image
 
-  """Returns a metafield found by namespace and key."""
+  """
+  A [custom field](https://shopify.dev/docs/apps/build/custom-data), including its `namespace` and `key`, that's associated with a Shopify resource for the purposes of adding and storing additional information.
+  """
   metafield(
     """The identifier for the metafield."""
     key: String!
 
-    """A container for a set of metafields."""
-    namespace: String!
+    """
+    The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+    """
+    namespace: String
   ): Metafield
 
-  "The metafields associated with the resource matching the supplied list of namespaces and keys.\n"
+  """
+  A list of [custom fields](/docs/apps/build/custom-data) that a merchant associates with a Shopify resource.
+  """
   metafields(
-    """The list of metafields to retrieve by namespace and key."""
+    """
+    The list of metafields to retrieve by namespace and key.
+    
+    The input must not contain more than `250` values.
+    """
     identifiers: [HasMetafieldsIdentifier!]!
   ): [Metafield]!
 
@@ -6457,6 +7859,24 @@ type ProductVariant implements HasMetafields & Node {
 
   """The total sellable quantity of the variant for online sales channels."""
   quantityAvailable: Int
+
+  """A list of quantity breaks for the product variant."""
+  quantityPriceBreaks(
+    """Returns the elements that come after the specified cursor."""
+    after: String
+
+    """Returns the elements that come before the specified cursor."""
+    before: String
+
+    """Returns up to the first `n` elements from the list."""
+    first: Int
+
+    """Returns up to the last `n` elements from the list."""
+    last: Int
+  ): QuantityPriceBreakConnection!
+
+  """The quantity rule for the product variant in a given context."""
+  quantityRule: QuantityRule!
 
   """
   Whether a customer needs to provide a shipping address when placing an order for the product variant.
@@ -6503,9 +7923,15 @@ type ProductVariant implements HasMetafields & Node {
     """Returns up to the last `n` elements from the list."""
     last: Int
 
+    """Used to sort results based on proximity to the provided location."""
+    near: GeoCoordinateInput
+
     """Reverse the order of the underlying list."""
     reverse: Boolean = false
   ): StoreAvailabilityConnection!
+
+  """Whether tax is charged when the product variant is sold."""
+  taxable: Boolean!
 
   """The product variant’s title."""
   title: String!
@@ -6567,9 +7993,71 @@ enum ProductVariantSortKeys {
 }
 
 """
+Represents information about the buyer that is interacting with the cart.
+"""
+type PurchasingCompany {
+  """The company associated to the order or draft order."""
+  company: Company!
+
+  """The company contact associated to the order or draft order."""
+  contact: CompanyContact
+
+  """The company location associated to the order or draft order."""
+  location: CompanyLocation!
+}
+
+"Quantity price breaks lets you offer different rates that are based on the\namount of a specific variant being ordered.\n"
+type QuantityPriceBreak {
+  "Minimum quantity required to reach new quantity break price.\n"
+  minimumQuantity: Int!
+
+  "The price of variant after reaching the minimum quanity.\n"
+  price: MoneyV2!
+}
+
+"An auto-generated type for paginating through multiple QuantityPriceBreaks.\n"
+type QuantityPriceBreakConnection {
+  """A list of edges."""
+  edges: [QuantityPriceBreakEdge!]!
+
+  """A list of the nodes contained in QuantityPriceBreakEdge."""
+  nodes: [QuantityPriceBreak!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+}
+
+"An auto-generated type which holds one QuantityPriceBreak and a cursor during pagination.\n"
+type QuantityPriceBreakEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of QuantityPriceBreakEdge."""
+  node: QuantityPriceBreak!
+}
+
+"The quantity rule for the product variant in a given context.\n"
+type QuantityRule {
+  "The value that specifies the quantity increment between minimum and maximum of the rule.\nOnly quantities divisible by this value will be considered valid.\n\nThe increment must be lower than or equal to the minimum and the maximum, and both minimum and maximum\nmust be divisible by this value.\n"
+  increment: Int!
+
+  "An optional value that defines the highest allowed quantity purchased by the customer.\nIf defined, maximum must be lower than or equal to the minimum and must be a multiple of the increment.\n"
+  maximum: Int
+
+  "The value that defines the lowest allowed quantity purchased by the customer.\nThe minimum must be a multiple of the quantity rule's increment.\n"
+  minimum: Int!
+}
+
+"""
 The schema’s entry-point for queries. This acts as the public, top-level API from which all queries must start.
 """
 type QueryRoot {
+  """Fetch a specific Article by its ID."""
+  article(
+    """The ID of the `Article`."""
+    id: ID!
+  ): Article
+
   """List of the shop's articles."""
   articles(
     """Returns the elements that come after the specified cursor."""
@@ -6584,7 +8072,7 @@ type QueryRoot {
     """Returns up to the last `n` elements from the list."""
     last: Int
 
-    "Supported filter parameters:\n - `author`\n - `blog_title`\n - `created_at`\n - `tag`\n - `tag_not`\n - `updated_at`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
+    "Apply one or multiple filters to the query.\n| name | description | acceptable_values | default_value | example_use |\n| ---- | ---- | ---- | ---- | ---- |\n| author |\n| blog_title |\n| created_at |\n| tag |\n| tag_not |\n| updated_at |\nRefer to the detailed [search syntax](https://shopify.dev/api/usage/search-syntax) for more information about using filters.\n"
     query: String
 
     """Reverse the order of the underlying list."""
@@ -6623,7 +8111,7 @@ type QueryRoot {
     """Returns up to the last `n` elements from the list."""
     last: Int
 
-    "Supported filter parameters:\n - `created_at`\n - `handle`\n - `title`\n - `updated_at`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
+    "Apply one or multiple filters to the query.\n| name | description | acceptable_values | default_value | example_use |\n| ---- | ---- | ---- | ---- | ---- |\n| created_at |\n| handle |\n| title |\n| updated_at |\nRefer to the detailed [search syntax](https://shopify.dev/api/usage/search-syntax) for more information about using filters.\n"
     query: String
 
     """Reverse the order of the underlying list."""
@@ -6638,6 +8126,12 @@ type QueryRoot {
     """The ID of the cart."""
     id: ID!
   ): Cart
+
+  "A poll for the status of the cart checkout completion and order creation.\n"
+  cartCompletionAttempt(
+    """The ID of the attempt."""
+    attemptId: String!
+  ): CartCompletionAttemptResult
 
   """Fetch a specific `Collection` by one of its unique attributes."""
   collection(
@@ -6668,7 +8162,7 @@ type QueryRoot {
     """Returns up to the last `n` elements from the list."""
     last: Int
 
-    "Supported filter parameters:\n - `collection_type`\n - `title`\n - `updated_at`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
+    "Apply one or multiple filters to the query.\n| name | description | acceptable_values | default_value | example_use |\n| ---- | ---- | ---- | ---- | ---- |\n| collection_type |\n| title |\n| updated_at |\nRefer to the detailed [search syntax](https://shopify.dev/api/usage/search-syntax) for more information about using filters.\n"
     query: String
 
     """Reverse the order of the underlying list."""
@@ -6678,7 +8172,7 @@ type QueryRoot {
     sortKey: CollectionSortKeys = ID
   ): CollectionConnection!
 
-  """Find a customer by its access token."""
+  "The customer associated with the given access token. Tokens are obtained by using the\n[`customerAccessTokenCreate` mutation](https://shopify.dev/docs/api/storefront/latest/mutations/customerAccessTokenCreate).\n"
   customer(
     """The customer access token."""
     customerAccessToken: String!
@@ -6687,7 +8181,7 @@ type QueryRoot {
   """Returns the localized experiences configured for the shop."""
   localization: Localization!
 
-  "List of the shop's locations that support in-store pickup.\n\nWhen sorting by distance, you must specify a location via the `near` argument.\n"
+  "List of the shop's locations that support in-store pickup.\n\nWhen sorting by distance, you must specify a location via the `near` argument.\n\n"
   locations(
     """Returns the elements that come after the specified cursor."""
     after: String
@@ -6711,11 +8205,46 @@ type QueryRoot {
     sortKey: LocationSortKeys = ID
   ): LocationConnection!
 
-  """A storefront menu."""
+  """
+  Retrieve a [navigation menu](https://help.shopify.com/manual/online-store/menus-and-links) by its handle.
+  """
   menu(
-    """Returns a storefront menu by the specified handle."""
+    """The navigation menu's handle."""
     handle: String!
   ): Menu
+
+  """Fetch a specific Metaobject by one of its unique identifiers."""
+  metaobject(
+    """The handle and type of the metaobject."""
+    handle: MetaobjectHandleInput
+
+    """The ID of the metaobject."""
+    id: ID
+  ): Metaobject
+
+  """All active metaobjects for the shop."""
+  metaobjects(
+    """Returns the elements that come after the specified cursor."""
+    after: String
+
+    """Returns the elements that come before the specified cursor."""
+    before: String
+
+    """Returns up to the first `n` elements from the list."""
+    first: Int
+
+    """Returns up to the last `n` elements from the list."""
+    last: Int
+
+    """Reverse the order of the underlying list."""
+    reverse: Boolean = false
+
+    """The key of a field to sort with. Supports "id" and "updated_at"."""
+    sortKey: String
+
+    """The type of metaobject to retrieve."""
+    type: String!
+  ): MetaobjectConnection!
 
   """Returns a specific node by ID."""
   node(
@@ -6725,7 +8254,11 @@ type QueryRoot {
 
   """Returns the list of nodes with the given IDs."""
   nodes(
-    """The IDs of the Nodes to return."""
+    """
+    The IDs of the Nodes to return.
+    
+    The input must not contain more than `250` values.
+    """
     ids: [ID!]!
   ): [Node]!
 
@@ -6758,7 +8291,7 @@ type QueryRoot {
     """Returns up to the last `n` elements from the list."""
     last: Int
 
-    "Supported filter parameters:\n - `created_at`\n - `handle`\n - `title`\n - `updated_at`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
+    "Apply one or multiple filters to the query.\n| name | description | acceptable_values | default_value | example_use |\n| ---- | ---- | ---- | ---- | ---- |\n| created_at |\n| handle |\n| title |\n| updated_at |\nRefer to the detailed [search syntax](https://shopify.dev/api/usage/search-syntax) for more information about using filters.\n"
     query: String
 
     """Reverse the order of the underlying list."""
@@ -6767,6 +8300,39 @@ type QueryRoot {
     """Sort the underlying list by the given key."""
     sortKey: PageSortKeys = ID
   ): PageConnection!
+
+  """List of the predictive search results."""
+  predictiveSearch(
+    """
+    Limits the number of results based on `limit_scope`. The value can range from 1 to 10, and the default is 10.
+    """
+    limit: Int
+
+    """Decides the distribution of results."""
+    limitScope: PredictiveSearchLimitScope
+
+    """The search query."""
+    query: String!
+
+    """
+    Specifies the list of resource fields to use for search. The default fields searched on are TITLE, PRODUCT_TYPE, VARIANT_TITLE, and VENDOR. For the best search experience, you should search on the default field set.
+    
+    The input must not contain more than `250` values.
+    """
+    searchableFields: [SearchableField!]
+
+    """
+    The types of resources to search for.
+    
+    The input must not contain more than `250` values.
+    """
+    types: [PredictiveSearchType!]
+
+    """
+    Specifies how unavailable products are displayed in the search results.
+    """
+    unavailableProducts: SearchUnavailableProductsType
+  ): PredictiveSearchResult
 
   """Fetch a specific `Product` by one of its unique attributes."""
   product(
@@ -6779,14 +8345,17 @@ type QueryRoot {
 
   """Find a product by its handle."""
   productByHandle(
-    """
-    A unique string that identifies the product. Handles are automatically generated based on the product's title, and are always lowercase. Whitespace and special characters are replaced with a hyphen: `-`. If there are multiple consecutive whitespace or special characters, then they're replaced with a single hyphen. Whitespace or special characters at the beginning are removed. If a duplicate product title is used, then the handle is auto-incremented by one. For example, if you had two products called `Potion`, then their handles would be `potion` and `potion-1`. After a product has been created, changing the product title doesn't update the handle.
-    """
+    "A unique, human-readable string of the product's title.\nA handle can contain letters, hyphens (`-`), and numbers, but no spaces.\nThe handle is used in the online store URL for the product.\n"
     handle: String!
   ): Product @deprecated(reason: "Use `product` instead.")
 
   "Find recommended products related to a given `product_id`.\nTo learn more about how recommendations are generated, see\n[*Showing product recommendations on product pages*](https://help.shopify.com/themes/development/recommended-products).\n"
   productRecommendations(
+    """
+    The recommendation intent that is used to generate product recommendations. You can use intent to generate product recommendations on various pages across the channels, according to different strategies.
+    """
+    intent: ProductRecommendationIntent = RELATED
+
     """The id of the product."""
     productId: ID!
   ): [Product!]
@@ -6805,7 +8374,9 @@ type QueryRoot {
     first: Int!
   ): StringConnection!
 
-  """List of the shop’s products."""
+  """
+  Returns a list of the shop's products. For storefront search, use the [`search`](https://shopify.dev/docs/api/storefront/latest/queries/search) query.
+  """
   products(
     """Returns the elements that come after the specified cursor."""
     after: String
@@ -6819,7 +8390,7 @@ type QueryRoot {
     """Returns up to the last `n` elements from the list."""
     last: Int
 
-    "Supported filter parameters:\n - `available_for_sale`\n - `created_at`\n - `product_type`\n - `tag`\n - `tag_not`\n - `title`\n - `updated_at`\n - `variants.price`\n - `vendor`\n\nSee the detailed [search syntax](https://shopify.dev/api/usage/search-syntax)\nfor more information about using filters.\n"
+    "You can apply one or multiple filters to a query.\n| name | description | acceptable_values | default_value | example_use |\n| ---- | ---- | ---- | ---- | ---- |\n| available_for_sale | Filter by products that have at least one product variant available for sale. |\n| created_at | Filter by the date and time when the product was created. | | | - `created_at:>'2020-10-21T23:39:20Z'`<br/> - `created_at:<now`<br/> - `created_at:<=2024` |\n| product_type | Filter by a comma-separated list of [product types](https://help.shopify.com/en/manual/products/details/product-type). | | | `product_type:snowboard` |\n| tag | Filter products by the product [`tags`](https://shopify.dev/docs/api/storefront/latest/objects/Product#field-tags) field. | | | `tag:my_tag` |\n| tag_not | Filter by products that don't have the specified product [tags](https://shopify.dev/docs/api/storefront/latest/objects/Product#field-tags). | | | `tag_not:my_tag` |\n| title | Filter by the product [`title`](https://shopify.dev/docs/api/storefront/latest/objects/Product#field-title) field. | | | `title:The Minimal Snowboard` |\n| updated_at | Filter by the date and time when the product was last updated. | | | - `updated_at:>'2020-10-21T23:39:20Z'`<br/> - `updated_at:<now`<br/> - `updated_at:<=2024` |\n| variants.price | Filter by the price of the product's variants. |\n| vendor | Filter by the product [`vendor`](https://shopify.dev/docs/api/storefront/latest/objects/Product#field-vendor) field. | | | - `vendor:Snowdevil`<br/> - `vendor:Snowdevil OR vendor:Icedevil` |\nLearn more about [Shopify API search syntax](https://shopify.dev/api/usage/search-syntax).\n"
     query: String
 
     """Reverse the order of the underlying list."""
@@ -6833,6 +8404,54 @@ type QueryRoot {
   The list of public Storefront API versions, including supported, release candidate and unstable versions.
   """
   publicApiVersions: [ApiVersion!]!
+
+  """List of the search results."""
+  search(
+    """Returns the elements that come after the specified cursor."""
+    after: String
+
+    """Returns the elements that come before the specified cursor."""
+    before: String
+
+    """Returns up to the first `n` elements from the list."""
+    first: Int
+
+    """Returns up to the last `n` elements from the list."""
+    last: Int
+
+    """
+    Specifies whether to perform a partial word match on the last search term.
+    """
+    prefix: SearchPrefixQueryType
+
+    """
+    Returns a subset of products matching all product filters.
+    
+    The input must not contain more than `250` values.
+    """
+    productFilters: [ProductFilter!]
+
+    """The search query."""
+    query: String!
+
+    """Reverse the order of the underlying list."""
+    reverse: Boolean = false
+
+    """Sort the underlying list by the given key."""
+    sortKey: SearchSortKeys = RELEVANCE
+
+    """
+    The types of resources to search for.
+    
+    The input must not contain more than `250` values.
+    """
+    types: [SearchType!]
+
+    """
+    Specifies how unavailable products or variants are displayed in the search results.
+    """
+    unavailableProducts: SearchUnavailableProductsType
+  ): SearchResultItemConnection!
 
   """The shop associated with the storefront access token."""
   shop: Shop!
@@ -6850,6 +8469,9 @@ type QueryRoot {
 
     """Returns up to the last `n` elements from the list."""
     last: Int
+
+    "Apply one or multiple filters to the query.\n| name | description | acceptable_values | default_value | example_use |\n| ---- | ---- | ---- | ---- | ---- |\n| created_at |\n| path |\n| target |\nRefer to the detailed [search syntax](https://shopify.dev/api/usage/search-syntax) for more information about using filters.\n"
+    query: String
 
     """Reverse the order of the underlying list."""
     reverse: Boolean = false
@@ -6885,6 +8507,128 @@ type ScriptDiscountApplication implements DiscountApplication {
   value: PricingValue!
 }
 
+"""
+Specifies whether to perform a partial word match on the last search term.
+"""
+enum SearchPrefixQueryType {
+  """Perform a partial word match on the last search term."""
+  LAST
+
+  """Don't perform a partial word match on the last search term."""
+  NONE
+}
+
+"""A search query suggestion."""
+type SearchQuerySuggestion implements Trackable {
+  """The text of the search query suggestion with highlighted HTML tags."""
+  styledText: String!
+
+  """The text of the search query suggestion."""
+  text: String!
+
+  """
+  URL parameters to be added to a page URL to track the origin of on-site search traffic for [analytics reporting](https://help.shopify.com/manual/reports-and-analytics/shopify-reports/report-types/default-reports/behaviour-reports). Returns a result when accessed through the [search](https://shopify.dev/docs/api/storefront/current/queries/search) or [predictiveSearch](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries, otherwise returns null.
+  """
+  trackingParameters: String
+}
+
+"A search result that matches the search query.\n"
+union SearchResultItem = Article | Page | Product
+
+"An auto-generated type for paginating through multiple SearchResultItems.\n"
+type SearchResultItemConnection {
+  """A list of edges."""
+  edges: [SearchResultItemEdge!]!
+
+  """A list of the nodes contained in SearchResultItemEdge."""
+  nodes: [SearchResultItem!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of available filters."""
+  productFilters: [Filter!]!
+
+  """The total number of results."""
+  totalCount: Int!
+}
+
+"An auto-generated type which holds one SearchResultItem and a cursor during pagination.\n"
+type SearchResultItemEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of SearchResultItemEdge."""
+  node: SearchResultItem!
+}
+
+"""The set of valid sort keys for the search query."""
+enum SearchSortKeys {
+  """Sort by the `price` value."""
+  PRICE
+
+  """Sort by relevance to the search terms."""
+  RELEVANCE
+}
+
+"""The types of search items to perform search within."""
+enum SearchType {
+  """Returns matching articles."""
+  ARTICLE
+
+  """Returns matching pages."""
+  PAGE
+
+  """Returns matching products."""
+  PRODUCT
+}
+
+"""Specifies whether to display results for unavailable products."""
+enum SearchUnavailableProductsType {
+  """Exclude unavailable products."""
+  HIDE
+
+  """
+  Show unavailable products after all other matching results. This is the default.
+  """
+  LAST
+
+  """Show unavailable products in the order that they're found."""
+  SHOW
+}
+
+"""Specifies the list of resource fields to search."""
+enum SearchableField {
+  """Author of the page or article."""
+  AUTHOR
+
+  """
+  Body of the page or article or product description or collection description.
+  """
+  BODY
+
+  """Product type."""
+  PRODUCT_TYPE
+
+  """Tag associated with the product or article."""
+  TAG
+
+  """Title of the page or article or product title or collection title."""
+  TITLE
+
+  """Variant barcode."""
+  VARIANTS_BARCODE
+
+  """Variant SKU."""
+  VARIANTS_SKU
+
+  """Variant title."""
+  VARIANTS_TITLE
+
+  """Product vendor."""
+  VENDOR
+}
+
 "Properties used by customers to select a product variant.\nProducts can have multiple options, like different sizes or colors.\n"
 type SelectedOption {
   """The product option’s name."""
@@ -6894,7 +8638,7 @@ type SelectedOption {
   value: String!
 }
 
-"""Specifies the input fields required for a selected option."""
+"""The input fields required for a selected option."""
 input SelectedOptionInput {
   """The product option’s name."""
   name: String!
@@ -6911,7 +8655,7 @@ type SellingPlan {
   """The description of the selling plan."""
   description: String
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """
@@ -7202,21 +8946,31 @@ type Shop implements HasMetafields & Node {
   """A description of the shop."""
   description: String
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
-  """Returns a metafield found by namespace and key."""
+  """
+  A [custom field](https://shopify.dev/docs/apps/build/custom-data), including its `namespace` and `key`, that's associated with a Shopify resource for the purposes of adding and storing additional information.
+  """
   metafield(
     """The identifier for the metafield."""
     key: String!
 
-    """A container for a set of metafields."""
-    namespace: String!
+    """
+    The container the metafield belongs to. If omitted, the app-reserved namespace will be used.
+    """
+    namespace: String
   ): Metafield
 
-  "The metafields associated with the resource matching the supplied list of namespaces and keys.\n"
+  """
+  A list of [custom fields](/docs/apps/build/custom-data) that a merchant associates with a Shopify resource.
+  """
   metafields(
-    """The list of metafields to retrieve by namespace and key."""
+    """
+    The list of metafields to retrieve by namespace and key.
+    
+    The input must not contain more than `250` values.
+    """
     identifiers: [HasMetafieldsIdentifier!]!
   ): [Metafield]!
 
@@ -7253,6 +9007,15 @@ type Shop implements HasMetafields & Node {
   termsOfService: ShopPolicy
 }
 
+"The input fields for submitting Shop Pay payment method information for checkout.\n"
+input ShopPayWalletContentInput {
+  """The customer's billing address."""
+  billingAddress: MailingAddressInput!
+
+  """Session token for transaction."""
+  sessionToken: String!
+}
+
 """
 Policy that a merchant has configured for their store, such as their refund or privacy policy.
 """
@@ -7263,7 +9026,7 @@ type ShopPolicy implements Node {
   """Policy’s handle."""
   handle: String!
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """Policy’s title."""
@@ -7281,9 +9044,7 @@ type ShopPolicyWithDefault {
   """The handle of the policy."""
   handle: String!
 
-  """
-  The unique identifier of the policy. A default policy doesn't have an ID.
-  """
+  """The unique ID of the policy. A default policy doesn't have an ID."""
   id: ID
 
   """The title of the policy."""
@@ -7305,6 +9066,9 @@ type StoreAvailability {
   Returns the estimated amount of time it takes for pickup to be ready (Example: Usually ready in 24 hours).
   """
   pickUpTime: String!
+
+  """The quantity of the product variant in-stock at this location."""
+  quantityAvailable: Int!
 }
 
 "An auto-generated type for paginating through multiple StoreAvailabilities.\n"
@@ -7328,7 +9092,7 @@ type StoreAvailabilityEdge {
   node: StoreAvailability!
 }
 
-"An auto-generated type for paginating through a list of Strings.\n"
+"An auto-generated type for paginating through multiple Strings.\n"
 type StringConnection {
   """A list of edges."""
   edges: [StringEdge!]!
@@ -7344,6 +9108,152 @@ type StringEdge {
 
   """The item at the end of StringEdge."""
   node: String!
+}
+
+"""An error that occurred during cart submit for completion."""
+type SubmissionError {
+  """The error code."""
+  code: SubmissionErrorCode!
+
+  """The error message."""
+  message: String
+}
+
+"""The code of the error that occurred during cart submit for completion."""
+enum SubmissionErrorCode {
+  BUYER_IDENTITY_EMAIL_IS_INVALID
+  BUYER_IDENTITY_EMAIL_REQUIRED
+  BUYER_IDENTITY_PHONE_IS_INVALID
+  DELIVERY_ADDRESS1_INVALID
+  DELIVERY_ADDRESS1_REQUIRED
+  DELIVERY_ADDRESS1_TOO_LONG
+  DELIVERY_ADDRESS2_INVALID
+  DELIVERY_ADDRESS2_REQUIRED
+  DELIVERY_ADDRESS2_TOO_LONG
+  DELIVERY_ADDRESS_REQUIRED
+  DELIVERY_CITY_INVALID
+  DELIVERY_CITY_REQUIRED
+  DELIVERY_CITY_TOO_LONG
+  DELIVERY_COMPANY_INVALID
+  DELIVERY_COMPANY_REQUIRED
+  DELIVERY_COMPANY_TOO_LONG
+  DELIVERY_COUNTRY_REQUIRED
+  DELIVERY_FIRST_NAME_INVALID
+  DELIVERY_FIRST_NAME_REQUIRED
+  DELIVERY_FIRST_NAME_TOO_LONG
+  DELIVERY_INVALID_POSTAL_CODE_FOR_COUNTRY
+  DELIVERY_INVALID_POSTAL_CODE_FOR_ZONE
+  DELIVERY_LAST_NAME_INVALID
+  DELIVERY_LAST_NAME_REQUIRED
+  DELIVERY_LAST_NAME_TOO_LONG
+  DELIVERY_NO_DELIVERY_AVAILABLE
+  DELIVERY_NO_DELIVERY_AVAILABLE_FOR_MERCHANDISE_LINE
+  DELIVERY_OPTIONS_PHONE_NUMBER_INVALID
+  DELIVERY_OPTIONS_PHONE_NUMBER_REQUIRED
+  DELIVERY_PHONE_NUMBER_INVALID
+  DELIVERY_PHONE_NUMBER_REQUIRED
+  DELIVERY_POSTAL_CODE_INVALID
+  DELIVERY_POSTAL_CODE_REQUIRED
+  DELIVERY_ZONE_NOT_FOUND
+  DELIVERY_ZONE_REQUIRED_FOR_COUNTRY
+  ERROR
+  MERCHANDISE_LINE_LIMIT_REACHED
+  MERCHANDISE_NOT_APPLICABLE
+  MERCHANDISE_NOT_ENOUGH_STOCK_AVAILABLE
+  MERCHANDISE_OUT_OF_STOCK
+  MERCHANDISE_PRODUCT_NOT_PUBLISHED
+  NO_DELIVERY_GROUP_SELECTED
+  PAYMENTS_ADDRESS1_INVALID
+  PAYMENTS_ADDRESS1_REQUIRED
+  PAYMENTS_ADDRESS1_TOO_LONG
+  PAYMENTS_ADDRESS2_INVALID
+  PAYMENTS_ADDRESS2_REQUIRED
+  PAYMENTS_ADDRESS2_TOO_LONG
+  PAYMENTS_BILLING_ADDRESS_ZONE_NOT_FOUND
+  PAYMENTS_BILLING_ADDRESS_ZONE_REQUIRED_FOR_COUNTRY
+  PAYMENTS_CITY_INVALID
+  PAYMENTS_CITY_REQUIRED
+  PAYMENTS_CITY_TOO_LONG
+  PAYMENTS_COMPANY_INVALID
+  PAYMENTS_COMPANY_REQUIRED
+  PAYMENTS_COMPANY_TOO_LONG
+  PAYMENTS_COUNTRY_REQUIRED
+  PAYMENTS_CREDIT_CARD_BASE_EXPIRED
+  PAYMENTS_CREDIT_CARD_BASE_GATEWAY_NOT_SUPPORTED
+  PAYMENTS_CREDIT_CARD_BASE_INVALID_START_DATE_OR_ISSUE_NUMBER_FOR_DEBIT
+  PAYMENTS_CREDIT_CARD_BRAND_NOT_SUPPORTED
+  PAYMENTS_CREDIT_CARD_FIRST_NAME_BLANK
+  PAYMENTS_CREDIT_CARD_GENERIC
+  PAYMENTS_CREDIT_CARD_LAST_NAME_BLANK
+  PAYMENTS_CREDIT_CARD_MONTH_INCLUSION
+  PAYMENTS_CREDIT_CARD_NAME_INVALID
+  PAYMENTS_CREDIT_CARD_NUMBER_INVALID
+  PAYMENTS_CREDIT_CARD_NUMBER_INVALID_FORMAT
+  PAYMENTS_CREDIT_CARD_SESSION_ID
+  PAYMENTS_CREDIT_CARD_VERIFICATION_VALUE_BLANK
+  PAYMENTS_CREDIT_CARD_VERIFICATION_VALUE_INVALID_FOR_CARD_TYPE
+  PAYMENTS_CREDIT_CARD_YEAR_EXPIRED
+  PAYMENTS_CREDIT_CARD_YEAR_INVALID_EXPIRY_YEAR
+  PAYMENTS_FIRST_NAME_INVALID
+  PAYMENTS_FIRST_NAME_REQUIRED
+  PAYMENTS_FIRST_NAME_TOO_LONG
+  PAYMENTS_INVALID_POSTAL_CODE_FOR_COUNTRY
+  PAYMENTS_INVALID_POSTAL_CODE_FOR_ZONE
+  PAYMENTS_LAST_NAME_INVALID
+  PAYMENTS_LAST_NAME_REQUIRED
+  PAYMENTS_LAST_NAME_TOO_LONG
+  PAYMENTS_METHOD_REQUIRED
+  PAYMENTS_METHOD_UNAVAILABLE
+  PAYMENTS_PHONE_NUMBER_INVALID
+  PAYMENTS_PHONE_NUMBER_REQUIRED
+  PAYMENTS_POSTAL_CODE_INVALID
+  PAYMENTS_POSTAL_CODE_REQUIRED
+  PAYMENTS_SHOPIFY_PAYMENTS_REQUIRED
+  PAYMENTS_UNACCEPTABLE_PAYMENT_AMOUNT
+  PAYMENTS_WALLET_CONTENT_MISSING
+  TAXES_DELIVERY_GROUP_ID_NOT_FOUND
+  TAXES_LINE_ID_NOT_FOUND
+  TAXES_MUST_BE_DEFINED
+}
+
+"""Cart submit for checkout completion is successful."""
+type SubmitAlreadyAccepted {
+  """
+  The ID of the cart completion attempt that will be used for polling for the result.
+  """
+  attemptId: String!
+}
+
+"""Cart submit for checkout completion failed."""
+type SubmitFailed {
+  """The URL of the checkout for the cart."""
+  checkoutUrl: URL
+
+  """The list of errors that occurred from executing the mutation."""
+  errors: [SubmissionError!]!
+}
+
+"""Cart submit for checkout completion is already accepted."""
+type SubmitSuccess {
+  """
+  The ID of the cart completion attempt that will be used for polling for the result.
+  """
+  attemptId: String!
+}
+
+"""Cart submit for checkout completion is throttled."""
+type SubmitThrottled {
+  "UTC date time string that indicates the time after which clients should make their next\npoll request. Any poll requests sent before this time will be ignored. Use this value to schedule the\nnext poll request.\n"
+  pollAfter: DateTime!
+}
+
+"""Color and image for visual representation."""
+type Swatch {
+  """The swatch color."""
+  color: Color
+
+  """The swatch image."""
+  image: MediaImage
 }
 
 "Specifies the fields required to complete a checkout with\na tokenized payment.\n"
@@ -7368,12 +9278,22 @@ input TokenizedPaymentInputV3 {
   paymentData: String!
 
   """
-  Whether to execute the payment in test mode, if possible. Test mode is not supported in production stores. Defaults to `false`.
+  Whether to execute the payment in test mode, if possible. Test mode isn't supported in production stores. Defaults to `false`.
   """
   test: Boolean = false
 
   """The type of payment token."""
   type: PaymentTokenType!
+}
+
+"""
+Represents a resource that you can track the origin of the search traffic.
+"""
+interface Trackable {
+  """
+  URL parameters to be added to a page URL to track the origin of on-site search traffic for [analytics reporting](https://help.shopify.com/manual/reports-and-analytics/shopify-reports/report-types/default-reports/behaviour-reports). Returns a result when accessed through the [search](https://shopify.dev/docs/api/storefront/current/queries/search) or [predictiveSearch](https://shopify.dev/docs/api/storefront/current/queries/predictiveSearch) queries, otherwise returns null.
+  """
+  trackingParameters: String
 }
 
 """An object representing exchange of money for a product or service."""
@@ -7432,7 +9352,7 @@ enum TransactionStatus {
   SUCCESS
 }
 
-"Represents an [RFC 3986](https://datatracker.ietf.org/doc/html/rfc3986) and\n[RFC 3987](https://datatracker.ietf.org/doc/html/rfc3987)-compliant URI string.\n\nFor example, `\"https://johns-apparel.myshopify.com\"` is a valid URL. It includes a scheme (`https`) and a host\n(`johns-apparel.myshopify.com`).\n"
+"Represents an [RFC 3986](https://datatracker.ietf.org/doc/html/rfc3986) and\n[RFC 3987](https://datatracker.ietf.org/doc/html/rfc3987)-compliant URI string.\n\nFor example, `\"https://example.myshopify.com\"` is a valid URL. It includes a scheme (`https`) and a host\n(`example.myshopify.com`).\n"
 scalar URL
 
 "The measurement used to calculate a unit price for a product variant (e.g. $9.99 / 100ml).\n"
@@ -7561,7 +9481,7 @@ type UserError implements DisplayableError {
 }
 
 """
-A filter used to view a subset of products in a collection matching a specific variant option.
+The input fields for a filter used to view a subset of products in a collection matching a specific variant option.
 """
 input VariantOptionFilter {
   """The name of the variant option to filter on."""
@@ -7576,11 +9496,14 @@ type Video implements Media & Node {
   """A word or phrase to share the nature or contents of a media."""
   alt: String
 
-  """A globally-unique identifier."""
+  """A globally-unique ID."""
   id: ID!
 
   """The media content type."""
   mediaContentType: MediaContentType!
+
+  """The presentation for a media."""
+  presentation: MediaPresentation
 
   """The preview image for the media."""
   previewImage: Image

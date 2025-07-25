@@ -2,7 +2,7 @@ import type { ActionFunction, HeadersFunction } from "@remix-run/cloudflare";
 import { redirect } from "@remix-run/cloudflare";
 import { createSdk } from "~/graphqlWrapper";
 import { getCart } from "~/providers/cart/cart";
-import { checkoutWithWebUrl } from "~/providers/checkout/checkout";
+import { createCartWithCheckout } from "~/providers/checkout/cart-checkout";
 
 export const headers: HeadersFunction = ({ actionHeaders }) => {
   return actionHeaders;
@@ -17,20 +17,23 @@ export const action: ActionFunction = async ({ request, context }) => {
 
   const redirectTo = (formData.get("redirectTo") || "/") as string;
   const lineItems = variantId
-    ? [{ variantId, quantity: parseInt(quantity) ?? 1 }]
-    : await getCart(request);
+    ? [{ merchandiseId: variantId, quantity: parseInt(quantity) ?? 1 }]
+    : (await getCart(request)).map(item => ({
+        merchandiseId: item.variantId,
+        quantity: item.quantity
+      }));
 
-  const { errors, webUrl } = await checkoutWithWebUrl(sdk, {
+  const { errors, checkoutUrl } = await createCartWithCheckout(sdk, {
     request,
     lineItems,
   });
-  console.log({ errors, webUrl });
-  if (webUrl) {
-    const realWebUrl = webUrl.replace(
+  console.log({ errors, checkoutUrl });
+  if (checkoutUrl) {
+    const realCheckoutUrl = checkoutUrl.replace(
       "instrumentecreative.myshopify.com",
       "shop.instrumente-creative.ro"
     );
-    return redirect(realWebUrl);
+    return redirect(realCheckoutUrl);
   }
   return redirect(redirectTo);
 };
