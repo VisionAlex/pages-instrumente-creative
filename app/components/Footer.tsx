@@ -4,7 +4,6 @@ import { FooterSubscribeToNewsletter } from "./FooterSubscribeToNewsletter";
 import { Logo } from "./Logo";
 import { Link } from "./shared/Link";
 import { SocialLinks } from "./shared/SocialLinks";
-import { TruckIcon } from "./shared/icons";
 
 interface Props {
   user: GetUserQuery | null;
@@ -38,10 +37,6 @@ export const Footer: React.FC<Props> = ({ user }) => {
         >
           Contact
         </Link>
-      </div>
-      <div className="flex  items-center justify-center gap-2 text-center text-subtitle xs2:flex-row">
-        <TruckIcon width={20} fill="#707070" />
-        <p>Livrare gratuită pentru toate comenzile</p>
       </div>
       <div className="my-4 flex justify-center">
         <Logo />
